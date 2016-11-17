@@ -1,7 +1,7 @@
 Package: SKTools
 Type: Package
 Title: SK's Tools
-Version: 0.1.1
+Version: 0.1.0
 Author: Samuel Kaminsky (with some code from Eric Knudsen)
 Maintainer: Samuel Kaminsky <samuel.e.kaminsky@gmail.com>
 Description: Adds some helpful functions for dealing with Excel files and analyzing data.
