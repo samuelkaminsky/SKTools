@@ -4,19 +4,20 @@
 \alias{read_excel_all}
 \title{Read an entire Excel file workbook}
 \usage{
-read_excel_all(path, save2env = FALSE, make.names = TRUE, names = "")
+read_excel_all(path, save2env = FALSE, make.variable.names = TRUE,
+  names = "")
 }
 \arguments{
 \item{path}{Path to the xls/xlsx file}
 
 \item{save2env}{Either TRUE to save each worksheet to the environment or FALSE to return a list of worksheets, which can be saved to the environment}
 
-\item{names}{A vector of character data representing preferred sheet names}
-
 \item{make.variable.names}{Either TRUE to make variable names syntactically valid or FALSE to preserve original names}
+
+\item{names}{A vector of character data representing preferred sheet names}
 }
 \value{
-list of data frames that represent each worksheet
+If there is more than one worksheet, then a list of data frames that represent each worksheet. If there is only one worksheet, then a data frame.
 }
 \description{
 Read an entire Excel file workbook
