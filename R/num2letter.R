@@ -10,13 +10,10 @@ num2letter <- function(x, number = "") {
   x.round <- trunc((x-1) / 26)
 
   if (x.round == 0) {
-    value <- paste(index[x, 2], number, sep = "")
-    value
+    paste(index[x, 2], number, sep = "")
   } else{
     if (x.round > 0 & x.round < 26) {
-      value <-
-        paste(index[x.round, 2], index[x - x.round * 26, 2], number, sep = "")
-      value
+      paste(index[x.round, 2], index[x - x.round * 26, 2], number, sep = "")
     } else {
       print("Input Value too high")
     }
