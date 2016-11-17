@@ -4,12 +4,14 @@
 \alias{read_excel_all}
 \title{Read an entire Excel file workbook}
 \usage{
-read_excel_all(path = "", save2env = FALSE, make.names = TRUE)
+read_excel_all(path, save2env = FALSE, make.names = TRUE, names = "")
 }
 \arguments{
 \item{path}{Path to the xls/xlsx file}
 
 \item{save2env}{Either TRUE to save each worksheet to the environment or FALSE to return a list of worksheets, which can be saved to the environment}
+
+\item{names}{A vector of character data representing preferred sheet names}
 
 \item{makenames}{Either TRUE to make variable names syntactically valid or FALSE to preserve original names}
 }
