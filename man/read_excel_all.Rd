@@ -13,7 +13,7 @@ read_excel_all(path, save2env = FALSE, make.names = TRUE, names = "")
 
 \item{names}{A vector of character data representing preferred sheet names}
 
-\item{makenames}{Either TRUE to make variable names syntactically valid or FALSE to preserve original names}
+\item{make.variable.names}{Either TRUE to make variable names syntactically valid or FALSE to preserve original names}
 }
 \value{
 list of data frames that represent each worksheet
