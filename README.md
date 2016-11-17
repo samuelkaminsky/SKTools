@@ -5,4 +5,4 @@ A collection of R functions that help with importing Excel files and analyzing d
 <ol>
 <li>If not installed already, install devtools package: <code>install.packages("devtools").</code></li>
 <li>Call <code>library(devtools)</code> to prepare for GitHub installation.</li>
-<li>Use <code>install_github("samuelkaminsky/SKTools")</code> to install the ONETr package.</li>
+<li>Use <code>install_github("samuelkaminsky/SKTools")</code> to install the package.</li>
