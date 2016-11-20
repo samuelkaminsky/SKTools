@@ -11,5 +11,6 @@ License: GPL-3
 Imports:
     moments,
     openxlsx,
-    pbapply
+    pbapply,
+    readxl
 RoxygenNote: 5.0.1
