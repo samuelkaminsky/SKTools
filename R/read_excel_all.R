@@ -2,34 +2,33 @@
 #'
 #' @param path Path to the xls/xlsx file
 #' @param save2env Either TRUE to save each worksheet to the environment or FALSE to return a list of worksheets, which can be saved to the environment
-#' @param makenames Either TRUE to make variable names syntactically valid or FALSE to preserve original names
-#' @return list of data frames that represent each worksheet
+#' @param names A vector of character data representing preferred sheet names
+#' @return If there is more than one worksheet, then a list of data frames that represent each worksheet. If there is only one worksheet, then a data frame.
 #' @export
 
 
-
-read_excel_all <-
-  function(path = "",
+read.xlsx.all <-
+  function(path,
            save2env = FALSE,
-           make.names = TRUE) {
-    sheetnames <- readxl::excel_sheets(path)
-    make.sheetnames <- make.names(sheetnames, unique = TRUE)
-    workbook <-
-      lapply(sheetnames, function(x)
-        readxl::read_excel(path, sheet = x))
-    names(workbook) <- make.sheetnames
-    if (isTRUE(make.names))
-    {
-      for (i in 1:length(sheetnames)) {
-        names(workbook[[i]]) <-
-          make.names(names(workbook[[i]]), unique = TRUE)
+           names = "") {
+    sheetnames <- openxlsx::getSheetNames(path)
+    if (length(sheetnames) == 1) {
+      worksheet <- openxlsx::read.xlsx(path)
+    } else{
+      make.sheetnames <- make.names(sheetnames, unique = TRUE)
+      workbook <-
+        pbapply::pblapply(sheetnames, function(x)
+          openxlsx::read.xlsx(path, sheet = x))
+      if (sum(names != "") > 0) {
+        names(workbook) <- names
+      } else {
+        names(workbook) <- make.sheetnames
       }
-    }
-    if (isTRUE(save2env))
-    {
-      list2env(workbook, .GlobalEnv)
-    }
-    else{
-      workbook
+      if (isTRUE(save2env)) {
+        list2env(workbook, .GlobalEnv)
+      }
+      else{
+        workbook
+      }
     }
   }
