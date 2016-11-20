@@ -10,5 +10,6 @@ LazyData: true
 License: GPL-3
 Imports:
     moments,
-    readxl
+    openxlsx,
+    pbapply
 RoxygenNote: 5.0.1

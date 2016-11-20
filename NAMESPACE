@@ -3,4 +3,4 @@
 export(excel_date)
 export(num2letter)
 export(quality.check)
-export(read_excel_all)
+export(read.xlsx.all)
