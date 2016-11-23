@@ -7,12 +7,12 @@
 num2letter(x, number = "")
 }
 \arguments{
-\item{x}{Number to be converted to letter}
+\item{x}{Number to be converted to letter (only works for numbers less than or equal to 702)}
 
 \item{number}{Number to be appended to letter}
 }
 \value{
-Character string representing Excel column
+Character string a letter and optional appended number
 }
 \description{
 Converts a number to an equivalent letter, with an option to concatenate a row value. Useful for adding data to existing Google Sheets
