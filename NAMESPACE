@@ -3,5 +3,8 @@
 export(excel_date)
 export(num2letter)
 export(quality.check)
+export(read.clip.mac.table)
+export(read.clip.mac.vector)
 export(read.xlsx.all)
 export(read_excel_all)
+export(write.clip.mac)
