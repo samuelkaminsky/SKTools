@@ -2,7 +2,7 @@
 #' @param corr.test.results corr.test object
 #' @return Dataframe with clean output
 #' @export
-#' @description Converts corr.test output to single dataframe with most important information
+#' @description Converts corr.test output to single dataframe with most important information (IV, DV, r, n, t, p)
 
 corr.summary <- function(corr.test.results) {
   cor.df <-
