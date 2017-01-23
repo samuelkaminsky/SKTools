@@ -13,6 +13,10 @@ corr.summary(corr.test.results)
 Dataframe with clean output
 }
 \description{
+<<<<<<< HEAD
 Converts corr.test output to single dataframe with most important information
+=======
+Converts corr.test output to single dataframe with most important information (IV, DV, r, n, t, p)
+>>>>>>> 7b1c440f09aeaec8b166894f0710f0b85a942b90
 }
 

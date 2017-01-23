@@ -6,6 +6,6 @@
 
 read.clip.mac.vector <-
   function() {
-    as.vector(unlist(read.table(pipe("pbpaste"), sep="\t", header=FALSE))) # for a vector
-    
+    as.vector(unlist(utils::read.table(pipe("pbpaste"), sep="\t", header=FALSE))) # for a vector
+
   }

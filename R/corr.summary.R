@@ -14,4 +14,5 @@ corr.summary <- function(corr.test.results,alpha=.05) {
   names(cor.df) <- c("IV", "DV", "r", "n", "t", "p")
   cor.df$Sig = ifelse(cor.df$p < alpha, 1, 0)
   cor.df
+
 }
