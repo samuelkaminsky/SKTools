@@ -6,14 +6,10 @@
 
 corr.summary <- function(corr.test.results) {
   cor.df <-
-    lapply(corr.test.results[1:4], function(x) {
-      x %>%
-        as.data.frame() %>%
-        rownames_to_column() %>%
-        gather(key = rowname)
-    }) %>%
-    bind_cols()
+    dplyr::bind_cols(lapply(corr.test.results[1:4], function(x) {
+      tidyr::gather(tibble::rownames_to_column(as.data.frame(x)), key = rowname)
+    }))
   cor.df <- cor.df[, c(1:3, 6, 9, 12)]
   names(cor.df) <- c("IV", "DV", "r", "n", "t", "p")
-  mutate(cor.df, Sig = ifelse(p < .05, 1, 0))
+  dplyr::mutate(cor.df, Sig = ifelse(p < .05, 1, 0))
 }

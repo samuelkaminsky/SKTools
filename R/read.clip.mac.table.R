@@ -6,5 +6,5 @@
 
 read.clip.mac.table <-
   function() {
-    read.table(pipe("pbpaste"), sep = "\t", header = TRUE) # for a data frame
+    utils::read.table(pipe("pbpaste"), sep = "\t", header = TRUE) # for a data frame
   }

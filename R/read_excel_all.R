@@ -4,6 +4,7 @@
 #' @param save2env Either TRUE to save each worksheet to the environment or FALSE to return a list of worksheets, which can be saved to the environment
 #' @param make.variable.names Either TRUE to make variable names syntactically valid or FALSE to preserve original names
 #' @param names A vector of character data representing preferred sheet names
+#' @param skip Number of rows to skip when reading in data
 #' @return If there is more than one worksheet, then a list of data frames that represent each worksheet. If there is only one worksheet, then a data frame.
 #' @export
 

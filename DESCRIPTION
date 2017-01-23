@@ -12,5 +12,8 @@ Imports:
     moments,
     openxlsx,
     pbapply,
-    readxl
+    readxl,
+    tidyr,
+    dplyr,
+    tibble
 RoxygenNote: 5.0.1

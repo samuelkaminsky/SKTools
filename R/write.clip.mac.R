@@ -8,6 +8,6 @@
 write.clip.mac <-
   function(object) {
     clip <- pipe("pbcopy", "w")
-    write.table(object, file = clip, sep = '\t')
+    utils::write.table(object, file = clip, sep = '\t')
     close(clip)
   }
