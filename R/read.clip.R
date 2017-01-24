@@ -10,8 +10,7 @@ read.clip <-
     if (.Platform$OS.type == "unix") {
       if (isTRUE(istable)) {
         utils::read.table(pipe("pbpaste"), sep = "\t", header = TRUE)
-      }
-      else{
+      } else{
         as.vector(unlist(utils::read.table(
           pipe("pbpaste"), sep = "\t", header = FALSE
         )))
@@ -20,8 +19,7 @@ read.clip <-
       if (.Platform$OS.type == "windows") {
         if (isTRUE(istable)) {
           utils::read.table("clipboard", sep = "\t", header = TRUE)
-        }
-        else{
+        } else{
           readClipboard()
         }
       }
