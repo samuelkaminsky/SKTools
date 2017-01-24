@@ -4,11 +4,11 @@
 \alias{read.xlsx.all}
 \title{Read an entire Excel file workbook (using openxlsx functions)}
 \usage{
-read.xlsx.all(path, save2env = FALSE, names = "", startRow = 1,
+read.xlsx.all(xlsxFile, save2env = FALSE, names = "", startRow = 1,
   detectDates = TRUE)
 }
 \arguments{
-\item{path}{Path to the xls/xlsx file}
+\item{xlsxFile}{Path to the xls/xlsx file}
 
 \item{save2env}{Either TRUE to save each worksheet to the environment or FALSE to return a list of worksheets, which can be saved to the environment}
 

@@ -15,7 +15,7 @@ read.xlsx.all <-
            names = "",
            startRow = 1,
            detectDates = TRUE) {
-    sheetnames <- openxlsx::getSheetNames(path)
+    sheetnames <- openxlsx::getSheetNames(xlsxFile)
     if (length(sheetnames) == 1) {
       worksheet <-
         openxlsx::read.xlsx(
