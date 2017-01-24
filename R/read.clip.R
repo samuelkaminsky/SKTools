@@ -16,13 +16,14 @@ read.clip <-
           pipe("pbpaste"), sep = "\t", header = FALSE
         )))
       }
-    }
-    if (.Platform$OS.type == "windows") {
-      if (isTRUE(istable)) {
-        utils::read.table("clipboard", sep = "\t", header = TRUE)
-      }
-      else{
-        readClipboard()
+    } else{
+      if (.Platform$OS.type == "windows") {
+        if (isTRUE(istable)) {
+          utils::read.table("clipboard", sep = "\t", header = TRUE)
+        }
+        else{
+          readClipboard()
+        }
       }
     }
   }
