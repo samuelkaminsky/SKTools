@@ -19,8 +19,7 @@ write.clip <- function(object) {
       object,
       "clipboard",
       sep = "\t",
-      row.names = FALSE,
-      col.names = FALSE
+      row.names = FALSE
     )
   }
 }
