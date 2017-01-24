@@ -15,5 +15,6 @@ Imports:
     readxl,
     tidyr,
     dplyr,
-    tibble
+    tibble,
+    utils
 RoxygenNote: 5.0.1
