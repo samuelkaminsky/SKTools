@@ -13,7 +13,7 @@ Imports:
     openxlsx,
     pbapply,
     readxl,
-    tidyr,
+    reshape2,
     dplyr,
     tibble,
     utils

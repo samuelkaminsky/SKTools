@@ -4,19 +4,17 @@
 \alias{corr.summary}
 \title{Clean corr.test output}
 \usage{
-corr.summary(corr.test.results)
+corr.summary(corr.test.results, alpha = 0.05)
 }
 \arguments{
 \item{corr.test.results}{corr.test object}
+
+\item{alpha}{Alpha level to test significance}
 }
 \value{
 Dataframe with clean output
 }
 \description{
-<<<<<<< HEAD
-Converts corr.test output to single dataframe with most important information
-=======
 Converts corr.test output to single dataframe with most important information (IV, DV, r, n, t, p)
->>>>>>> 7b1c440f09aeaec8b166894f0710f0b85a942b90
 }
 
