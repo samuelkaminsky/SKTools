@@ -12,9 +12,9 @@ corr.summary <- function(corr.test.results, alpha = .05) {
   if (length(corr.test.results[2] == 1)) {
     corr.test.results[2] <-
       list(n = rep(x = corr.test.results[[2]],
-                   reshape2::melt(
+                   nrow(reshape2::melt(
                      tibble::rownames_to_column(as.data.frame(corr.test.results[[1]]))
-                   ) %>% nrow()))
+                   ))))
   }
   cor.df =
     dplyr::bind_cols(lapply(corr.test.results[1:4], function(x) {
