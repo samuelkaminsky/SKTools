@@ -13,6 +13,6 @@ write.clip(object)
 Table pasted to clipboard
 }
 \description{
-NOTE THAT I DID NOT WRITE THIS CODE, IT COMES FROM https://tonyladson.wordpress.com/2015/05/20/writing-to-the-clipboard-mac/
+NOTE THAT I DID NOT WRITE THIS CODE, MOST OF IT COMES FROM https://tonyladson.wordpress.com/2015/05/20/writing-to-the-clipboard-mac/
 }
 
