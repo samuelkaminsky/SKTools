@@ -1,7 +1,7 @@
 #' Write object to clipboard
 #'
 #' @param object R object
-#' @description NOTE THAT I DID NOT WRITE THIS CODE, IT COMES FROM https://tonyladson.wordpress.com/2015/05/20/writing-to-the-clipboard-mac/
+#' @description NOTE THAT I DID NOT WRITE THIS CODE, MOST OF IT COMES FROM https://tonyladson.wordpress.com/2015/05/20/writing-to-the-clipboard-mac/
 #' @return Table pasted to clipboard
 #' @export
 
