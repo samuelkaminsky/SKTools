@@ -13,10 +13,11 @@ read_excel_all <-
   function(path,
            save2env = FALSE,
            check.names = TRUE,
-           names = "",skip=0) {
+           names = "",
+           skip = 0) {
     sheetnames <- readxl::excel_sheets(path)
     if (length(readxl::excel_sheets(path)) == 1) {
-      worksheet <- readxl::read_excel(path=path,skip=skip)
+      worksheet <- readxl::read_excel(path = path, skip = skip)
       if (isTRUE(check.names)) {
         names(worksheet) <-  make.names(names(worksheet))
         worksheet
@@ -26,8 +27,12 @@ read_excel_all <-
     } else{
       make.sheetnames <- make.names(sheetnames, unique = TRUE)
       workbook <-
-        lapply(sheetnames, function(x)
-          readxl::read_excel(path=path, sheet = x,skip=skip))
+        pbapply::pblapply(sheetnames, function(x)
+          readxl::read_excel(
+            path = path,
+            sheet = x,
+            skip = skip
+          ))
       if (sum(names != "") > 0) {
         names(workbook) <- names
       } else {
