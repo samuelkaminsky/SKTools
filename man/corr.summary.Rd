@@ -15,6 +15,6 @@ corr.summary(corr.test.results, alpha = 0.05)
 Dataframe with clean output
 }
 \description{
-Converts corr.test output to single dataframe with most important information (IV, DV, r, n, t, p)
+Converts corr.test output to tidy dataframe with most important information (IV, DV, r, n, t, p)
 }
 
