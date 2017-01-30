@@ -7,9 +7,6 @@
 
 corr.summary <- function(corr.test.results, alpha = .05) {
   if (length(corr.test.results[[2]]) == 1) {
-    # if (!("corr.test" %in% class(corr.test.results))) {
-    # stop("Not a corr.test object")
-    # }
     corr.test.results[2] <-
       list(n = rep(x = corr.test.results[[2]],
                    nrow(
