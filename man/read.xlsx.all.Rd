@@ -24,4 +24,3 @@ If there is more than one worksheet, then a list of data frames that represent e
 \description{
 Read an entire Excel file workbook (using openxlsx functions)
 }
-

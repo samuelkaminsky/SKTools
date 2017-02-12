@@ -15,4 +15,3 @@ Table object
 \description{
 NOTE THAT I DID NOT WRITE THIS CODE, IT HAS BEEN ADAPTED FROM https://tonyladson.wordpress.com/2015/05/20/writing-to-the-clipboard-mac/
 }
-

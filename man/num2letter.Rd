@@ -17,4 +17,3 @@ Character string a letter and optional appended number
 \description{
 Converts a number to an equivalent letter, with an option to concatenate a row value. Useful for adding data to existing Google Sheets
 }
-

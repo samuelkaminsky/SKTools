@@ -15,4 +15,3 @@ POSIXct date value
 \description{
 Convert date from Excel (Windows) to R
 }
-

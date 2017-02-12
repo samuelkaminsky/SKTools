@@ -17,4 +17,3 @@ Dataframe with clean output
 \description{
 Converts corr.test output to tidy dataframe with most important information (IV, DV, r, n, t, p)
 }
-
