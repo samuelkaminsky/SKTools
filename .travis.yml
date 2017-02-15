@@ -1,0 +1,5 @@
+# Travis file
+# See https://docs.travis-ci.com/user/languages/r/
+
+language: R
+cache: packages
