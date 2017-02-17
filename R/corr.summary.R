@@ -1,9 +1,6 @@
 #' Clean corr.test output
 #' @param corr.test.results corr.test object
 #' @param alpha Alpha level to test significance
-#' @importFrom tibble rownames_to_column
-#' @importFrom reshape2 melt
-#' @importFrom dplyr bind_cols
 #' @return Dataframe with clean output
 #' @export
 #' @description Converts corr.test output to tidy dataframe with most important information (IV, DV, r, n, t, p)

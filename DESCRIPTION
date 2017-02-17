@@ -10,7 +10,7 @@ LazyData: true
 License: GPL-3
 Imports:
     moments,
-    openxlsx,
+    openxlsx, 
     pbapply,
     readxl,
     reshape2,
