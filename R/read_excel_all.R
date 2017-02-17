@@ -5,6 +5,7 @@
 #' @param check.names Either TRUE to make variable names syntactically valid or FALSE to preserve original names
 #' @param names A vector of character data representing preferred sheet names
 #' @param skip Number of rows to skip when reading in data
+#' @import readxl
 #' @return If there is more than one worksheet, then a list of data frames that represent each worksheet. If there is only one worksheet, then a data frame.
 #' @export
 
