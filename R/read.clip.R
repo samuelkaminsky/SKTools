@@ -6,10 +6,19 @@
 #' @export
 
 read.clip <-
-  function(istable = TRUE) {
+  function(istable = TRUE,
+           row.names = FALSE) {
     if (.Platform$OS.type == "unix") {
       if (isTRUE(istable)) {
-        utils::read.table(pipe("pbpaste"), sep = "\t", header = TRUE,row.names = FALSE)
+        utils::read.table(pipe("pbpaste"),
+                          sep = "\t",
+                          header = TRUE,
+                          if (row.names) {
+                            row.names = TRUE
+                          } else {
+                            row.names = FALSE
+                          })
+        
       } else{
         as.vector(unlist(utils::read.table(
           pipe("pbpaste"), sep = "\t", header = FALSE
@@ -18,7 +27,7 @@ read.clip <-
     } else{
       if (.Platform$OS.type == "windows") {
         if (isTRUE(istable)) {
-          utils::read.table("clipboard", sep = "\t", header = TRUE,row.names = FALSE)
+          utils::read.delim("clipboard")
         } else{
           readClipboard()
         }
