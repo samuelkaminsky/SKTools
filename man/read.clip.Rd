@@ -4,7 +4,7 @@
 \alias{read.clip}
 \title{Read object from clipboard}
 \usage{
-read.clip(istable = TRUE)
+read.clip(istable = TRUE, row.names = FALSE)
 }
 \arguments{
 \item{istable}{Either TRUE if clipboard object is a tablle, or FALSE if object is a vector}
@@ -13,5 +13,5 @@ read.clip(istable = TRUE)
 Table object
 }
 \description{
-NOTE THAT I DID NOT WRITE THIS CODE, IT HAS BEEN ADAPTED FROM https://tonyladson.wordpress.com/2015/05/20/writing-to-the-clipboard-mac/
+Function to read from the clipboard on Unix and Windows computers. Note that much of this code has been from  https://tonyladson.wordpress.com/2015/05/20/writing-to-the-clipboard-mac/
 }

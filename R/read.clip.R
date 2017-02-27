@@ -1,15 +1,24 @@
 #' Read object from clipboard
 #'
-#' @description NOTE THAT I DID NOT WRITE THIS CODE, IT HAS BEEN ADAPTED FROM https://tonyladson.wordpress.com/2015/05/20/writing-to-the-clipboard-mac/
+#' @description Function to read from the clipboard on Unix and Windows computers. Note that much of this code has been from  https://tonyladson.wordpress.com/2015/05/20/writing-to-the-clipboard-mac/
 #' @param istable Either TRUE if clipboard object is a tablle, or FALSE if object is a vector
 #' @return Table object
 #' @export
 
 read.clip <-
-  function(istable = TRUE) {
+  function(istable = TRUE,
+           row.names = FALSE) {
     if (.Platform$OS.type == "unix") {
       if (isTRUE(istable)) {
-        utils::read.table(pipe("pbpaste"), sep = "\t", header = TRUE,row.names = FALSE)
+        utils::read.table(pipe("pbpaste"),
+                          sep = "\t",
+                          header = TRUE,
+                          if (row.names) {
+                            row.names = TRUE
+                          } else {
+                            row.names = FALSE
+                          })
+        
       } else{
         as.vector(unlist(utils::read.table(
           pipe("pbpaste"), sep = "\t", header = FALSE
@@ -18,7 +27,7 @@ read.clip <-
     } else{
       if (.Platform$OS.type == "windows") {
         if (isTRUE(istable)) {
-          utils::read.table("clipboard", sep = "\t", header = TRUE,row.names = FALSE)
+          utils::read.delim("clipboard")
         } else{
           readClipboard()
         }
