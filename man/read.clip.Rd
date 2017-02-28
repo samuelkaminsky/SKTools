@@ -8,6 +8,8 @@ read.clip(istable = TRUE, row.names = FALSE)
 }
 \arguments{
 \item{istable}{Either TRUE if clipboard object is a tablle, or FALSE if object is a vector}
+
+\item{row.names}{Either TRUE if the clipboard object contains row.names or FALSE if it does not}
 }
 \value{
 Table object
