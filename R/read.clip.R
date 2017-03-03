@@ -7,19 +7,10 @@
 #' @export
 
 read.clip <-
-  function(istable = TRUE,
-           row.names = FALSE) {
+  function(istable = TRUE) {
     if (.Platform$OS.type == "unix") {
       if (isTRUE(istable)) {
-        utils::read.table(pipe("pbpaste"),
-                          sep = "\t",
-                          header = TRUE,
-                          if (row.names) {
-                            row.names = TRUE
-                          } else {
-                            row.names = FALSE
-                          })
-        
+        utils::read.delim(pipe("pbpaste"))
       } else{
         as.vector(unlist(utils::read.table(
           pipe("pbpaste"), sep = "\t", header = FALSE
