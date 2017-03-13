@@ -4,7 +4,7 @@
 \alias{read_excel_all}
 \title{Read an entire Excel file workbook (using readxl functions)}
 \usage{
-read_excel_all(path, save2env = FALSE, check.names = TRUE, names = "",
+read_excel_all(path, save2env = FALSE, check.names = FALSE, names = "",
   skip = 0)
 }
 \arguments{

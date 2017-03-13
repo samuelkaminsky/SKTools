@@ -11,7 +11,7 @@
 read_excel_all <-
   function(path,
            save2env = FALSE,
-           check.names = TRUE,
+           check.names = FALSE,
            names = "",
            skip = 0) {
     sheetnames <- readxl::excel_sheets(path)
@@ -26,7 +26,7 @@ read_excel_all <-
     } else{
       make.sheetnames <- make.names(sheetnames, unique = TRUE)
       workbook <-
-        pbapply::pblapply(sheetnames, function(x)
+        lapply(sheetnames, function(x)
           readxl::read_excel(
             path = path,
             sheet = x,
