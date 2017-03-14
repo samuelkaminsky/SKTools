@@ -27,7 +27,7 @@ read.xlsx.all <-
     } else{
       make.sheetnames <- make.names(sheetnames, unique = TRUE)
       workbook <-
-        pbapply::pblapply(sheetnames, function(x)
+        lapply(sheetnames, function(x)
           openxlsx::read.xlsx(
             xlsxFile = xlsxFile,
             sheet = x,
