@@ -8,7 +8,6 @@
 #' @return If there is more than one worksheet, then a list of data frames that represent each worksheet. If there is only one worksheet, then a data frame.
 #' @export
 
-
 read.xlsx.all <-
   function(xlsxFile,
            save2env = FALSE,
