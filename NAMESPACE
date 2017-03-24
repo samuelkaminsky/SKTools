@@ -2,6 +2,7 @@
 
 export(corr.summary)
 export(excel_date)
+export(install.sk)
 export(num2letter)
 export(quality.check)
 export(read.clip)
