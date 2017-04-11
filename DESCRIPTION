@@ -15,5 +15,6 @@ Imports:
     reshape2,
     dplyr,
     tibble,
-    utils
+    utils,
+    purrr
 RoxygenNote: 6.0.1
