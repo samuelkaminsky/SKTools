@@ -33,8 +33,8 @@ install.sk <- function(extra = FALSE) {
   }
   
   new.packages <-
-    list.of.packages[!(list.of.packages %in% installed.packages()[, "Package"])]
+    list.of.packages[!(list.of.packages %in% utils::installed.packages()[, "Package"])]
   if (length(new.packages)) {
-    install.packages(new.packages)
+    utils::install.packages(new.packages)
   }
 }
