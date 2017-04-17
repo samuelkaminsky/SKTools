@@ -4,7 +4,7 @@
 \alias{distinct.2col}
 \title{Remove duplicates based on two columns, ignoring their order}
 \usage{
-distinct.2col(df, col1, col2)
+\method{distinct}{2col}(df, col1, col2)
 }
 \arguments{
 \item{df}{Dataframe}
