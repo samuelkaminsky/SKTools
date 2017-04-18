@@ -12,10 +12,10 @@ Imports:
     moments,
     openxlsx, 
     readxl,
-    reshape2,
     dplyr,
     tibble,
     utils,
     purrr,
-    httr
+    httr,
+    tidyr
 RoxygenNote: 6.0.1
