@@ -9,7 +9,7 @@
 #' @export
 
 qualtrics.prior.distros <-
-  function(surveyId,header.all) {
+  function(surveyId, header.all) {
     distributions.response <-
       GET(
         url = paste0(
@@ -22,9 +22,9 @@ qualtrics.prior.distros <-
     
     distributions.list <-
       distributions.response$result$elements %>%
-      map( ~ .$recipients$mailingListId) %>%
+      map(~ .$recipients$mailingListId) %>%
       unlist() %>%
-      map( ~ GET(
+      map(~ GET(
         url = paste0(
           "https://az1.qualtrics.com/API/v3/mailinglists/",
           .,
@@ -32,13 +32,17 @@ qualtrics.prior.distros <-
         ),
         add_headers(header.all)
       )) %>%
-      map( ~ content(.)) %>%
-      map( ~ .$result$elements)
+      map(~ content(.)) %>%
+      map(~ .$result$elements)
     
     distributions.df <-
       map_df(1:length(distributions.list), function(x) {
         map_df(1:length(distributions.list[[x]]), function(y) {
-          distributions.list[[x]][[y]] %>% unlist %>% t %>% as.data.frame()
+          distributions.list[[x]][[y]] %>%
+            unlist %>%
+            t %>%
+            as.data.frame() %>%
+            dplyr::mutate_all(as.character)
         })
       })
     return(distributions.df)
