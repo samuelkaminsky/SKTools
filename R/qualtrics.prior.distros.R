@@ -2,16 +2,13 @@
 #' @param surveyId Qualtrics Survey ID
 #' @param header.all Header
 #' @return Data frame of distribution data
-#' @import httr
-#' @importFrom dplyr %>% select mutate distinct left_join
-#' @importFrom purrr map map_df
 #' @description Retrieves distributions for a survey on Qualtrics
 #' @export
 
 qualtrics.prior.distros <-
   function(surveyId, header.all) {
     distributions.response <-
-      GET(
+      httr::GET(
         url = paste0(
           "https://az1.qualtrics.com/API/v3/distributions?surveyId=",
           surveyId
@@ -22,9 +19,9 @@ qualtrics.prior.distros <-
     
     distributions.list <-
       distributions.response$result$elements %>%
-      map(~ .$recipients$mailingListId) %>%
+      purrr::map( ~ .$recipients$mailingListId) %>%
       unlist() %>%
-      map(~ GET(
+      purrr::map( ~ GET(
         url = paste0(
           "https://az1.qualtrics.com/API/v3/mailinglists/",
           .,
@@ -32,16 +29,17 @@ qualtrics.prior.distros <-
         ),
         add_headers(header.all)
       )) %>%
-      map(~ content(.)) %>%
-      map(~ .$result$elements)
+      purrr::map( ~ content(.)) %>%
+      purrr::map( ~ .$result$elements)
     
     distributions.df <-
-      map_df(1:length(distributions.list), function(x) {
-        map_df(1:length(distributions.list[[x]]), function(y) {
+      purrr::map_df(1:length(distributions.list), function(x) {
+        purrr::map_df(1:length(distributions.list[[x]]), function(y) {
           distributions.list[[x]][[y]] %>%
             unlist %>%
-            t %>%
+            t() %>%
             as.data.frame() %>%
+            tibble::repair_names() %>% 
             dplyr::mutate_all(as.character)
         })
       })
