@@ -17,7 +17,7 @@ qualtrics.prior.distros <-
       ) %>%
       httr::content()
     
-    distributions.list <<-
+    distributions.list <-
       distributions.response$result$elements %>%
       purrr::map( ~ .$recipients$mailingListId) %>%
       unlist() %>%
@@ -32,7 +32,7 @@ qualtrics.prior.distros <-
       purrr::map( ~ httr::content(.)) %>%
       purrr::map( ~ .$result$elements)
     
-    distributions.df <<-
+    distributions.df <-
       purrr::map_df(1:length(distributions.list), function(x) {
         purrr::map_df(
           1:length(distributions.list[[x]]),
