@@ -17,5 +17,7 @@ Imports:
     utils,
     purrr,
     httr,
-    tidyr
+    tidyr,
+    jsonlite,
+    stringr
 RoxygenNote: 6.0.1
