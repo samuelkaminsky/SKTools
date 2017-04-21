@@ -8,7 +8,6 @@ install.sk <- function(extra = FALSE) {
     c(
       "tidyverse",
       "openxlsx",
-      "car",
       "sjmisc",
       "data.table",
       "rmarkdown",
@@ -28,7 +27,8 @@ install.sk <- function(extra = FALSE) {
       "feather",
       "GGally",
       "knitr",
-      "lavaan"
+      "lavaan",
+      "car"
     )
   }
   
