@@ -2,7 +2,7 @@
 #' @param df Dataframe with test data
 #' @param ivs Names of indepndent variables as character string
 #' @param dvs Names of dependent variables as character string
-#' @param perc Nth percentile
+#' @param perc Nth percentile to conduct T-Test at
 #' @return Data frame of tidy t.test results
 #' @description Conduct T-Tests at every 5% interval for list of IVs and DVs
 #' @export
