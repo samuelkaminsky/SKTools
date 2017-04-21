@@ -2,9 +2,15 @@
 % Please edit documentation in R/ttest.all.r
 \name{ttest.all}
 \alias{ttest.all}
+<<<<<<< HEAD
 \title{Conduct T-Tests at every nth percentile for list of IVs and DVs}
 \usage{
 ttest.all(df, ivs, dvs, perc = 0.05)
+=======
+\title{Conduct T-Tests at every fifth percentile for list of IVs and DVs}
+\usage{
+ttest.all(df, ivs, dvs)
+>>>>>>> fd7fdbf2b9a1c98409e6014d31824be794654535
 }
 \arguments{
 \item{df}{Dataframe with test data}
@@ -12,8 +18,11 @@ ttest.all(df, ivs, dvs, perc = 0.05)
 \item{ivs}{Names of indepndent variables as character string}
 
 \item{dvs}{Names of dependent variables as character string}
+<<<<<<< HEAD
 
 \item{perc}{Pth percentile}
+=======
+>>>>>>> fd7fdbf2b9a1c98409e6014d31824be794654535
 }
 \value{
 Data frame of tidy t.test results
