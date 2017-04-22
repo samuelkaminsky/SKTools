@@ -11,5 +11,6 @@ qualtRics.json.df <-
       jsonlite::fromJSON() %>%
       unlist(recursive = FALSE) %>%
       dplyr::as_tibble() %>%
-      purrr::set_names(stringr::str_replace(names(.), "responses.", ""))
+      purrr::set_names(stringr::str_replace(names(.), "responses.", "")) %>% 
+      dplyr::mutate_if(is.list,unlist)
   }
