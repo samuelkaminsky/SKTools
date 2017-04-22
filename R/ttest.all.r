@@ -8,9 +8,9 @@
 #' @export
 
 ttest.all <-
-  function(df,ivs,dvs,perc=.05){
-    dvs <- enquo(dvs)
-    ivs <- enquo(ivs)
+  function(df,ivs,dvs,perc=.05) {
+    dvs <- dplyr::enquo(dvs)
+    ivs <- dplyr::enquo(ivs)
     IVs <-
       df %>%
       dplyr::select(!!ivs) %>%
@@ -30,7 +30,7 @@ ttest.all <-
               as.list() %>%
               purrr::map_df(purrr::possibly(function(z){
                 df$Grouped <-
-                  if_else(df[, x] >= z, 1, 0)
+                  dplyr::if_else(df[, x] >= z, 1, 0)
                 
                 
                 cd <-
@@ -52,14 +52,14 @@ ttest.all <-
                         Value = z,
                         cd.df)
                 
-              },otherwise = data_frame(Cutoff=NA_real_,cd.est=NA_real_,cd.mag=NA_character_))
+              },otherwise = tibble::data_frame(Cutoff=NA_real_,cd.est=NA_real_,cd.mag=NA_character_))
               ,
               .id="Cutoff"
               )
           },.id="DV")
       },.id="IV") %>%
-      distinct %>%
-      mutate(sig=if_else(p.value < .05,TRUE,FALSE)) %>%
-      mutate_at(vars(estimate:conf.high, Value), funs(round(., 6))) %>%
-      distinct(IV, DV, estimate, estimate1, .keep_all = TRUE)
+      dplyr::distinct %>%
+      dplyr::mutate(sig=dplyr::if_else(p.value < .05,TRUE,FALSE)) %>%
+      dplyr::mutate_at(vars(estimate:conf.high, Value), funs(round(., 6))) %>%
+      dplyr::distinct(IV, DV, estimate, estimate1, .keep_all = TRUE)
   }

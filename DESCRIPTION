@@ -19,5 +19,7 @@ Imports:
     httr,
     tidyr,
     jsonlite,
-    stringr
+    stringr,
+    broom,
+    effsize
 RoxygenNote: 6.0.1

@@ -13,7 +13,7 @@ ttest.all(df, ivs, dvs, perc = 0.05)
 
 \item{dvs}{Names of dependent variables as character string}
 
-\item{perc}{Nth percentile}
+\item{perc}{Nth percentile to conduct T-Test at}
 }
 \value{
 Data frame of tidy t.test results
