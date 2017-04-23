@@ -2,7 +2,7 @@ Package: SKTools
 Type: Package
 Title: SK's Tools
 Version: 0.2.4
-Author: Samuel Kaminsky (with some code from Eric Knudsen)
+Author: Samuel Kaminsky
 Maintainer: Samuel Kaminsky <samuel.e.kaminsky@gmail.com>
 Description: Adds some helpful functions for dealing with Excel files and analyzing data.
 Encoding: UTF-8
@@ -21,5 +21,6 @@ Imports:
     jsonlite,
     stringr,
     broom,
-    effsize
+    effsize,
+    devtools
 RoxygenNote: 6.0.1
