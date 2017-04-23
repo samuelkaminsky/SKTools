@@ -9,9 +9,9 @@ ttest.all(df, ivs, dvs, perc = 0.05)
 \arguments{
 \item{df}{Dataframe with test data}
 
-\item{ivs}{Names of indepndent variables as character string}
+\item{ivs}{Names of indepndent variables to be inserted into dplyr::select()}
 
-\item{dvs}{Names of dependent variables as character string}
+\item{dvs}{Names of dependent variables to be inserted into dplyr::select()}
 
 \item{perc}{Nth percentile to conduct T-Test at}
 }
