@@ -8,8 +8,8 @@ github_update <- function() {
     .$Package %>%
     purrr::set_names()  %>%
     purrr::map(utils::packageDescription) %>%
-    purrr::map(~ paste0(.$GithubUsername, "/", .$GithubRepo)) %>%
-    purrr::walk(purrr::safely(~ devtools::install_github(.)))
+    purrr::map( ~ paste0(.$GithubUsername, "/", .$GithubRepo)) %>%
+    purrr::map_if(nchar(.) > 3, purrr::safely( ~ devtools::install_github(.)))
   if ("SKTools" %in% loadedNamespaces()) {
     unloadNamespace("SKTools")
     library(SKTools)
