@@ -21,5 +21,6 @@ Imports:
     jsonlite,
     stringr,
     broom,
-    effsize
+    effsize,
+    devtools
 RoxygenNote: 6.0.1
