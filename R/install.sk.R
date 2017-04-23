@@ -23,7 +23,6 @@ install.sk <- function(extra = FALSE) {
       "parallel",
       "doParallel",
       "foreach",
-      "dtplyr",
       "feather",
       "GGally",
       "knitr",
