@@ -28,6 +28,7 @@
 #' * lsr
 #' * parallel
 #' * semTools
+#' * shinythemes
 #' * reshape2
 #' @md
 
@@ -63,6 +64,7 @@ install.sk <- function(extra = FALSE) {
         "lsr",
         "parallel",
         "semTools",
+        "shinythemes",
         "reshape2"
       )
   }
