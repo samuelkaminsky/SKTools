@@ -6,29 +6,38 @@
 install.sk <- function(extra = FALSE) {
   list.of.packages <-
     c(
+      "anytime",
       "tidyverse",
+      "data.table",
       "openxlsx",
       "sjmisc",
-      "data.table",
       "rmarkdown",
       "psych",
-      "shiny"
-    )
+      "lavaan",
+      "shiny",
+      "knitr",
+      "roxygen2",
+      "feather"
+      )
   
   if (isTRUE(extra)) {
-    c(
-      list.of.packages,
-      "googlesheets",
-      "lsr",
-      "parallel",
-      "doParallel",
-      "foreach",
-      "feather",
-      "GGally",
-      "knitr",
-      "lavaan",
-      "car"
-    )
+    list.of.packages <-
+      c(
+        list.of.packages,
+        "car",
+        "caret",
+        "doParallel",
+        "dtplyr",
+        "effsize",
+        "foreach",
+        "GGally",
+        "googlesheets",
+        "gtools",
+        "lsr",
+        "parallel",
+        "semTools",
+        "reshape2"
+      )
   }
   
   new.packages <-
