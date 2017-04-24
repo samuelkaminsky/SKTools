@@ -2,7 +2,6 @@
 
 export(corr.summary)
 export(distinct2col)
-export(excel_date)
 export(github_update)
 export(install.sk)
 export(num2letter)
