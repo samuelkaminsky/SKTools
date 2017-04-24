@@ -54,7 +54,7 @@ ttest.all <-
                           group_by(Grouped) %>% 
                           summarize(Count=sum(Count)) %>% 
                           spread(Grouped,Count),
-                        Value = z,
+                        Cutoff.Num = z,
                         cd.df)
 
               }
@@ -71,18 +71,20 @@ ttest.all <-
         alternative = NA_character_,
         `0` = NA_real_,
         `1` = NA_real_,
-        value = NA_real_,
-        Cutoff = NA_real_,
+        Cutoff.Num = NA_real_,
+        Cutoff.Perc = NA_real_,
         cd.est = NA_real_,
         cd.mag = NA_character_
       ))
       ,
-              .id="Cutoff"
+              .id="Cutoff.Perc"
               )
           },.id="DV")
       },.id="IV") %>%
       dplyr::distinct() %>%
+      tidyr::drop_na(estimate) %>% 
       dplyr::mutate(sig=dplyr::if_else(p.value < .05,TRUE,FALSE)) %>%
-      dplyr::mutate_at(vars(estimate:conf.high, Value), funs(round(., 6))) %>%
-      dplyr::distinct(IV, DV, estimate, estimate1, .keep_all = TRUE)
+      dplyr::mutate_at(vars(estimate:conf.high, Cutoff.Num), funs(round(., 6))) %>%
+      dplyr::distinct(IV, DV, estimate, estimate1, .keep_all = TRUE) %>% 
+      dplyr::select(IV,DV,Cutoff.Perc,Cutoff.Num,everything())
   }
