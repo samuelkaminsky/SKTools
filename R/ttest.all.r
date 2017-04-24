@@ -26,39 +26,62 @@ ttest.all <-
       purrr::map_df(function(x){
         DVs %>%
           purrr::map_df(function(y){
-            stats::quantile(df[,x],seq(0.05,.95,perc),na.rm=TRUE) %>%
+            stats::quantile(df[,x] %>% unlist,seq(from=0.05,to=.95,by=perc),na.rm=TRUE) %>%
               as.list() %>%
-              purrr::map_df(purrr::possibly(function(z){
+              purrr::map_df(
+                purrr::possibly(
+                  function(z){
                 df$Grouped <-
-                  dplyr::if_else(df[, x] >= z, 1, 0)
+                  dplyr::if_else(df[, x] >= z, 1, 0) %>% 
+                  as.factor()
                 
+                testval<<-class(df$Grouped)
                 
                 cd <-
-                  effsize::cohen.d(df[, y] ~ df$Grouped)
+                  effsize::cohen.d(as.formula(paste0(y," ~ Grouped")),data=df)
                 
                 cd.df <-
                   data.frame(
                     cd.est = cd$estimate %>% as.numeric(),
                     cd.mag = cd$magnitude %>% as.character()
                   )
-                
-                
-                stats::t.test(df[, y] ~ df$Grouped) %>%
-                  broom::tidy(.) %>%
-                  cbind(table(df$Grouped, df[, y]) %>%
-                          rowSums() %>%
-                          t %>%
-                          as.data.frame(),
+
+                stats::t.test(as.formula(paste0(y," ~ Grouped")),data=df) %>%
+                  broom::tidy() %>%
+                  cbind(df %>% 
+                          group_by_(c("Grouped",y)) %>% 
+                          summarize(Count=n()) %>% 
+                          group_by(Grouped) %>% 
+                          summarize(Count=sum(Count)) %>% 
+                          spread(Grouped,Count),
                         Value = z,
                         cd.df)
-                
-              },otherwise = tibble::data_frame(Cutoff=NA_real_,cd.est=NA_real_,cd.mag=NA_character_))
-              ,
+
+              }
+      ,otherwise = tibble::data_frame(
+        estimate = NA_real_,
+        estimate1 = NA_real_,
+        estimate2 = NA_real_,
+        statistic = NA_real_,
+        p.value = NA_real_,
+        parameter = NA_real_,
+        conf.low = NA_real_,
+        conf.high = NA_real_,
+        method = NA_character_,
+        alternative = NA_character_,
+        `0` = NA_real_,
+        `1` = NA_real_,
+        value = NA_real_,
+        Cutoff = NA_real_,
+        cd.est = NA_real_,
+        cd.mag = NA_character_
+      ))
+      ,
               .id="Cutoff"
               )
           },.id="DV")
       },.id="IV") %>%
-      dplyr::distinct %>%
+      dplyr::distinct() %>%
       dplyr::mutate(sig=dplyr::if_else(p.value < .05,TRUE,FALSE)) %>%
       dplyr::mutate_at(vars(estimate:conf.high, Value), funs(round(., 6))) %>%
       dplyr::distinct(IV, DV, estimate, estimate1, .keep_all = TRUE)
