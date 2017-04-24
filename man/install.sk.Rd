@@ -43,6 +43,7 @@ Packages installed with the extra=TRUE argument include:
 \item lsr
 \item parallel
 \item semTools
+\item shinythemes
 \item reshape2
 }
 }
