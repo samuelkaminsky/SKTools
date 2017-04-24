@@ -38,7 +38,7 @@ ttest.all <-
                 testval<<-class(df$Grouped)
                 
                 cd <-
-                  effsize::cohen.d(as.formula(paste0(y," ~ Grouped")),data=df)
+                  effsize::cohen.d(stats::as.formula(paste0(y," ~ Grouped")),data=df)
                 
                 cd.df <-
                   data.frame(
@@ -46,14 +46,14 @@ ttest.all <-
                     cd.mag = cd$magnitude %>% as.character()
                   )
 
-                stats::t.test(as.formula(paste0(y," ~ Grouped")),data=df) %>%
+                stats::t.test(stats::as.formula(paste0(y," ~ Grouped")),data=df) %>%
                   broom::tidy() %>%
                   cbind(df %>% 
-                          group_by_(c("Grouped",y)) %>% 
-                          summarize(Count=n()) %>% 
-                          group_by(Grouped) %>% 
-                          summarize(Count=sum(Count)) %>% 
-                          spread(Grouped,Count),
+                          dplyr::group_by_(c("Grouped",y)) %>% 
+                          dplyr::summarize(Count=dplyr::n()) %>% 
+                          dplyr::group_by(Grouped) %>% 
+                          dplyr::summarize(Count=sum(Count)) %>% 
+                          tidyr::spread(Grouped,Count),
                         Cutoff.Num = z,
                         cd.df)
 
@@ -86,5 +86,5 @@ ttest.all <-
       dplyr::mutate(sig=dplyr::if_else(p.value < .05,TRUE,FALSE)) %>%
       dplyr::mutate_at(vars(estimate:conf.high, Cutoff.Num), funs(round(., 6))) %>%
       dplyr::distinct(IV, DV, estimate, estimate1, .keep_all = TRUE) %>% 
-      dplyr::select(IV,DV,Cutoff.Perc,Cutoff.Num,everything())
+      dplyr::select(IV,DV,Cutoff.Perc,Cutoff.Num,dplyr::everything())
   }
