@@ -1,6 +1,7 @@
 #' Checks quality of data in a data frame
 #'
 #' @param df name of dataframe
+#' @author Eric Knudsen <eknudsen88@gmail.com>
 #' @return summary statistics of data frame
 #' @export
 

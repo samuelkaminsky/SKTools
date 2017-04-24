@@ -15,3 +15,6 @@ summary statistics of data frame
 \description{
 Checks quality of data in a data frame
 }
+\author{
+Eric Knudsen <eknudsen88@gmail.com>
+}
