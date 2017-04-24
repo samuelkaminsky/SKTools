@@ -7,19 +7,18 @@ install.sk <- function(extra = FALSE) {
   list.of.packages <-
     c(
       "anytime",
-      "tidyverse",
       "data.table",
-      "openxlsx",
-      "sjmisc",
-      "rmarkdown",
-      "psych",
-      "lavaan",
-      "shiny",
+      "feather",
       "knitr",
+      "lavaan",
+      "openxlsx",
+      "psych",
+      "rmarkdown",
       "roxygen2",
-      "feather"
-      )
-  
+      "shiny",
+      "sjmisc",
+      "tidyverse"
+    )
   if (isTRUE(extra)) {
     list.of.packages <-
       c(
