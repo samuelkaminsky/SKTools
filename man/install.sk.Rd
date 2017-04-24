@@ -12,3 +12,37 @@ install.sk(extra = FALSE)
 \description{
 Installs packages that I like
 }
+\details{
+Packages installed with the default arguments include:
+\itemize{
+\item anytime
+\item data.table
+\item feather
+\item knitr
+\item lavaan
+\item openxlsx
+\item psych
+\item rmarkdown
+\item roxygen2
+\item shiny
+\item sjmisc
+\item tidyverse
+}
+
+Packages installed with the extra=TRUE argument include:
+\itemize{
+\item car
+\item caret
+\item doParallel
+\item dtplyr
+\item effsize
+\item foreach
+\item GGally
+\item googlesheets
+\item gtools
+\item lsr
+\item parallel
+\item semTools
+\item reshape2
+}
+}
