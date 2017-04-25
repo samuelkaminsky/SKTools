@@ -43,9 +43,11 @@ Packages installed with the extra=TRUE argument include:
 \item gtools
 \item lsr
 \item parallel
+\item parsedate
 \item qualtRics
+\item relaimpo
+\item reshape2
 \item semTools
 \item shinythemes
-\item reshape2
 }
 }

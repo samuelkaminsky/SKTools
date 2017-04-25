@@ -28,10 +28,12 @@
 #' * gtools
 #' * lsr
 #' * parallel
+#' * parsedate
 #' * qualtRics
+#' * relaimpo
+#' * reshape2
 #' * semTools
 #' * shinythemes
-#' * reshape2
 #' @md
 
 install.sk <- function(extra = FALSE) {
@@ -66,10 +68,12 @@ install.sk <- function(extra = FALSE) {
         "gtools",
         "lsr",
         "parallel",
+        "parsedate",
+        "relaimpo",
+        "reshape2",
         "qualtRics",
         "semTools",
-        "shinythemes",
-        "reshape2"
+        "shinythemes"
       )
   }
   
