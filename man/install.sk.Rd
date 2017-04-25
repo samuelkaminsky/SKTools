@@ -34,6 +34,7 @@ Packages installed with the extra=TRUE argument include:
 \item car
 \item caret
 \item doParallel
+\item DT
 \item dtplyr
 \item effsize
 \item foreach
@@ -42,6 +43,7 @@ Packages installed with the extra=TRUE argument include:
 \item gtools
 \item lsr
 \item parallel
+\item qualtRics
 \item semTools
 \item shinythemes
 \item reshape2

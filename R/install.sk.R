@@ -19,6 +19,7 @@
 #' * car
 #' * caret
 #' * doParallel
+#' * DT
 #' * dtplyr
 #' * effsize
 #' * foreach
@@ -27,6 +28,7 @@
 #' * gtools
 #' * lsr
 #' * parallel
+#' * qualtRics
 #' * semTools
 #' * shinythemes
 #' * reshape2
@@ -55,6 +57,7 @@ install.sk <- function(extra = FALSE) {
         "car",
         "caret",
         "doParallel",
+        "DT",
         "dtplyr",
         "effsize",
         "foreach",
@@ -63,6 +66,7 @@ install.sk <- function(extra = FALSE) {
         "gtools",
         "lsr",
         "parallel",
+        "qualtRics",
         "semTools",
         "shinythemes",
         "reshape2"
