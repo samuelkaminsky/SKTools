@@ -13,6 +13,6 @@ distinct2col <- function(df, col1, col2) {
         sort
     }),
     dupevec = as.character(dupevec)) %>%
-    dplyr::distinct(dupevec, .keep_all = TRUE) %>%
+    dplyr::distinct_("dupevec", .keep_all = TRUE) %>%
     dplyr::select_("-dupevec")
 }

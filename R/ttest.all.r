@@ -57,9 +57,9 @@ ttest.all <-
                       df %>%
                         dplyr::group_by_(c("Grouped", y)) %>%
                         dplyr::summarize(Count = n()) %>%
-                        dplyr::group_by(Grouped) %>%
-                        dplyr::summarize(Count = sum(Count)) %>%
-                        tidyr::spread(Grouped, Count),
+                        dplyr::group_by_("Grouped") %>%
+                        dplyr::summarize_(Count = "sum(Count)") %>%
+                        tidyr::spread_("Grouped", "Count"),
                       Cutoff.Num = z,
                       cd.df
                     )
@@ -90,9 +90,9 @@ ttest.all <-
           }, .id = "DV")
       }, .id = "IV") %>%
       dplyr::distinct() %>%
-      tidyr::drop_na(estimate) %>%
+      tidyr::drop_na_("estimate") %>%
       dplyr::mutate(sig = dplyr::if_else(p.value < .05, TRUE, FALSE)) %>%
       dplyr::mutate_at(vars(estimate:conf.high, Cutoff.Num), funs(round(., 6))) %>%
-      dplyr::distinct(IV, DV, estimate, estimate1, .keep_all = TRUE) %>%
-      dplyr::select(IV, DV, Cutoff.Perc, Cutoff.Num, dplyr::everything())
+      dplyr::distinct_("IV", "DV", "estimate", "estimate1", .keep_all = TRUE) %>%
+      dplyr::select_("IV", "DV", "Cutoff.Perc", "Cutoff.Num", "dplyr::everything()")
   }
