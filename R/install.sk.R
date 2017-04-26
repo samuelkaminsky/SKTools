@@ -23,10 +23,12 @@
 #' * dtplyr
 #' * effsize
 #' * foreach
+#' * formatR
 #' * GGally
 #' * googlesheets
 #' * gtools
 #' * lsr
+#' * multilevel
 #' * parallel
 #' * parsedate
 #' * qualtRics
@@ -63,10 +65,12 @@ install.sk <- function(extra = FALSE) {
         "dtplyr",
         "effsize",
         "foreach",
+        "formatR",
         "GGally",
         "googlesheets",
         "gtools",
         "lsr",
+        "multilevel",
         "parallel",
         "parsedate",
         "relaimpo",

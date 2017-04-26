@@ -38,10 +38,12 @@ Packages installed with the extra=TRUE argument include:
 \item dtplyr
 \item effsize
 \item foreach
+\item formatR
 \item GGally
 \item googlesheets
 \item gtools
 \item lsr
+\item multilevel
 \item parallel
 \item parsedate
 \item qualtRics
