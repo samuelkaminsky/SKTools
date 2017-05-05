@@ -25,12 +25,14 @@
 #' * foreach
 #' * formatR
 #' * GGally
+#' * ggthemes
 #' * googlesheets
 #' * gtools
 #' * lsr
 #' * multilevel
 #' * parallel
 #' * parsedate
+#' * plotly
 #' * qualtRics
 #' * relaimpo
 #' * reshape2
@@ -67,12 +69,14 @@ install.sk <- function(extra = FALSE) {
         "foreach",
         "formatR",
         "GGally",
+        "ggthemes",
         "googlesheets",
         "gtools",
         "lsr",
         "multilevel",
         "parallel",
         "parsedate",
+        "plotly",
         "relaimpo",
         "reshape2",
         "qualtRics",
