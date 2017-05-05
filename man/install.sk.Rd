@@ -40,12 +40,14 @@ Packages installed with the extra=TRUE argument include:
 \item foreach
 \item formatR
 \item GGally
+\item ggthemes
 \item googlesheets
 \item gtools
 \item lsr
 \item multilevel
 \item parallel
 \item parsedate
+\item plotly
 \item qualtRics
 \item relaimpo
 \item reshape2
