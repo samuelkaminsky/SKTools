@@ -22,5 +22,6 @@ Imports:
     stringr,
     broom,
     effsize,
-    devtools
+    devtools,
+    rstudioapi
 RoxygenNote: 6.0.1

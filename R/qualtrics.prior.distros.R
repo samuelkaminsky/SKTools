@@ -7,7 +7,7 @@
 
 qualtrics.prior.distros <-
   function(surveyId, header.all) {
-    distributions.response <<-
+    distributions.response <-
       httr::GET(
         url = paste0(
           "https://az1.qualtrics.com/API/v3/distributions?surveyId=",

@@ -63,7 +63,6 @@ ttest.all <-
                       Cutoff.Num = z,
                       cd.df
                     )
-                  
                 }
                 ,
                 otherwise = tibble::data_frame(
@@ -84,8 +83,7 @@ ttest.all <-
                   cd.est = NA_real_,
                   cd.mag = NA_character_
                 )
-              )
-              ,
+              ),
               .id = "Cutoff.Perc")
           }, .id = "DV")
       }, .id = "IV") %>%
