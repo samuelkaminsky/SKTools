@@ -22,9 +22,9 @@ qualtrics.prior.distros <-
       purrr::map( ~ .$recipients$mailingListId) %>%
       unlist() 
     
-    if(is.null(distributions.list)){
-      return()
-    }
+    # if(is.null(distributions.list)){
+    #   return()
+    # }
     distributions.list <-
       distributions.list %>%
       purrr::map( ~ httr::GET(
@@ -38,7 +38,7 @@ qualtrics.prior.distros <-
       purrr::map( ~ httr::content(.)) %>%
       purrr::map( ~ .$result$elements)
     
-    distributions.df <-
+    distributions.df <- 
       purrr::map_df(1:length(distributions.list), function(x) {
         purrr::map_df(
           1:length(distributions.list[[x]]),
@@ -49,16 +49,16 @@ qualtrics.prior.distros <-
                 t() %>%
                 as.data.frame() %>%
                 tibble::repair_names() %>%
-                dplyr::mutate_all(as.character)
+                lapply(as.character)
             },
             otherwise = dplyr::tibble(
               id = NA_character_,
               firstName = NA_character_,
               lastName = NA_character_,
               email = NA_character_,
-              embeddedData.Position = NA_character_,
+              embeddedData.Req.Position.Title = NA_character_,
               embeddedData.Candidate.ID = NA_character_,
-              embeddedData.City = NA_character_,
+              embeddedData.Location.Code = NA_character_,
               embeddedData.Cand.Profile.ID = NA_character_,
               embeddedData.System.Req.ID = NA_character_,
               unsubscribed = NA_character_,
