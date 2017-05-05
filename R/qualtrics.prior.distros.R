@@ -20,7 +20,13 @@ qualtrics.prior.distros <-
     distributions.list <-
       distributions.response$result$elements %>%
       purrr::map( ~ .$recipients$mailingListId) %>%
-      unlist() %>%
+      unlist() 
+    
+    if(is.null(distributions.list)){
+      return()
+    }
+    distributions.list <-
+      distributions.list %>%
       purrr::map( ~ httr::GET(
         url = paste0(
           "https://az1.qualtrics.com/API/v3/mailinglists/",
@@ -28,7 +34,7 @@ qualtrics.prior.distros <-
           "/contacts"
         ),
         httr::add_headers(header.all)
-      )) %>%
+      ))  %>%
       purrr::map( ~ httr::content(.)) %>%
       purrr::map( ~ .$result$elements)
     
