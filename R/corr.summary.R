@@ -26,15 +26,15 @@ corr.summary <-
       purrr::map(~ tibble::rownames_to_column(.)) %>%
       purrr::map(~ tidyr::gather(., rowname)) %>%
       dplyr::bind_cols() %>%
-      dplyr::select_(
-        IV = "rowname",
-        DV = "rowname1",
-        r = "value",
-        n = "value1",
-        t = "value2",
-        p = "value3"
+      dplyr::select(
+        IV = .data$rowname,
+        DV = .data$rowname1,
+        r = .data$value,
+        n = .data$value1,
+        t = .data$value2,
+        p = .data$value3
       ) %>%
-      dplyr::mutate(Sig = dplyr::if_else(.$p < alpha, TRUE, FALSE)) %>%
-      dplyr::filter(!(.$IV == .$DV & .$r == 1))
+      dplyr::mutate(Sig = dplyr::if_else(.data$p < alpha, TRUE, FALSE)) %>%
+      dplyr::filter(!(.data$IV == .data$DV & .data$r == 1))
     return(cor.df)
   }

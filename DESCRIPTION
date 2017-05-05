@@ -23,5 +23,6 @@ Imports:
     broom,
     effsize,
     devtools,
-    rstudioapi
+    rstudioapi,
+    rlang
 RoxygenNote: 6.0.1

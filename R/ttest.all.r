@@ -1,9 +1,10 @@
 #' Conduct T-Tests at every nth percentile for list of IVs and DVs
 #' @param df Dataframe with test data
-#' @param ivs Names of indepndent variables to be inserted into dplyr::select()
+#' @param ivs Names of independent variables to be inserted into dplyr::select()
 #' @param dvs Names of dependent variables to be inserted into dplyr::select()
 #' @param perc Nth percentile to conduct T-Test at
 #' @return Data frame of tidy t.test results
+#' @importFrom dplyr n
 #' @description Conduct T-Tests at every 5% interval for list of IVs and DVs
 #' @export
 
@@ -38,8 +39,6 @@ ttest.all <-
                     dplyr::if_else(df[, x] >= z, 1, 0) %>%
                     as.factor()
                   
-                  testval <<- class(df$Grouped)
-                  
                   cd <-
                     effsize::cohen.d(stats::as.formula(paste0(y, " ~ Grouped")), data =
                                        df)
@@ -57,7 +56,7 @@ ttest.all <-
                       df %>%
                         dplyr::group_by_(c("Grouped", y)) %>%
                         dplyr::summarize(Count = n()) %>%
-                        dplyr::group_by_("Grouped") %>%
+                        dplyr::group_by(.data$Grouped) %>%
                         dplyr::summarize_(Count = "sum(Count)") %>%
                         tidyr::spread_("Grouped", "Count"),
                       Cutoff.Num = z,
@@ -89,8 +88,8 @@ ttest.all <-
       }, .id = "IV") %>%
       dplyr::distinct() %>%
       tidyr::drop_na_("estimate") %>%
-      dplyr::mutate(sig = dplyr::if_else(p.value < .05, TRUE, FALSE)) %>%
-      dplyr::mutate_at(vars(estimate:conf.high, Cutoff.Num), funs(round(., 6))) %>%
-      dplyr::distinct_("IV", "DV", "estimate", "estimate1", .keep_all = TRUE) %>%
-      dplyr::select_("IV", "DV", "Cutoff.Perc", "Cutoff.Num", "dplyr::everything()")
+      dplyr::mutate(sig = dplyr::if_else(.data$p.value < .05, TRUE, FALSE)) %>%
+      dplyr::mutate_at(dplyr::vars(.data$estimate:.data$conf.high, .data$Cutoff.Num), dplyr::funs(round(., 6))) %>%
+      dplyr::distinct(.data$IV, .data$DV, .data$estimate, .data$estimate1, .keep_all = TRUE) %>%
+      dplyr::select(.data$IV, .data$DV, .data$Cutoff.Perc, .data$Cutoff.Num, dplyr::everything())
   }

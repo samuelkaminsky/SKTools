@@ -9,7 +9,7 @@ ttest.all(df, ivs, dvs, perc = 0.05)
 \arguments{
 \item{df}{Dataframe with test data}
 
-\item{ivs}{Names of indepndent variables to be inserted into dplyr::select()}
+\item{ivs}{Names of independent variables to be inserted into dplyr::select()}
 
 \item{dvs}{Names of dependent variables to be inserted into dplyr::select()}
 
