@@ -3,6 +3,7 @@
 export(corr.summary)
 export(distinct2col)
 export(github_update)
+export(insertInAddin)
 export(install.sk)
 export(num2letter)
 export(quality.check)
