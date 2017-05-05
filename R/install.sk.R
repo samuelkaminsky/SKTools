@@ -89,5 +89,7 @@ install.sk <- function(extra = FALSE) {
     list.of.packages[!(list.of.packages %in% utils::installed.packages()[, "Package"])]
   if (length(new.packages)) {
     utils::install.packages(new.packages)
+  } else {
+    message("All packages already installed!")
   }
 }
