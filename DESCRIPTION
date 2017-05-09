@@ -4,7 +4,7 @@ Title: SK's Tools
 Version: 0.2.6.1
 Author: Samuel Kaminsky
 Maintainer: Samuel Kaminsky <samuel.e.kaminsky@gmail.com>
-Description: Adds some helpful functions for dealing with Excel files and analyzing data.
+Description: Adds some helpful functions for analyzing data.
 Encoding: UTF-8
 LazyData: true
 License: GPL-3
