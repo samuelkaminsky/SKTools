@@ -5,7 +5,7 @@
 #' @return Table object
 #' @export
 
-read.clip <-
+read_clip <-
   function(istable = TRUE) {
     if (.Platform$OS.type == "unix") {
       if (isTRUE(istable)) {

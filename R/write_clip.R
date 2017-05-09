@@ -5,7 +5,7 @@
 #' @return Table pasted to clipboard
 #' @export
 
-write.clip <- function(object) {
+write_clip <- function(object) {
   if (.Platform$OS.type == "unix") {
     clip <- pipe("pbcopy", "w")
     utils::write.table(object,
