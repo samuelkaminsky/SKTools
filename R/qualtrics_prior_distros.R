@@ -5,7 +5,7 @@
 #' @description Retrieves distributions for a survey on Qualtrics
 #' @export
 
-qualtrics.prior.distros <-
+qualtrics_prior_distros <-
   function(surveyId, header.all) {
     distributions.response <-
       httr::GET(

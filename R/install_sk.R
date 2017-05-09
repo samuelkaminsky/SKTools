@@ -40,7 +40,7 @@
 #' * shinythemes
 #' @md
 
-install.sk <- function(extra = FALSE) {
+install_sk <- function(extra = FALSE) {
   list.of.packages <-
     c(
       "anytime",
