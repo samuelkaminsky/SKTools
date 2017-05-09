@@ -5,7 +5,7 @@
 #' @export
 #' @description Converts corr.test output to tidy dataframe with most important information (IV, DV, r, n, t, p)
 
-corr.summary <-
+corr_summary <-
   function(corr.test.results, alpha = .05) {
     if (length(corr.test.results[[2]]) == 1) {
       corr.test.results[2] <-

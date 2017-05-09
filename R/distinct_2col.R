@@ -5,7 +5,7 @@
 #' @return Dataframe with duplicates removed
 #' @export
 
-distinct2col <- function(df, col1, col2) {
+distinct_2col <- function(df, col1, col2) {
   df %>%
     dplyr::mutate(dupevec = purrr::map(1:nrow(.), function(x) {
       c(.[x, col1] %>% unlist, .[x, col2] %>% unlist) %>% 

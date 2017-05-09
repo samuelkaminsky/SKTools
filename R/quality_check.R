@@ -5,7 +5,7 @@
 #' @return summary statistics of data frame
 #' @export
 
-quality.check <- function(df){
+quality_check <- function(df){
 
   classes <- sapply(df, class) # get classes of all columns
   num.cols <-  df[,which(classes=="integer")]
