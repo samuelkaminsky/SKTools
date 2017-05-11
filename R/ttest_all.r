@@ -8,7 +8,7 @@
 #' @description Conduct T-Tests at every 5% interval for list of IVs and DVs
 #' @export
 
-ttest.all <-
+ttest_all <-
   function(df, ivs, dvs, perc = .05) {
     dvs <- dplyr::enquo(dvs)
     ivs <- dplyr::enquo(ivs)
