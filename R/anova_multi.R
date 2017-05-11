@@ -37,9 +37,9 @@ anova_multi <-
       purrr::map(~.[1]) %>% 
       purrr::map(as.data.frame) %>% 
       purrr::map_df(tibble::rownames_to_column,.id="DV") %>% 
-      tidyr::spread(rowname,df.iv.p.adj) %>% 
+      tidyr::spread_(key_col="rowname",value_col="df.iv.p.adj") %>% 
       dplyr::select(-(dplyr::starts_with("df.iv")))  %>%
-      dplyr::group_by(DV) %>%
+      dplyr::group_by(.data$DV) %>%
       dplyr::summarise_all(dplyr::funs(mean(., na.rm = TRUE))) 
     
     results <- 
@@ -53,7 +53,7 @@ anova_multi <-
     
     means.t <-
       means[,-1] %>%
-      t %>%
+      t() %>%
       as.data.frame() %>%
       purrr::set_names(means[, 1] %>%
                   unlist()) %>% 
