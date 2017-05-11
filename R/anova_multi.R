@@ -43,7 +43,8 @@ anova_multi <-
       dplyr::summarise_all(dplyr::funs(mean(., na.rm = TRUE))) 
     
     results <- 
-      dplyr::left_join(results.anova, results.posthocs,by="DV")
+      results.anova %>% 
+      dplyr::left_join(results.posthocs,by="DV",na_matches="never")
     
     means <- 
       df %>%
