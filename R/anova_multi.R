@@ -59,7 +59,7 @@ anova_multi <-
                   unlist()) %>% 
       tibble::rownames_to_column(var = "DV")
     
-    summary <-
+    df.summary <-
       cbind(means.t,
             p.value=results[, 7:ncol(results)]) %>% 
       as.data.frame() %>%
@@ -72,5 +72,7 @@ anova_multi <-
       Props = prop.table(table(df$iv)) %>% round(3)
     )
     
-    return(list(Summary=summary,Details=details))
+    print(details)
+    
+    return(df.summary)
   }
