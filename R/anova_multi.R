@@ -25,14 +25,14 @@ anova_multi <-
     
     results.anova <-
       dvs.list %>% 
-      purrr::map(~aov(lm(as.formula(paste0("df$",.," ~ df$iv"))))) %>% 
+      purrr::map(~aov(lm(as.formula(paste0("df$`",.,"` ~ df$iv"))))) %>% 
       purrr::map_df(broom::tidy,.id="DV") %>%
       dplyr::filter(.data$term != "Residuals") %>% 
       dplyr::select(-.data$term)
     
     results.posthocs <-
       dvs.list %>% 
-      purrr::map(~aov(lm(as.formula(paste0("df$",.," ~ df$iv"))))) %>% 
+      purrr::map(~aov(lm(as.formula(paste0("df$`",.,"` ~ df$iv"))))) %>% 
       purrr::map(stats::TukeyHSD) %>% 
       purrr::map(~.[1]) %>% 
       purrr::map(as.data.frame) %>% 
