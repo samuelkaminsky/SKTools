@@ -14,7 +14,7 @@ anova_multi(df, iv, dvs)
 \item{dvs}{Names of dependent variables to be inserted into dplyr::select()}
 }
 \value{
-List with data frame of tidy t.test results, and Ns and percentages in each level of the IV
+List with data frame of tidy ANOVA results, and Ns and percentages in each level of the IV
 }
 \description{
 Conduct one-way ANOVAs on multipe DVs
