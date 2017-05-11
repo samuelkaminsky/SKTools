@@ -43,6 +43,7 @@ Packages installed with the extra=TRUE argument include:
 \item ggthemes
 \item googlesheets
 \item gtools
+\item iopsych
 \item lsr
 \item multilevel
 \item parallel

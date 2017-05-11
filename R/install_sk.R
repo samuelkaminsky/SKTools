@@ -28,6 +28,7 @@
 #' * ggthemes
 #' * googlesheets
 #' * gtools
+#' * iopsych
 #' * lsr
 #' * multilevel
 #' * parallel
@@ -72,6 +73,7 @@ install_sk <- function(extra = FALSE) {
         "ggthemes",
         "googlesheets",
         "gtools",
+        "iopsych",
         "lsr",
         "multilevel",
         "parallel",
