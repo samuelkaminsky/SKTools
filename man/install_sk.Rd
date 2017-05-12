@@ -46,6 +46,7 @@ Packages installed with the extra=TRUE argument include:
 \item iopsych
 \item lsr
 \item multilevel
+\item nycflights13
 \item parallel
 \item parsedate
 \item plotly

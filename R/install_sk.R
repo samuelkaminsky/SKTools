@@ -31,6 +31,7 @@
 #' * iopsych
 #' * lsr
 #' * multilevel
+#' * nycflights13
 #' * parallel
 #' * parsedate
 #' * plotly
@@ -76,6 +77,7 @@ install_sk <- function(extra = FALSE) {
         "iopsych",
         "lsr",
         "multilevel",
+        "nycflights13",
         "parallel",
         "parsedate",
         "plotly",
