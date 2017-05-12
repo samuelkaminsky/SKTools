@@ -2,7 +2,7 @@
 #' @param df Dataframe with test data
 #' @param iv Name of independent variable
 #' @param dvs Names of dependent variables to be inserted into dplyr::select()
-#' @return List with data frame of tidy ANOVA results, and Ns and percentages in each level of the IV
+#' @return Data frame of tidy ANOVA post-hoc results, also prints Ns and percentages in each level of the IV
 #' @description Conduct one-way ANOVAs on multipe DVs
 #' @export
 
