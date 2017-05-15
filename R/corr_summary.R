@@ -14,8 +14,7 @@ corr_summary <-
             x = corr.test.results[[2]],
             corr.test.results[[1]] %>%
               as.data.frame() %>%
-              tibble::rownames_to_column() %>%
-              tidyr::gather(rowname) %>%
+              tidyr::gather() %>%
               nrow()
           )
         )
