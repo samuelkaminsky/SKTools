@@ -49,9 +49,11 @@ Packages installed with the extra=TRUE argument include:
 \item nycflights13
 \item parallel
 \item parsedate
+\item pdftools
 \item plotly
 \item qualtRics
 \item relaimpo
+\item reprex
 \item reshape2
 \item semTools
 \item shinythemes

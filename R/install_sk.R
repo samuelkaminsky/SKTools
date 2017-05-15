@@ -34,9 +34,11 @@
 #' * nycflights13
 #' * parallel
 #' * parsedate
+#' * pdftools
 #' * plotly
 #' * qualtRics
 #' * relaimpo
+#' * reprex
 #' * reshape2
 #' * semTools
 #' * shinythemes
@@ -80,8 +82,10 @@ install_sk <- function(extra = FALSE) {
         "nycflights13",
         "parallel",
         "parsedate",
+        "pdftools",
         "plotly",
         "relaimpo",
+        "reprex",
         "reshape2",
         "qualtRics",
         "semTools",
