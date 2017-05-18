@@ -121,7 +121,7 @@ anova_multi_all <-
       dplyr::distinct() %>%
       dplyr::mutate_at(dplyr::vars(dplyr::starts_with("Cutoff")),
                        dplyr::funs(readr::parse_number(.) / 100)) %>%
-      dplyr::filter(.data$Cutoff.Bottom < .data$Cutoff.Top) %>%
+      dplyr::filter(.data$Cutoff.Bottom <= .data$Cutoff.Top) %>%
       dplyr::select(
         .data$IV,
         .data$DV,
