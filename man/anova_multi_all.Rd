@@ -4,7 +4,7 @@
 \alias{anova_multi_all}
 \title{Conducts One-Way ANOVAs on Multiple DVs at Multiple Cut Points}
 \usage{
-anova_multi_all(df, ivs, dvs, perc = 0.05)
+anova_multi_all(df, ivs, dvs, perc = 0.05, print = FALSE)
 }
 \arguments{
 \item{df}{Dataframe with test data}
@@ -14,6 +14,8 @@ anova_multi_all(df, ivs, dvs, perc = 0.05)
 \item{dvs}{Names of dependent variables to be inserted into dplyr::select()}
 
 \item{perc}{Nth percentile to conduct ANOVA at}
+
+\item{print}{TRUE to print progress as it goes}
 }
 \value{
 Data frame of tidy ANOVA F test and post-hoc results, also includes descriptives about each level of the IV
