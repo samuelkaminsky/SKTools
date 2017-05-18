@@ -41,7 +41,7 @@ anova_multi_all <-
     iv.dv <- expand.grid(dv = DVs, iv = IVs) %>%
       dplyr::mutate_all(as.character)
     
-    index <<-
+    index <-
       cuts %>%
       dplyr::left_join(cuts, by = "iv", suffix = c(".bottom", ".top")) %>%
       dplyr::distinct() %>%
