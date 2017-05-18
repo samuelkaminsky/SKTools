@@ -3,8 +3,8 @@
 #' @param ivs Names of independent variables to be inserted into dplyr::select()
 #' @param dvs Names of dependent variables to be inserted into dplyr::select()
 #' @param perc Nth percentile to conduct ANOVA at
-#' @return Data frame of tidy ANOVA post-hoc results, also prints Ns and percentages in each level of the IV
-#' @description Conduct one-way ANOVAs on multipe DVs
+#' @return Data frame of tidy ANOVA F test and post-hoc results, also includes descriptives about each level of the IV
+#' @description Conduct one-way ANOVAs on multiple DVs at various cutpoints of the iv
 #' @export
 
 anova_multi_all <-

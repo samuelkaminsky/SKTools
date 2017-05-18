@@ -16,8 +16,8 @@ anova_multi_all(df, ivs, dvs, perc = 0.05)
 \item{perc}{Nth percentile to conduct ANOVA at}
 }
 \value{
-Data frame of tidy ANOVA post-hoc results, also prints Ns and percentages in each level of the IV
+Data frame of tidy ANOVA F test and post-hoc results, also includes descriptives about each level of the IV
 }
 \description{
-Conduct one-way ANOVAs on multipe DVs
+Conduct one-way ANOVAs on multiple DVs at various cutpoints of the iv
 }
