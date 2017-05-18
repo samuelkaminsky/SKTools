@@ -20,7 +20,7 @@ read_clip <-
         if (isTRUE(istable)) {
           utils::read.delim("clipboard")
         } else{
-          readClipboard()
+          utils::readClipboard()
         }
       }
     }
