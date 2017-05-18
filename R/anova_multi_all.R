@@ -41,7 +41,7 @@ anova_multi_all <-
                   by = perc
                 ), na.rm = TRUE) %>%
                   as.list() %>%
-                  purrr::map_df(function(a) {
+                  purrr::map_df(purrr::possibly(function(a) {
                     df$Grouped <-
                       dplyr::case_when(df[, x] < z ~ 0,
                                        df[, x] >= z &
@@ -67,8 +67,7 @@ anova_multi_all <-
                       .[1] %>%
                       as.data.frame() %>%
                       tibble::rownames_to_column() %>%
-                      tidyr::spread_(key_col = "rowname", value_col =
-                                       "df.Grouped.p.adj") %>%
+                      tidyr::spread("rowname","df.Grouped.p.adj") %>%
                       dplyr::select(-(dplyr::starts_with("df.Grouped"))) %>%
                       cbind(DV = as.character(y)) %>%
                       dplyr::group_by(.data$DV) %>%
@@ -97,7 +96,7 @@ anova_multi_all <-
                       df %>%
                       dplyr::group_by(.data$Grouped) %>%
                       dplyr::summarize(Count = n()) %>%
-                      tidyr::spread(Grouped, Count)
+                      tidyr::spread("Grouped", "Count")
                     
                     results <-
                       results.anova %>%
@@ -107,12 +106,18 @@ anova_multi_all <-
                       cbind(mean_0 = mean0,
                             mean_1 = mean1,
                             mean_2 = mean2,
-                            n)
+                            n) %>% 
+                      dplyr::mutate_if(is.factor,dplyr::funs(as.character(.)))
+                    return(results)
                     
-                  }, .id = "Cutoff.Top")
+                  }, 
+                  otherwise = tibble::data_frame(
+                    Error="Y"
+                  )
+                  ), .id = "Cutoff.Top")
               }, .id = "Cutoff.Bottom")
           }, .id = "DV")
-      }, .id = "IV") %>%
+      }, .id = "IV") %>% 
       dplyr::distinct() %>%
       dplyr::mutate_at(dplyr::vars(dplyr::starts_with("Cutoff")),
                        dplyr::funs(readr::parse_number(.) / 100)) %>%
@@ -143,7 +148,7 @@ anova_multi_all <-
       purrr::map(unlist) %>%
       purrr::map_df(~ quantile(., seq(0, 1, by = .01))) %>%
       dplyr::mutate(Perc = (0:100) / 100) %>%
-      tidyr::gather(iv, num,-Perc) %>%
+      tidyr::gather("iv", "num",-.data$Perc) %>%
       dplyr::distinct()
     
     
