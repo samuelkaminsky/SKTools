@@ -29,10 +29,11 @@ anova_multi_all <-
       purrr::map( ~ select(df, .)) %>%
       purrr::map(unlist) %>%
       purrr::map( ~ stats::quantile(., seq(
-        from = 0.05,
-        to = .95,
-        by = perc
-      ))) %>%
+                                          from = 0.05,
+                                          to = .95,
+                                          by = perc
+                                    ), na.rm=TRUE)
+                ) %>%
       as.data.frame() %>%
       tibble::rownames_to_column("percentage") %>%
       tidyr::gather("iv", "cut", -.data$percentage) %>%
