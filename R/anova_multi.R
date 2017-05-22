@@ -14,7 +14,8 @@ anova_multi <-
     
     df <-
       df %>%
-      dplyr::mutate(iv = as.factor(!!iv))
+      dplyr::mutate(iv = as.factor(!!iv)) %>% 
+      tidyr::drop_na(iv)
     
     dvs.list <-
       df %>%
