@@ -140,8 +140,8 @@ anova_multi_all <-
                      }, otherwise = tibble::tibble(Error = "Y")),
                      .id  =  "Source")
     index <- 
-      bind_cols(index) %>% 
-      dplyr::select(-rowid)
+      dplyr::bind_cols(index) %>% 
+      dplyr::select(-.data$rowid)
       
     
     final <- 
