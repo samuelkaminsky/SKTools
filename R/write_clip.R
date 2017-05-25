@@ -1,9 +1,8 @@
 #' Write object to clipboard
 #'
 #' @param object R object
-#' @description NOTE THAT I DID NOT WRITE THIS CODE, MOST OF IT COMES FROM https://tonyladson.wordpress.com/2015/05/20/writing-to-the-clipboard-mac/
+#' @description Function to write from the clipboard on Unix and Windows computers. Note that much of this code has been modified from https://tonyladson.wordpress.com/2015/05/20/writing-to-the-clipboard-mac/
 #' @return Table pasted to clipboard
-#' @export
 
 write_clip <- function(object) {
   if (.Platform$OS.type == "unix") {

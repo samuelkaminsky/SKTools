@@ -13,5 +13,5 @@ read_clip(istable = TRUE)
 Table object
 }
 \description{
-Function to read from the clipboard on Unix and Windows computers. Note that much of this code has been from  https://tonyladson.wordpress.com/2015/05/20/writing-to-the-clipboard-mac/
+Function to read from the clipboard on Unix and Windows computers. Note that much of this code has been modified from https://tonyladson.wordpress.com/2015/05/20/writing-to-the-clipboard-mac/
 }
