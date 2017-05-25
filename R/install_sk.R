@@ -1,5 +1,6 @@
 #' Install commonly used packages
 #' @param extra TRUE or FALSE to indicate whether you want to install supplemental packages
+#' @param dependencies TRUE or FALSE to indicate whether you want to pass TRUE to the install.packages() dependencies argument
 #' @export
 #' @description Installs packages that I like
 #' @details Packages installed with the default arguments include: 
@@ -44,7 +45,7 @@
 #' * shinythemes
 #' @md
 
-install_sk <- function(extra = FALSE) {
+install_sk <- function(extra = FALSE, dependencies = FALSE) {
   list.of.packages <-
     c(
       "anytime",
@@ -96,7 +97,7 @@ install_sk <- function(extra = FALSE) {
   new.packages <-
     list.of.packages[!(list.of.packages %in% utils::installed.packages()[, "Package"])]
   if (length(new.packages)) {
-    utils::install.packages(new.packages)
+    utils::install.packages(new.packages,dependencies = dependencies)
   } else {
     message("All packages already installed!")
   }

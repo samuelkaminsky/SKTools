@@ -4,10 +4,12 @@
 \alias{install_sk}
 \title{Install commonly used packages}
 \usage{
-install_sk(extra = FALSE)
+install_sk(extra = FALSE, dependencies = FALSE)
 }
 \arguments{
 \item{extra}{TRUE or FALSE to indicate whether you want to install supplemental packages}
+
+\item{dependencies}{TRUE or FALSE to indicate whether you want to pass TRUE to the install.packages() dependencies argument}
 }
 \description{
 Installs packages that I like
