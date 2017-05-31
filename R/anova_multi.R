@@ -2,12 +2,13 @@
 #' @param df Dataframe with test data
 #' @param iv Name of independent variable
 #' @param dvs Names of dependent variables to be inserted into dplyr::select()
+#' @param print Logical indicating whether or not ns and proportions of iv are printed
 #' @return Data frame of tidy ANOVA post-hoc results, also prints Ns and percentages in each level of the IV
 #' @description Conduct one-way ANOVAs on multipe DVs
 #' @export
 
 anova_multi <-
-  function(df, iv, dvs) {
+  function(df, iv, dvs, print = FALSE) {
     iv <- dplyr::enquo(iv)
     # iv.r <- paste0(quo_name(iv))
     dvs <- dplyr::enquo(dvs)
@@ -66,6 +67,7 @@ anova_multi <-
       as.data.frame() %>%
       dplyr::mutate_if(is.numeric, dplyr::funs(round(., 4)))
     
+    if(isTRUE(print)) {
     details <- list(
       # IV = iv,
       # SJT.Items = df %>% select(contains("AOSJT")) %>% names,
@@ -73,7 +75,7 @@ anova_multi <-
       Props = prop.table(table(df$iv)) %>% round(3)
     )
     
-    print(details)
+    print(details)}
     
     return(df.summary)
   }

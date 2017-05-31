@@ -4,7 +4,7 @@
 \alias{anova_multi}
 \title{Conducts One-Way ANOVAs on Multiple DVs}
 \usage{
-anova_multi(df, iv, dvs)
+anova_multi(df, iv, dvs, print = FALSE)
 }
 \arguments{
 \item{df}{Dataframe with test data}
@@ -12,6 +12,8 @@ anova_multi(df, iv, dvs)
 \item{iv}{Name of independent variable}
 
 \item{dvs}{Names of dependent variables to be inserted into dplyr::select()}
+
+\item{print}{Logical indicating whether or not ns and proportions of iv are printed}
 }
 \value{
 Data frame of tidy ANOVA post-hoc results, also prints Ns and percentages in each level of the IV
