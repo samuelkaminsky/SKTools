@@ -10,6 +10,7 @@
 #' * knitr
 #' * lavaan
 #' * openxlsx
+#' * pander
 #' * psych
 #' * rmarkdown
 #' * roxygen2
@@ -54,6 +55,7 @@ install_sk <- function(extra = FALSE, dependencies = FALSE) {
       "knitr",
       "lavaan",
       "openxlsx",
+      "pander",
       "psych",
       "rmarkdown",
       "roxygen2",

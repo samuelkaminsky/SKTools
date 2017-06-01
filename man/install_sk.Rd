@@ -23,6 +23,7 @@ Packages installed with the default arguments include:
 \item knitr
 \item lavaan
 \item openxlsx
+\item pander
 \item psych
 \item rmarkdown
 \item roxygen2
