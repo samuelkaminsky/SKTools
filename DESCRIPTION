@@ -1,7 +1,7 @@
 Package: SKTools
 Type: Package
 Title: SK's Tools
-Version: 0.2.8
+Version: 0.3
 Author: Samuel Kaminsky
 Maintainer: Samuel Kaminsky <samuel.e.kaminsky@gmail.com>
 Description: Adds some helpful functions for analyzing data.
@@ -11,7 +11,7 @@ License: GPL-3
 Imports:
     broom,
     devtools,
-    dplyr (>= 0.5.0.9004),
+    dplyr (>= 0.7),
     effsize,
     httr,
     jsonlite,
@@ -27,5 +27,3 @@ Imports:
     tidyr,
     utils
 RoxygenNote: 6.0.1
-Remotes:
-  tidyverse/dplyr
