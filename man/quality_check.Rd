@@ -10,7 +10,7 @@ quality_check(df)
 \item{df}{name of dataframe}
 }
 \value{
-summary statistics of data frame
+Prints message that identifies columns with no variance and those with strong or moderate skewness
 }
 \description{
 Checks quality of data in a data frame

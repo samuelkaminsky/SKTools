@@ -2,7 +2,7 @@
 #'
 #' @param df name of dataframe
 #' @author Eric Knudsen <eknudsen88@gmail.com>
-#' @return summary statistics of data frame
+#' @return Prints message that identifies columns with no variance and those with strong or moderate skewness
 #' @export
 
 quality_check <- function(df){
