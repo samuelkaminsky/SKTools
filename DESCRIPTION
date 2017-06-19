@@ -8,6 +8,7 @@ Description: Adds some helpful functions for analyzing data.
 Encoding: UTF-8
 LazyData: true
 License: GPL-3
+URL: https://github.com/samuelkaminsky/SKTools
 Imports:
     broom,
     devtools,
@@ -27,3 +28,4 @@ Imports:
     tidyr,
     utils
 RoxygenNote: 6.0.1
+Suggests: testthat
