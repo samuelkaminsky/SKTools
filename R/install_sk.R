@@ -95,11 +95,11 @@ install_sk <- function(extra = FALSE, dependencies = FALSE) {
         "shinythemes"
       )
   }
-  
   new.packages <-
-    list.of.packages[!(list.of.packages %in% utils::installed.packages()[, "Package"])]
+    list.of.packages[!(list.of.packages %in% 
+                         utils::installed.packages()[, "Package"])]
   if (length(new.packages)) {
-    utils::install.packages(new.packages,dependencies = dependencies)
+    utils::install.packages(new.packages, dependencies = dependencies)
   } else {
     message("All packages already installed!")
   }

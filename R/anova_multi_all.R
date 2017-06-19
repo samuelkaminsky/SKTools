@@ -9,7 +9,11 @@
 #' @export
 
 anova_multi_all <-
-  function(df, ivs, dvs, perc = .05, print = FALSE) {
+  function(df,
+           ivs,
+           dvs,
+           perc = .05,
+           print = FALSE) {
     dvs <- dplyr::enquo(dvs)
     ivs <- dplyr::enquo(ivs)
     IVs <-
@@ -17,45 +21,37 @@ anova_multi_all <-
       dplyr::select(!!ivs) %>%
       names() %>%
       purrr::set_names()
-    
     DVs <-
       df %>%
       dplyr::select(!!dvs) %>%
       names() %>%
       purrr::set_names()
-    
     cuts <-
       IVs %>%
       purrr::map( ~ select(df, .)) %>%
       purrr::map(unlist) %>%
       purrr::map( ~ stats::quantile(., seq(
-                                          from = 0.05,
-                                          to = .95,
-                                          by = perc
-                                    ), na.rm=TRUE)
-                ) %>%
+        from = 0.05,
+        to = .95,
+        by = perc
+      ), na.rm = TRUE)) %>%
       as.data.frame() %>%
       tibble::rownames_to_column("percentage") %>%
       tidyr::gather("iv", "cut", -.data$percentage) %>%
       dplyr::distinct(.data$iv, .data$cut, .keep_all = TRUE)
-    
-    
     iv.dv <- expand.grid(dv = DVs, iv = IVs) %>%
       dplyr::mutate_all(as.character)
-    
     index <-
       cuts %>%
       dplyr::left_join(cuts, by = "iv", suffix = c(".bottom", ".top")) %>%
       dplyr::distinct() %>%
       dplyr::filter(.data$cut.top >= .data$cut.bottom) %>%
       dplyr::left_join(iv.dv, by = "iv") %>%
-      dplyr::distinct() %>% 
+      dplyr::distinct() %>%
       tibble::rowid_to_column()
-      
     index <-
       as.list(index)
-    
-    results.all <- 
+    results.all <-
       purrr::pmap_df(index,
                      purrr::possibly(function(iv,
                                               cut.bottom,
@@ -70,20 +66,16 @@ anova_multi_all <-
                                             df[, iv] < cut.top ~ 1,
                                           df[, iv] >= cut.top ~ 2) %>%
                          as.factor()
-                       
-                       
                        temp.anova <-
                          stats::aov(stats::lm(stats::as.formula(paste0(
                            "df$`", dv, "` ~ df$Grouped"
                          ))))
-                       
                        results.anova <-
                          temp.anova %>%
                          broom::tidy() %>%
                          dplyr::filter(.data$term != "Residuals") %>%
                          dplyr::select(-.data$term) %>%
                          cbind(DV = as.character(dv))
-                       
                        results.posthocs <-
                          temp.anova %>%
                          stats::TukeyHSD() %>%
@@ -94,8 +86,8 @@ anova_multi_all <-
                          dplyr::select(-(dplyr::starts_with("df.Grouped"))) %>%
                          cbind(DV = as.character(dv)) %>%
                          dplyr::group_by(.data$DV) %>%
-                         dplyr::summarise_all(dplyr::funs(mean(., na.rm = TRUE)))
-                       
+                         dplyr::summarise_all(
+                           dplyr::funs(mean(., na.rm = TRUE)))
                        mean0 <-
                          df %>%
                          dplyr::filter(.data$Grouped == 0) %>%
@@ -114,13 +106,11 @@ anova_multi_all <-
                          dplyr::select(paste0(dv)) %>%
                          unlist() %>%
                          mean(na.rm = TRUE)
-                       
                        n <-
                          df %>%
                          dplyr::group_by(.data$Grouped) %>%
                          dplyr::summarize(Count = n()) %>%
                          tidyr::spread("Grouped", "Count")
-                       
                        results <-
                          results.anova %>%
                          dplyr::left_join(results.posthocs,
@@ -130,31 +120,36 @@ anova_multi_all <-
                                mean_1 = mean1,
                                mean_2 = mean2,
                                n) %>%
-                         dplyr::mutate_if(is.factor, dplyr::funs(as.character(.)))
-                       
-                       if(isTRUE(print))
-                       {print(paste0(rowid," / ",length(index[[1]]), " - ",round(100*rowid/length(index[[1]]),2),"%"))}
-                       
+                         dplyr::mutate_if(
+                           is.factor, dplyr::funs(as.character(.)))
+                       if (isTRUE(print)) {
+                         print(paste0(
+                           rowid,
+                           " / ",
+                           length(index[[1]]),
+                           " - ",
+                           round(100 * rowid / length(index[[1]]), 2),
+                           "%"
+                         ))
+                       }
                        results
-                       
-                     }, otherwise = tibble::tibble(Error = "Y")),
+                     }
+                     , otherwise = tibble::tibble(Error = "Y")),
                      .id  =  "Source")
-    index <- 
-      dplyr::bind_cols(index) %>% 
+    index <-
+      dplyr::bind_cols(index) %>%
       dplyr::select(-.data$rowid)
-      
-    
-    final <- 
-      cbind(index,results.all) %>% 
+    final <-
+      cbind(index, results.all) %>%
       # dplyr::filter(.data$Error!="Y") %>%
       dplyr::distinct() %>%
       dplyr::select(
         .data$iv,
         .data$dv,
-        Cutoff.Bottom=.data$percentage.bottom,
-        Cutoff.Top=.data$percentage.top,
-        Cutoff.Bottom.Num=.data$cut.bottom,
-        Cutoff.Bottom.Top=.data$cut.top,
+        Cutoff.Bottom = .data$percentage.bottom,
+        Cutoff.Top = .data$percentage.top,
+        Cutoff.Bottom.Num = .data$cut.bottom,
+        Cutoff.Bottom.Top = .data$cut.top,
         .data$df,
         .data$sumsq,
         .data$meansq,
@@ -169,10 +164,12 @@ anova_multi_all <-
         `p.value.1-0` = .data$`1-0`,
         `p.value.2-0` = .data$`2-0`,
         `p.value.2-1` = .data$`2-1`
-      ) %>% 
-      tidyr::drop_na(.data$sumsq) %>% 
-      dplyr::mutate_at(dplyr::vars(dplyr::contains("p.value")),dplyr::funs(round(.,6))) %>% 
-      dplyr::mutate_at(dplyr::vars(dplyr::contains("mean_")),dplyr::funs(dplyr::if_else(is.nan(.),NA_real_,.)))
+      ) %>%
+      tidyr::drop_na(.data$sumsq) %>%
+      dplyr::mutate_at(dplyr::vars(
+        dplyr::contains("p.value")), dplyr::funs(round(., 6))) %>%
+      dplyr::mutate_at(dplyr::vars(dplyr::contains("mean_")),
+                       dplyr::funs(dplyr::if_else(is.nan(.), NA_real_, .)))
     
     return(final)
     

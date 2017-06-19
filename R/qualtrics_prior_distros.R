@@ -16,12 +16,10 @@ qualtrics_prior_distros <-
         httr::add_headers(header.all)
       ) %>%
       httr::content()
-    
     distributions.list <-
       distributions.response$result$elements %>%
       purrr::map( ~ .$recipients$mailingListId) %>%
       unlist() 
-    
     # if(is.null(distributions.list)){
     #   return()
     # }

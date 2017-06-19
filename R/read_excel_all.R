@@ -18,7 +18,7 @@ read_excel_all <-
     if (length(readxl::excel_sheets(path)) == 1) {
       worksheet <- readxl::read_excel(path = path, skip = skip)
       if (isTRUE(check.names)) {
-        names(worksheet) <-  make.names(names(worksheet),unique = TRUE)
+        names(worksheet) <-  make.names(names(worksheet), unique = TRUE)
         worksheet
       } else {
         worksheet

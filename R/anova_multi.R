@@ -10,49 +10,45 @@
 anova_multi <-
   function(df, iv, dvs, print = FALSE) {
     iv <- dplyr::enquo(iv)
-    # iv.r <- paste0(quo_name(iv))
     dvs <- dplyr::enquo(dvs)
-    
     df <-
       df %>%
       dplyr::mutate(iv = as.factor(!!iv)) %>% 
       tidyr::drop_na(iv)
-    
     dvs.list <-
       df %>%
       dplyr::select(!!dvs) %>%
       names() %>%
       as.list() %>% 
       purrr::set_names()
-    
     results.anova <-
       dvs.list %>% 
-      purrr::map(~aov(lm(as.formula(paste0("df$`",.,"` ~ df$iv"))))) %>% 
-      purrr::map_df(broom::tidy,.id="DV") %>%
+      purrr::map( ~ aov(lm(as.formula(
+        paste0("df$`", ., "` ~ df$iv")
+      )))) %>% 
+      purrr::map_df(broom::tidy, .id = "DV") %>% 
       dplyr::filter(.data$term != "Residuals") %>% 
       dplyr::select(-.data$term)
-    
     results.posthocs <-
       dvs.list %>% 
-      purrr::map(~aov(lm(as.formula(paste0("df$`",.,"` ~ df$iv"))))) %>% 
-      purrr::map(stats::TukeyHSD) %>% 
-      purrr::map(~.[1]) %>% 
-      purrr::map(as.data.frame) %>% 
-      purrr::map_df(tibble::rownames_to_column,.id="DV") %>% 
-      tidyr::spread_(key_col="rowname",value_col="df.iv.p.adj") %>% 
+      purrr::map(~ aov(lm(as.formula(
+        paste0("df$`", ., "` ~ df$iv")
+      )))) %>%
+      purrr::map(stats::TukeyHSD) %>%
+      purrr::map( ~ .[1]) %>%
+      purrr::map(as.data.frame) %>%
+      purrr::map_df(tibble::rownames_to_column, .id = "DV") %>%
+      tidyr::spread_(key_col = "rowname", value_col = "df.iv.p.adj") %>%
       dplyr::select(-(dplyr::starts_with("df.iv")))  %>%
       dplyr::group_by(.data$DV) %>%
-      dplyr::summarise_all(dplyr::funs(mean(., na.rm = TRUE))) 
-    
+      dplyr::summarise_all(dplyr::funs(mean(., na.rm = TRUE)))
     results <- 
       results.anova %>% 
       dplyr::left_join(results.posthocs,by="DV",na_matches="never")
-    
     means <- 
       df %>%
       dplyr::group_by(iv) %>%
       dplyr::summarise_at(dplyr::vars(!!dvs), dplyr::funs(mean(., na.rm = TRUE)))
-    
     means.t <-
       means[,-1] %>%
       t() %>%
@@ -60,10 +56,9 @@ anova_multi <-
       purrr::set_names(means[, 1] %>%
                   unlist()) %>% 
       tibble::rownames_to_column(var = "DV")
-    
     df.summary <-
       cbind(means.t,
-            p.value=results[, 7:ncol(results)]) %>% 
+            p.value = results[, 7:ncol(results)]) %>% 
       as.data.frame() %>%
       dplyr::mutate_if(is.numeric, dplyr::funs(round(., 4)))
     

@@ -7,8 +7,7 @@
 
 num2letter <- function(x, number = "") {
   index <- data.frame(Numbers = (1:26), Letters = LETTERS)
-  x.round <- trunc((x - 1) / 26)
-  
+  x.round <- trunc( (x - 1) / 26)
   if (x.round == 0) {
     paste0(index[x, 2], number)
   } else{

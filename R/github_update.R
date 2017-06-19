@@ -12,6 +12,6 @@ github_update <- function() {
     purrr::map_if(nchar(.) > 3, purrr::safely( ~ devtools::install_github(.)))
   if ("SKTools" %in% loadedNamespaces()) {
     unloadNamespace("SKTools")
-    library(SKTools)
+    loadNamespace("SKTools")
   }
 }

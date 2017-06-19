@@ -22,7 +22,6 @@ ttest_all <-
       dplyr::select(!!dvs) %>%
       names() %>%
       purrr::set_names()
-    
     IVs %>%
       purrr::map_df(function(x) {
         DVs %>%
@@ -38,17 +37,16 @@ ttest_all <-
                   df$Grouped <-
                     dplyr::if_else(df[, x] >= z, 1, 0) %>%
                     as.factor()
-                  
                   cd <-
-                    effsize::cohen.d(stats::as.formula(paste0(y, " ~ Grouped")), data = df)
-                  
+                    effsize::cohen.d(
+                      stats::as.formula(paste0(y, " ~ Grouped")), data = df)
                   cd.df <-
                     tibble::tibble(
                       cd.est = cd$estimate %>% as.numeric(),
                       cd.mag = cd$magnitude %>% as.character()
                     )
-                  
-                  stats::t.test(stats::as.formula(paste0(y, " ~ Grouped")), data = df) %>%
+                  stats::t.test(
+                    stats::as.formula(paste0(y, " ~ Grouped")), data = df) %>%
                     broom::tidy() %>%
                     cbind(
                       df %>%
@@ -82,12 +80,17 @@ ttest_all <-
                 )
               ),
               .id = "Cutoff.Perc")
-          }, .id = "DV")
-      }, .id = "IV") %>%
+          }
+          , .id = "DV")
+      }
+      , .id = "IV") %>%
       dplyr::distinct() %>%
       tidyr::drop_na(.data$estimate) %>%
       dplyr::mutate(sig = dplyr::if_else(.data$p.value < .05, TRUE, FALSE)) %>%
-      dplyr::mutate_at(dplyr::vars(.data$estimate:.data$conf.high, .data$Cutoff.Num), dplyr::funs(round(., 6))) %>%
-      dplyr::distinct(.data$IV, .data$DV, .data$estimate, .data$estimate1, .keep_all = TRUE) %>%
-      dplyr::select(.data$IV, .data$DV, .data$Cutoff.Perc, .data$Cutoff.Num, dplyr::everything())
+      dplyr::mutate_at(dplyr::vars(.data$estimate:.data$conf.high, .data$Cutoff.Num),
+                       dplyr::funs(round(., 6))) %>%
+      dplyr::distinct(.data$IV, .data$DV, .data$estimate, .data$estimate1, 
+                      .keep_all = TRUE) %>%
+      dplyr::select(.data$IV, .data$DV, .data$Cutoff.Perc, .data$Cutoff.Num, 
+                    dplyr::everything())
   }
