@@ -9,7 +9,7 @@ write_clip <- function(object) {
     clip <- pipe("pbcopy", "w")
     utils::write.table(object,
                        file = clip,
-                       sep = '\t',
+                       sep = "\t",
                        row.names = FALSE)
     close(clip)
   }

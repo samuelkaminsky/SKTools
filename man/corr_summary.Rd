@@ -4,10 +4,10 @@
 \alias{corr_summary}
 \title{Clean corr.test output}
 \usage{
-corr_summary(corr.test.results, alpha = 0.05)
+corr_summary(corr_test_results, alpha = 0.05)
 }
 \arguments{
-\item{corr.test.results}{corr.test object}
+\item{corr_test_results}{corr.test object}
 
 \item{alpha}{Alpha level to test significance}
 }

@@ -1,18 +1,18 @@
 #' Clean corr.test output
-#' @param corr.test.results corr.test object
+#' @param corr_test_results corr.test object
 #' @param alpha Alpha level to test significance
 #' @return Dataframe with clean output
 #' @export
 #' @description Converts corr.test output to tidy dataframe with most important information (IV, DV, r, n, t, p)
 
 corr_summary <-
-  function(corr.test.results, alpha = .05) {
-    if (length(corr.test.results[[2]]) == 1) {
-      corr.test.results[2] <-
+  function(corr_test_results, alpha = .05) {
+    if (length(corr_test_results[[2]]) == 1) {
+      corr_test_results[2] <-
         list(
           n = rep(
-            x = corr.test.results[[2]],
-            corr.test.results[[1]] %>%
+            x = corr_test_results[[2]],
+            corr_test_results[[1]] %>%
               as.data.frame() %>%
               tidyr::gather() %>%
               nrow()
@@ -20,7 +20,7 @@ corr_summary <-
         )
     }
     cor.df <-
-      corr.test.results[1:4] %>%
+      corr_test_results[1:4] %>%
       purrr::map(~ as.data.frame(.)) %>%
       purrr::map(~ tibble::rownames_to_column(.)) %>%
       purrr::map(~ tidyr::gather(., rowname)) %>%

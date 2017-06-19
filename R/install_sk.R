@@ -47,7 +47,7 @@
 #' @md
 
 install_sk <- function(extra = FALSE, dependencies = FALSE) {
-  list.of.packages <-
+  list_of_packages <-
     c(
       "anytime",
       "data.table",
@@ -64,9 +64,9 @@ install_sk <- function(extra = FALSE, dependencies = FALSE) {
       "tidyverse"
     )
   if (isTRUE(extra)) {
-    list.of.packages <-
+    list_of_packages <-
       c(
-        list.of.packages,
+        list_of_packages,
         "car",
         "caret",
         "doParallel",
@@ -95,11 +95,11 @@ install_sk <- function(extra = FALSE, dependencies = FALSE) {
         "shinythemes"
       )
   }
-  
   new.packages <-
-    list.of.packages[!(list.of.packages %in% utils::installed.packages()[, "Package"])]
+    list_of_packages[!(list_of_packages %in% 
+                         utils::installed.packages()[, "Package"])]
   if (length(new.packages)) {
-    utils::install.packages(new.packages,dependencies = dependencies)
+    utils::install.packages(new.packages, dependencies = dependencies)
   } else {
     message("All packages already installed!")
   }
