@@ -10,8 +10,8 @@ df_freqs(df)
 \item{df}{Dataframe with data}
 }
 \value{
-Data frame of frequencies for each variable and value
+Dataframe of frequencies for each variable and value
 }
 \description{
-Calculate Frequencies of Every Column in a Dataframe
+Calculates frequencies of every Column in a dataframe
 }

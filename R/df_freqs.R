@@ -1,7 +1,7 @@
 #' Dataframe Frequencies
 #' @param df Dataframe with data
-#' @return Data frame of frequencies for each variable and value
-#' @description Calculate Frequencies of Every Column in a Dataframe
+#' @return Dataframe of frequencies for each variable and value
+#' @description Calculates frequencies of every Column in a dataframe
 #' @export
 
 df_freqs <-
