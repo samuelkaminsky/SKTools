@@ -57,7 +57,8 @@ ttest_all <-
                         tidyr::spread_("Grouped", "Count"),
                       Cutoff.Num = z,
                       cd.df
-                    )
+                    ) %>% 
+                    dplyr::mutate_if(is.factor,dplyr::funs(as.character(.)))
                 }
                 ,
                 otherwise = tibble::data_frame(
