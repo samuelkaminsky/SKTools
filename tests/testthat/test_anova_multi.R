@@ -16,5 +16,5 @@ test_that("anova_multi has predictable result for mtcars", {
     anova_multi(mtcars,carb,mpg:cyl,print = TRUE) %>% 
       .[[1,2]] %>% 
       round(6)
-  }, prints_text("10"))
+  }, prints_text(".312"))
 })
