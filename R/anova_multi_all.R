@@ -28,7 +28,7 @@ anova_multi_all <-
       purrr::set_names()
     cuts <-
       IVs %>%
-      purrr::map( ~ select(df, .)) %>%
+      purrr::map( ~ dplyr::select(df, .)) %>%
       purrr::map(unlist) %>%
       purrr::map( ~ stats::quantile(., seq(
         from = 0.05,
