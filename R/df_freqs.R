@@ -11,5 +11,5 @@ df_freqs <-
         dplyr::count_(x) %>% 
         purrr::set_names(c("value","n")) %>% 
         dplyr::mutate(value = as.character(.data$value))
-    },.id="var")
+    }, .id="var")
   }
