@@ -4,7 +4,7 @@
 #' @description Calculates descriptives and frequencies of every Column in a dataframe. Heavily inspired by Ujjwal Karn's XDA package.
 #' @export
 
-df_check <-
+df_desc <-
   function(df) {
     freqs <-
       purrr::map_df(purrr::set_names(names(df)), function(x) {
