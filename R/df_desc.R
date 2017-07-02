@@ -4,7 +4,7 @@
 #' @description Calculates descriptives and frequencies of every Column in a dataframe. Heavily inspired by Ujjwal Karn's XDA package.
 #' @export
 
-df_check <-
+df_desc <-
   function(df) {
     freqs <-
       purrr::map_df(purrr::set_names(names(df)), function(x) {
@@ -21,8 +21,8 @@ df_check <-
     missing <-
       df %>%
       dplyr::mutate_all(dplyr::funs(as.character)) %>%
-      tidyr::gather() %>%
-      dplyr::group_by(.data$key) %>%
+      tidyr::gather("var", "value") %>%
+      dplyr::group_by(.data$var) %>%
       dplyr::summarize(n_missing = sum(is.na(.data$value)),
                        perc_missing = .data$n_missing / n())
     
@@ -30,13 +30,12 @@ df_check <-
       df %>%
       purrr::map(class) %>% 
       purrr::map_df(stringr::str_c,collapse = ", ") %>% 
-      tidyr::gather() %>%
-      dplyr::rename(class = .data$value)
+      tidyr::gather("var", "class")
     
     df %>%
       dplyr::select_if(is.numeric) %>%
-      tidyr::gather() %>%
-      dplyr::group_by(.data$key) %>%
+      tidyr::gather("var", "value") %>%
+      dplyr::group_by(.data$var) %>%
       dplyr::summarize(
         mean = mean(.data$value, na.rm = TRUE),
         median = stats::median(.data$value, na.rm = TRUE),
@@ -53,9 +52,9 @@ df_check <-
         `75%` = stats::quantile(.data$value, .75, na.rm = TRUE),
         `99%` = stats::quantile(.data$value, .99, na.rm = TRUE)
       ) %>%
-      dplyr::full_join(missing, by = "key", na_matches = "never") %>%
-      dplyr::full_join(class, by = "key", na_matches = "never") %>%
-      dplyr::full_join(freqs, by = c("key" = "var"), na_matches = "never") %>%
-      dplyr::mutate(frequencies = .data$frequencies %>% purrr::set_names(.data$key)) %>%
-      dplyr::select(var = .data$key, .data$class, dplyr::everything())
+      dplyr::full_join(missing, by = "var", na_matches = "never") %>%
+      dplyr::full_join(class, by = "var", na_matches = "never") %>%
+      dplyr::full_join(freqs, by = "var", na_matches = "never") %>%
+      dplyr::mutate(frequencies = .data$frequencies %>% purrr::set_names(.data$var)) %>%
+      dplyr::select(.data$var, .data$class, dplyr::everything())
   }
