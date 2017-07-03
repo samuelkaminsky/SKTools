@@ -46,6 +46,7 @@ df_desc <-
         iqr = stats::IQR(.data$value, na.rm = TRUE),
         skewness = moments::skewness(.data$value, na.rm = TRUE),
         kurtosis = moments::kurtosis(.data$value, na.rm = TRUE),
+        n_unique = length(unique(.data$value)),
         `1%` = stats::quantile(.data$value, .01, na.rm = TRUE),
         `25%` = stats::quantile(.data$value, .25, na.rm = TRUE),
         `50%` = stats::quantile(.data$value, .5, na.rm = TRUE),
@@ -56,5 +57,5 @@ df_desc <-
       dplyr::full_join(class, by = "var", na_matches = "never") %>%
       dplyr::full_join(freqs, by = "var", na_matches = "never") %>%
       dplyr::mutate(frequencies = .data$frequencies %>% purrr::set_names(.data$var)) %>%
-      dplyr::select(.data$var, .data$class, dplyr::everything())
+      dplyr::select(.data$var, .data$class, .data$mean:.data$n_unique,.data$n_missing,.data$perc_missing,.data$`1%`:.data$`99%`,.data$frequencies)
   }
