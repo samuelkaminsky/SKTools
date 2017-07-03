@@ -6,6 +6,9 @@
 
 df_desc <-
   function(df) {
+    df <- 
+      df %>% 
+      tibble::set_tidy_names(syntactic = TRUE, quiet = TRUE)
     freqs <-
       purrr::map_df(purrr::set_names(names(df)), function(x) {
         df %>%
