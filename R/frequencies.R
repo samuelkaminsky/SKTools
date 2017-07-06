@@ -4,7 +4,7 @@
 #' @description Calculates frequencies of every Column in a dataframe
 #' @export
 
-df_freqs <-
+frequencies <-
   function(df) {
     purrr::map_df(purrr::set_names(names(df)), function(x) {
       df %>%
