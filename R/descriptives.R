@@ -4,22 +4,24 @@
 #' @description Calculates descriptives and frequencies of every Column in a dataframe. Heavily inspired by Ujjwal Karn's XDA package.
 #' @export
 
-df_desc <-
-  function(df) {
-    df <- 
-      df %>% 
+descriptives <-
+  function(df, frequencies = FALSE) {
+    df <-
+      df %>%
       tibble::set_tidy_names(syntactic = TRUE, quiet = TRUE)
-    freqs <-
-      purrr::map_df(purrr::set_names(names(df)), function(x) {
-        df %>%
-          dplyr::count_(x) %>%
-          purrr::set_names(c("value", "n")) %>%
-          dplyr::mutate(value = as.character(.data$value))
-      }, .id = "var") %>%
-      dplyr::group_by(.data$var) %>%
-      tidyr::nest(.key = "frequencies") %>%
-      dplyr::mutate(frequencies = .data$frequencies %>% purrr::set_names(.data$var)) %>%
-      dplyr::arrange(.data$var)
+    if (isTRUE(frequencies)) {
+      freqs <-
+        purrr::map_df(purrr::set_names(names(df)), function(x) {
+          df %>%
+            dplyr::count_(x) %>%
+            purrr::set_names(c("value", "n")) %>%
+            dplyr::mutate(value = as.character(.data$value))
+        }, .id = "var") %>%
+        dplyr::group_by(.data$var) %>%
+        tidyr::nest(.key = "frequencies") %>%
+        dplyr::mutate(frequencies = .data$frequencies %>% purrr::set_names(.data$var)) %>%
+        dplyr::arrange(.data$var)
+    }
     
     missing <-
       df %>%
@@ -31,11 +33,12 @@ df_desc <-
     
     class <-
       df %>%
-      purrr::map(class) %>% 
-      purrr::map_df(stringr::str_c,collapse = ", ") %>% 
+      purrr::map(class) %>%
+      purrr::map_df(stringr::str_c, collapse = ", ") %>%
       tidyr::gather("var", "class")
     
-    df %>%
+    df <-
+      df %>%
       dplyr::select_if(is.numeric) %>%
       tidyr::gather("var", "value") %>%
       dplyr::group_by(.data$var) %>%
@@ -57,8 +60,35 @@ df_desc <-
         `99%` = stats::quantile(.data$value, .99, na.rm = TRUE)
       ) %>%
       dplyr::full_join(missing, by = "var", na_matches = "never") %>%
-      dplyr::full_join(class, by = "var", na_matches = "never") %>%
-      dplyr::full_join(freqs, by = "var", na_matches = "never") %>%
-      dplyr::mutate(frequencies = .data$frequencies %>% purrr::set_names(.data$var)) %>%
-      dplyr::select(.data$var, .data$class, .data$mean:.data$n_unique,.data$n_missing,.data$perc_missing,.data$`1%`:.data$`99%`,.data$frequencies)
+      dplyr::full_join(class, by = "var", na_matches = "never")
+    
+    if (isTRUE(frequencies))
+    {
+      df <-
+        df %>%
+        dplyr::full_join(freqs, by = "var", na_matches = "never") %>%
+        dplyr::mutate(frequencies = .data$frequencies %>% purrr::set_names(.data$var))
+    }
+    if (isTRUE(frequencies)) {
+      df %>%
+        dplyr::select(
+          .data$var,
+          .data$class,
+          .data$mean:.data$n_unique,
+          .data$n_missing,
+          .data$perc_missing,
+          .data$`1%`:.data$`99%`,
+          .data$frequencies
+        )
+    } else {
+      df %>%
+        dplyr::select(
+          .data$var,
+          .data$class,
+          .data$mean:.data$n_unique,
+          .data$n_missing,
+          .data$perc_missing,
+          .data$`1%`:.data$`99%`
+        )
+    }
   }
