@@ -1,6 +1,6 @@
 #' Update Packages from Github
 #' @export
-#' @description Updates packages that have been installed from Github
+#' @description Updates packages that have been installed from public Github repositories
 
 github_update <- function() {
   check <- "SKTools" %in% .packages()

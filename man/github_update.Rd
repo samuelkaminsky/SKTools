@@ -7,5 +7,5 @@
 github_update()
 }
 \description{
-Updates packages that have been installed from Github
+Updates packages that have been installed from public Github repositories
 }
