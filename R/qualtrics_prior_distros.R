@@ -64,7 +64,10 @@ qualtrics_prior_distros <-
     distributions.list.level4 <-
       distributions.list.level3 %>%
       purrr::map( ~ .$result$nextPage) %>%
-      purrr::compact()
+      purrr::compact() %>%
+      purrr::map(~ httr::GET(.,
+                             httr::add_headers(header.all))) %>%
+      purrr::map(~ httr::content(.))
     
     results.4 <-
       distributions.list.level4 %>%
@@ -73,7 +76,10 @@ qualtrics_prior_distros <-
     distributions.list.level5 <-
       distributions.list.level4 %>%
       purrr::map( ~ .$result$nextPage) %>%
-      purrr::compact()
+      purrr::compact() %>%
+      purrr::map(~ httr::GET(.,
+                             httr::add_headers(header.all))) %>%
+      purrr::map(~ httr::content(.))
     
     results.5 <-
       distributions.list.level5 %>%
@@ -82,7 +88,10 @@ qualtrics_prior_distros <-
     distributions.list.level6 <-
       distributions.list.level5 %>%
       purrr::map( ~ .$result$nextPage) %>%
-      purrr::compact()
+      purrr::compact() %>%
+      purrr::map(~ httr::GET(.,
+                             httr::add_headers(header.all))) %>%
+      purrr::map(~ httr::content(.))
     
     results.6 <-
       distributions.list.level6 %>%
