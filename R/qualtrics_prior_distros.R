@@ -16,7 +16,7 @@ qualtrics_prior_distros <-
         httr::add_headers(header.all)
       ) %>%
       httr::content()
-  
+    
     distributions.list <-
       distributions.response$result$elements %>%
       purrr::map( ~ .$recipients$mailingListId) %>%
@@ -31,87 +31,36 @@ qualtrics_prior_distros <-
         httr::add_headers(header.all)
       )) %>%
       purrr::map( ~ httr::content(.))
-
-    results.1 <-
+    
+    results <-
       distributions.list %>%
       purrr::map(~ .$result$elements)
     
-    
-    distributions.list.level2 <-
-      distributions.list %>%
-      purrr::map(~ .$result$nextPage) %>%
-      purrr::compact() %>%
-      purrr::map( ~ httr::GET(.,
-                              httr::add_headers(header.all))) %>%
-      purrr::map( ~ httr::content(.))
-    
-    results.2 <-
-      distributions.list.level2 %>%
-      purrr::map(~ .$result$elements)
-    
-    distributions.list.level3 <-
-      distributions.list.level2 %>%
-      purrr::map( ~ .$result$nextPage) %>%
-      purrr::compact() %>%
-      purrr::map(~ httr::GET(.,
-                             httr::add_headers(header.all))) %>%
-      purrr::map(~ httr::content(.))
-    
-    results.3 <-
-      distributions.list.level3 %>%
-      purrr::map(~ .$result$elements)
-    
-    distributions.list.level4 <-
-      distributions.list.level3 %>%
-      purrr::map( ~ .$result$nextPage) %>%
-      purrr::compact() %>%
-      purrr::map(~ httr::GET(.,
-                             httr::add_headers(header.all))) %>%
-      purrr::map(~ httr::content(.))
-    
-    results.4 <-
-      distributions.list.level4 %>%
-      purrr::map(~ .$result$elements)
-    
-    distributions.list.level5 <-
-      distributions.list.level4 %>%
-      purrr::map( ~ .$result$nextPage) %>%
-      purrr::compact() %>%
-      purrr::map(~ httr::GET(.,
-                             httr::add_headers(header.all))) %>%
-      purrr::map(~ httr::content(.))
-    
-    results.5 <-
-      distributions.list.level5 %>%
-      purrr::map(~ .$result$elements)
-    
-    distributions.list.level6 <-
-      distributions.list.level5 %>%
-      purrr::map( ~ .$result$nextPage) %>%
-      purrr::compact() %>%
-      purrr::map(~ httr::GET(.,
-                             httr::add_headers(header.all))) %>%
-      purrr::map(~ httr::content(.))
-    
-    results.6 <-
-      distributions.list.level6 %>%
-      purrr::map(~ .$result$elements)
-    
-    all.distributions <-
-      c(results.1,
-        results.2,
-        results.3,
-        results.4,
-        results.5,
-        results.6)
+    while ({
+      length(distributions.list %>%
+             purrr::map(~ .$result$nextPage) %>%
+             purrr::compact()) > 0
+    }) {
+      distributions.list <-
+        distributions.list %>%
+        purrr::map(~ .$result$nextPage) %>%
+        purrr::compact() %>%
+        purrr::map( ~ httr::GET(.,
+                                httr::add_headers(header.all))) %>%
+        purrr::map( ~ httr::content(.))
+      results <-
+        distributions.list %>%
+        purrr::map(~ .$result$elements) %>%
+        c(results, .)
+    }
     
     distributions.df <-
-      purrr::map_df(1:length(all.distributions), function(x) {
+      purrr::map_df(1:length(results), function(x) {
         purrr::map_df(
-          1:length(all.distributions[[x]]),
+          1:length(results[[x]]),
           purrr::possibly(
             function(y) {
-              all.distributions[[x]][[y]] %>%
+              results[[x]][[y]] %>%
                 unlist %>%
                 t() %>%
                 as.data.frame() %>%
