@@ -38,6 +38,7 @@ Packages installed with the extra=TRUE argument include:
 \item caret
 \item doParallel
 \item DT
+\item ez
 \item dtplyr
 \item effsize
 \item foreach
@@ -47,6 +48,7 @@ Packages installed with the extra=TRUE argument include:
 \item googlesheets
 \item gtools
 \item iopsych
+\item lmerTest
 \item lsr
 \item multilevel
 \item nycflights13

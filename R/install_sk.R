@@ -22,6 +22,7 @@
 #' * caret
 #' * doParallel
 #' * DT
+#' * ez
 #' * dtplyr
 #' * effsize
 #' * foreach
@@ -31,6 +32,7 @@
 #' * googlesheets
 #' * gtools
 #' * iopsych
+#' * lmerTest
 #' * lsr
 #' * multilevel
 #' * nycflights13
@@ -73,6 +75,7 @@ install_sk <- function(extra = FALSE, dependencies = FALSE) {
         "DT",
         "dtplyr",
         "effsize",
+        "ez",
         "foreach",
         "formatR",
         "GGally",
@@ -80,6 +83,7 @@ install_sk <- function(extra = FALSE, dependencies = FALSE) {
         "googlesheets",
         "gtools",
         "iopsych",
+        "lmerTest",
         "lsr",
         "multilevel",
         "nycflights13",
