@@ -28,8 +28,7 @@ anova_multi_all <-
       purrr::set_names()
     cuts <-
       IVs %>%
-      purrr::map( ~ dplyr::select(df, .)) %>%
-      purrr::map(unlist) %>%
+      purrr::map( ~ dplyr::pull(df, .)) %>%
       purrr::map( ~ stats::quantile(., seq(
         from = 0.05,
         to = .95,
@@ -39,7 +38,8 @@ anova_multi_all <-
       tibble::rownames_to_column("percentage") %>%
       tidyr::gather("iv", "cut", -.data$percentage) %>%
       dplyr::distinct(.data$iv, .data$cut, .keep_all = TRUE)
-    iv.dv <- expand.grid(dv = DVs, iv = IVs) %>%
+    iv.dv <- 
+      tidyr::crossing(dv = DVs, iv = IVs) %>%
       dplyr::mutate_all(as.character)
     index <-
       cuts %>%
