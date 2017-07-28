@@ -19,5 +19,5 @@ anova_multi(df, iv, dvs, print = FALSE)
 Data frame of tidy ANOVA post-hoc results, also prints Ns and percentages in each level of the IV
 }
 \description{
-Conduct one-way ANOVAs on multipe DVs
+Conduct one-way ANOVAs on multiple DVs
 }

@@ -4,7 +4,7 @@
 #' @param dvs Names of dependent variables to be inserted into dplyr::select()
 #' @param print Logical indicating whether or not ns and proportions of iv are printed
 #' @return Data frame of tidy ANOVA post-hoc results, also prints Ns and percentages in each level of the IV
-#' @description Conduct one-way ANOVAs on multipe DVs
+#' @description Conduct one-way ANOVAs on multiple DVs
 #' @export
 
 anova_multi <-
