@@ -5,7 +5,7 @@
 #' @description Creates a vector of variable names from a dataframe or tibble
 #' @export
 
-list_vars <-
+list_names <-
   function(df, ...) {
     vars <- rlang::quos(...)
     df %>%
