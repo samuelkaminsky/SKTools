@@ -29,7 +29,8 @@ descriptives <-
       dplyr::mutate_all(dplyr::funs(as.character)) %>%
       tidyr::gather("var", "value") %>%
       dplyr::group_by(.data$var) %>%
-      dplyr::summarize(n_missing = sum(is.na(.data$value)),
+      dplyr::summarize(n = sum(!is.na(.data$value)),
+                       n_missing = sum(is.na(.data$value)),
                        perc_missing = .data$n_missing / n())
     
     class <-
@@ -76,6 +77,7 @@ descriptives <-
           .data$var,
           .data$class,
           .data$mean:.data$n_unique,
+          .data$n,
           .data$n_missing,
           .data$perc_missing,
           .data$`1%`:.data$`99%`,
@@ -87,6 +89,7 @@ descriptives <-
           .data$var,
           .data$class,
           .data$mean:.data$n_unique,
+          .data$n,
           .data$n_missing,
           .data$perc_missing,
           .data$`1%`:.data$`99%`
