@@ -2,7 +2,7 @@
 #' @export
 #' @description Updates packages that have been installed from public Github repositories
 
-github_update <- function() {
+update_github_pkgs <- function() {
   check <- "SKTools" %in% .packages()
   if (check) {
     detach("package:SKTools", unload = TRUE)
