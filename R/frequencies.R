@@ -6,10 +6,14 @@
 
 frequencies <-
   function(df) {
-    purrr::map_df(purrr::set_names(names(df)), function(x) {
-      df %>%
-        dplyr::count_(x) %>% 
-        purrr::set_names(c("value","n")) %>% 
-        dplyr::mutate(value = as.character(.data$value))
-    }, .id="var")
+    df %>%
+      names() %>%
+      purrr::set_names() %>%
+      purrr::map_df(function(x) {
+        x <- as.name(x)
+        df %>%
+          dplyr::count(!!x) %>%
+          purrr::set_names("value", "n") %>%
+          dplyr::mutate(value = as.character(.data$value))
+      }, .id = "var")
   }
