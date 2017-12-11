@@ -4,10 +4,12 @@
 \alias{frequencies}
 \title{Dataframe Frequencies}
 \usage{
-frequencies(df)
+frequencies(df, perc = FALSE)
 }
 \arguments{
 \item{df}{Dataframe with data}
+
+\item{perc}{Logical indicating whether or not to calculate percentages for each value by variable}
 }
 \value{
 Dataframe of frequencies for each variable and value
