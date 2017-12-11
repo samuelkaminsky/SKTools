@@ -22,7 +22,7 @@ frequencies <-
     if (perc == TRUE) {
       result <- 
         result %>% 
-        dplyr::group_by(.data$var) %>% 
+        dplyr::group_by(.data$var) %>%
         dplyr::mutate(perc = .data$n/sum(.data$n, na.rm = TRUE)) %>% 
         dplyr::ungroup()
     }
