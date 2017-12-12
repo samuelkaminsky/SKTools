@@ -1,6 +1,6 @@
 #' Dataframe Frequencies
 #' @param df Dataframe with data
-#' @param perc Logical indicating whether or not to calculate percentages for each value by variable
+#' @param perc Logical indicating whether or not to calculate percentages and valid percentages for each value by variable
 #' @return Dataframe of frequencies for each variable and value
 #' @description Calculates frequencies of every Column in a dataframe
 #' @export
@@ -24,7 +24,12 @@ frequencies <-
         result %>% 
         dplyr::group_by(.data$var) %>%
         dplyr::mutate(perc = .data$n/sum(.data$n, na.rm = TRUE)) %>% 
-        dplyr::ungroup()
+        dplyr::ungroup() %>% 
+        dplyr::mutate(missing = dplyr::if_else(is.na(.data$value), TRUE, FALSE)) %>% 
+        dplyr::group_by(.data$var, .data$missing) %>%
+        dplyr::mutate(valid.perc = .data$n/sum(.data$n)) %>% 
+        dplyr::ungroup() %>% 
+        dplyr::select(-.data$missing)
     }
     result
   }
