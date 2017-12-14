@@ -4,9 +4,7 @@
 #' @export
 #' @description Installs packages that I like
 #' @details Packages installed with the default arguments include: 
-#' * anytime
 #' * data.table
-#' * feather
 #' * knitr
 #' * lavaan
 #' * openxlsx
@@ -16,8 +14,11 @@
 #' * roxygen2
 #' * shiny
 #' * sjmisc
+#' * sjlabelled
 #' * tidyverse
+#' * writexl
 #' @details Packages installed with the extra=TRUE argument include: 
+#' * anytime
 #' * car
 #' * caret
 #' * doParallel
@@ -50,10 +51,7 @@
 
 install_sk <- function(extra = FALSE, dependencies = FALSE) {
   list_of_packages <-
-    c(
-      "anytime",
-      "data.table",
-      "feather",
+    c("data.table",
       "knitr",
       "lavaan",
       "openxlsx",
@@ -63,12 +61,15 @@ install_sk <- function(extra = FALSE, dependencies = FALSE) {
       "roxygen2",
       "shiny",
       "sjmisc",
-      "tidyverse"
+      "sjlabelled",
+      "tidyverse",
+      "wrtiexl"
     )
   if (isTRUE(extra)) {
     list_of_packages <-
       c(
         list_of_packages,
+        "anytime",
         "car",
         "caret",
         "doParallel",

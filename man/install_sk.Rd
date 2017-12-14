@@ -17,9 +17,7 @@ Installs packages that I like
 \details{
 Packages installed with the default arguments include:
 \itemize{
-\item anytime
 \item data.table
-\item feather
 \item knitr
 \item lavaan
 \item openxlsx
@@ -29,11 +27,14 @@ Packages installed with the default arguments include:
 \item roxygen2
 \item shiny
 \item sjmisc
+\item sjlabelled
 \item tidyverse
+\item writexl
 }
 
 Packages installed with the extra=TRUE argument include:
 \itemize{
+\item anytime
 \item car
 \item caret
 \item doParallel
