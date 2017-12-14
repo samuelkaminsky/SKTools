@@ -27,7 +27,7 @@ frequencies <-
         dplyr::ungroup() %>% 
         dplyr::mutate(missing = dplyr::if_else(is.na(.data$value), TRUE, FALSE)) %>% 
         dplyr::group_by(.data$var, .data$missing) %>%
-        dplyr::mutate(valid.perc = .data$n/sum(.data$n)) %>% 
+        dplyr::mutate(valid.perc = dplyr::if_else(.data$missing == TRUE,NA_real_, .data$n/sum(.data$n))) %>% 
         dplyr::ungroup() %>% 
         dplyr::select(-.data$missing)
     }
