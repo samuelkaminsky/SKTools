@@ -54,7 +54,7 @@ descriptives <-
         iqr = stats::IQR(.data$value, na.rm = TRUE),
         skewness = moments::skewness(.data$value, na.rm = TRUE),
         kurtosis = moments::kurtosis(.data$value, na.rm = TRUE),
-        n_unique = length(unique(.data$value)),
+        n_unique = length(unique(stats::na.omit(.data$value))),
         `1%` = stats::quantile(.data$value, .01, na.rm = TRUE),
         `25%` = stats::quantile(.data$value, .25, na.rm = TRUE),
         `50%` = stats::quantile(.data$value, .5, na.rm = TRUE),
