@@ -63,7 +63,7 @@ install_sk <- function(extra = FALSE, dependencies = FALSE) {
       "sjmisc",
       "sjlabelled",
       "tidyverse",
-      "wrtiexl"
+      "writexl"
     )
   if (isTRUE(extra)) {
     list_of_packages <-
