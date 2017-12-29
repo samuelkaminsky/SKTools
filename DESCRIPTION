@@ -11,6 +11,7 @@ License: GPL-3
 URL: https://github.com/samuelkaminsky/SKTools
 Imports:
     broom,
+    crayon,
     devtools,
     dplyr (>= 0.7),
     effsize,
