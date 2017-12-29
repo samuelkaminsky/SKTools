@@ -4,12 +4,14 @@
 \alias{append_2_prepend}
 \title{append_2_prepend}
 \usage{
-append_2_prepend(df, string)
+append_2_prepend(df, string, sep = "_")
 }
 \arguments{
 \item{df}{Dataframe}
 
 \item{string}{String at end to move to beginning}
+
+\item{sep}{String to insert between prepended string and rest of variable name}
 }
 \value{
 Data frame with corrected column names
