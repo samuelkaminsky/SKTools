@@ -59,7 +59,11 @@ adapt_report_new <- function(date = "")
   Sys.sleep(3)
   cat("Also, please", crayon::red$bold("DO NOT"), "hit the escape button. If you do, we will get disconnected and the spy will never be stopped!")
   # Task 1
+<<<<<<< HEAD
   cat("For your first challenge, I'm going to send you a list of the potential suspsects and their performance\n")
+=======
+  cat("For your first challenge, I'm going to send you a list of the potential candidates.\n")
+>>>>>>> e94790dbc1007dddeecdc2e3544a0e121ec73ca8
   file <- readxl::read_excel(system.file("extdata", "Interviews.xlsx", package = "SKTools"))
   if(.Platform$OS.type == "windows") {
     writexl::write_xlsx(
@@ -72,6 +76,7 @@ adapt_report_new <- function(date = "")
       paste0(Sys.getenv("HOME"),"/Desktop/Interviews.xlsx")))
   }
   Sys.sleep(1)
+<<<<<<< HEAD
   cat('Their interview performance should now be on your desktop in a file called "Interviews.xlsx"\n')
   Sys.sleep(2)
   cat("We know that the spy applied in either 2016 or 2017, before applying again in 2018.\n")
@@ -79,4 +84,8 @@ adapt_report_new <- function(date = "")
   cat("I can tell you that the spy did well in the interview, but I remember that Debra had a bad feeling about a few people in the process.\n")
   Sys.sleep(2)
   cat("We didn’t listen to her then, but it might be a good idea to take a look at the phone interview rating forms to narrow down the suspects.\n")
+=======
+  cat('"Their interview performance should now be on your desktop in a file called "Interviews.xlsx"\n')
+  
+>>>>>>> e94790dbc1007dddeecdc2e3544a0e121ec73ca8
 }
