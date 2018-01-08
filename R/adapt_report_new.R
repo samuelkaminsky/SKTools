@@ -74,7 +74,7 @@ adapt_report_new <- function(date = "")
   # Task 1
   cat("To start you off, I'm going to send you a list of the potential suspsects and their performance\n")
   
-  # file <- readxl::read_excel("/Users/Samuel/Google Drive/Work/JetBlue/Scavenger Hunt/Interviews.xlsx")
+  # file <- readxl::read_excel("/Users/Samuel/Downloads/Interviews.xlsx")
   # devtools::use_data(file, overwrite = TRUE)
   file <- SKTools::file
   
