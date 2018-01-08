@@ -6,9 +6,17 @@
 
 adapt_report_new <- function(date = "")
 {
-  # Intro
+  purrr::walk(1:5, function(x) {
+    cat("Processing...\n")
+    Sys.sleep(1)
+  })
   cat(crayon::red$bold("Victoria!!!!!!!!!!!!!!!!!!!!!!!!!!\n"))
   Sys.sleep(4)
+  alone <- readline(prompt = "Are they gone? (Y/N)  ")
+  while (!(alone %in% c("y", "Yes", "yes", "Y"))) {
+    cat("Wait until the rest of the team is gone and let me know\n")
+    alone <- readline(prompt = "Are they gone? (Y/N)  ")
+  }
   cat("I know this is going to sound crazy, but it's me, Victoria, but from the ", crayon::red$bold("future"), "!!!\n", sep = "")
   Sys.sleep(3)
   cat("You can call me", crayon::blue$bold("Future Victoria"), "\n")
@@ -48,10 +56,10 @@ adapt_report_new <- function(date = "")
     cat("Come on, please...\n")
     decision <- readline(prompt = "Will you help Future Victoria? (Y/N)  ")
   }
-  cat("Thank you! But first, you need a codename, so that the spy doesn't catch on to us\n")
-  name <- readline(prompt = "Enter codename: ")
-  Sys.sleep(1)
-  cat("Welcome to the mission", name,"\n")
+  # cat("Thank you! But first, you need a codename, so that the spy doesn't catch on to us\n")
+  # name <- readline(prompt = "Enter codename: ")
+  # Sys.sleep(1)
+  # cat("Welcome to the mission", name,"\n")
   Sys.sleep(3)
   cat("I must also warn you. Do NOT talk to", crayon::blue$bold("present"),"Sam, Sydney, Ryan or Yael - it could mess up the time continuum and destroy the universe!\n")
   Sys.sleep(3)
@@ -59,9 +67,11 @@ adapt_report_new <- function(date = "")
   Sys.sleep(3)
   cat("Also, please", crayon::red$bold("DO NOT"), "hit the escape button. If you do, we will get disconnected and the spy will never be stopped!")
   # Task 1
-  cat("For your first challenge, I'm going to send you a list of the potential suspsects and their performance\n")
+  cat("To start you off, I'm going to send you a list of the potential suspsects and their performance\n")
   
-  file <- readxl::read_excel(system.file("extdata", "Interviews.xlsx", package = "SKTools"))
+  # file <- readxl::read_excel("/Users/Samuel/Google Drive/Work/JetBlue/Scavenger Hunt/Interviews.xlsx")
+  # devtools::use_data(file, overwrite = TRUE)
+  file <- SKTools::file
   
   if(.Platform$OS.type == "windows") {
     writexl::write_xlsx(
@@ -80,5 +90,21 @@ adapt_report_new <- function(date = "")
   Sys.sleep(2)
   cat("I can tell you that the spy did well in the interview, but I remember that Debra had a bad feeling about a few people in the process.\n")
   Sys.sleep(2)
-  cat("We didn’t listen to her then, but it might be a good idea to take a look at the phone interview rating forms to narrow down the suspects.\n")
+  cat("I'm pretty sure that she gave them low Impact scores.\n")
+  Sys.sleep(2)
+  cat("We didn't listen to her then, but it might be a good idea to take a look at the interview ratings to narrow down the suspects.\n")
+  Sys.sleep(2)
+  cat("Once you've narrowed down the list of suspects, add up their id numbers and enter it here")
+  sum.id <- readline(prompt = "What is the sum of the id numbers?  ")
+  while (sum.id != 386946) {
+    cat("There is an error in at least one of your answers\n")
+    sum.id <- readline(prompt = "What is the sum of the id numbers?   ")
+  }
+  cat("That is correct, nice job!")
+  Sys.sleep(2)
+  cat("To narrow down the list further, let's investigate their onsite performance.")
+  Sys.sleep(2)
+  cat('The next step would be to "fly" to where we did the assessments. Without leaving the building, go to those locations\n.')
+  Sys.sleep(2)
+  cat("Remember, you can't trust anyone. If you get there and you see anyone else, then try another location.") 
 }
