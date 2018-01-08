@@ -13,23 +13,10 @@ adapt_report_new <- function(date = "")
   cat(crayon::red$bold("Victoria!!!!!!!!!!!!!!!!!!!!!!!!!!\n"))
   Sys.sleep(4)
   cat("I know this is going to sound crazy, but it's me, Victoria, but from the ", crayon::red$bold("future"), "!!!\n", sep = "")
-<<<<<<< HEAD
-=======
   Sys.sleep(3)
   cat("You can call me", crayon::blue$bold("Future Victoria"), "\n")
   Sys.sleep(3)
   cat("In the future, everyone uses R for texting for some reason and I just invented a time machine. I'm contacting you to warn you.\n")
-  Sys.sleep(3)
-  cat("But first, we have to make sure Ryan, Sydney, and Yael are gone. It's not safe if they're around!")
-  Sys.sleep(3)
-  alone <- readline(prompt = "Are they gone? (Y/N)  ")
-  while (!(alone %in% c("y", "Yes", "yes", "Y"))) {
-    cat("Wait until the rest of the team is gone and let me know\n")
-    alone <- readline(prompt = "Are they gone? (Y/N)  ")
-  }
->>>>>>> ab42f32ff5f517d659bd87550463aefb3ffd52ef
-  Sys.sleep(3)
-  cat("Okay good!\n")
   Sys.sleep(3)
   cat("But first, we have to make sure Ryan, Sydney, and Yael are gone. It's not safe if they're around!")
   Sys.sleep(3)
