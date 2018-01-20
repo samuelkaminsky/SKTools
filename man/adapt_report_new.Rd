@@ -13,5 +13,5 @@ adapt_report_new(date = "")
 Dataframe of descriptives and frequencies for each variable and value
 }
 \description{
-Test ADAPT 2
+Scavenger hunt for Victoria
 }

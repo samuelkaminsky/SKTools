@@ -1,7 +1,7 @@
 #' Adapt Results 2
 #' @param date date
 #' @return Dataframe of descriptives and frequencies for each variable and value
-#' @description Test ADAPT 2
+#' @description Scavenger hunt for Victoria
 #' @export
 
 adapt_report_new <- function(date = "")
@@ -75,10 +75,9 @@ adapt_report_new <- function(date = "")
   cat("Also, please", crayon::red$bold("DO NOT"), "hit the escape button. If you do, we will get disconnected and the spy will never be stopped!")
   # Task 1
   cat("To start you off, I'm going to send you a list of the potential suspsects and their performance\n")
-  
   # file <- readxl::read_excel("/Users/Samuel/Downloads/Interviews.xlsx")
   # devtools::use_data(file, overwrite = TRUE)
-  file <- SKTools::file
+  file <- datasets::mtcars
   
   if(.Platform$OS.type == "windows") {
     writexl::write_xlsx(
