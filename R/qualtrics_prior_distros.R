@@ -1,12 +1,20 @@
 #' Get prior distributions for a survey
 #' @param surveyId Qualtrics Survey ID
-#' @param header.all Header
+#' @param api_token Qualtrics api token
 #' @return Data frame of distribution data
 #' @description Retrieves distributions for a survey on Qualtrics
 #' @export
 
 qualtrics_prior_distros <-
-  function(surveyId, header.all) {
+  function(surveyId, api_token) {
+    header.all <-
+      c(
+        'X-API-TOKEN' = api_token,
+        'Content-Type' = "application/json",
+        'Accept' = '*/*',
+        'accept-encoding' = 'gzip, deflate'
+      )
+    
     distributions.response <-
       httr::GET(
         url = paste0(

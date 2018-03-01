@@ -8,32 +8,34 @@
 corr_summary <-
   function(corr_test_results, alpha = .05) {
     if (length(corr_test_results[[2]]) == 1) {
-      corr_test_results[2] <-
-        list(
-          n = rep(
-            x = corr_test_results[[2]],
-            corr_test_results[[1]] %>%
-              as.data.frame() %>%
-              tidyr::gather() %>%
-              nrow()
-          )
-        )
+      # corr_test_results[2] <-
+      #   list(
+      #     n = rep(
+      #       x = corr_test_results[[2]],
+      #       corr_test_results[[1]] %>%
+      #         as.data.frame() %>%
+      #         tidyr::gather() %>%
+      #         nrow()
+      #     )
+      #   )
+      corr_test_results[[2]] <- matrix(data= corr_test_results[[2]], corr_test_results[[1]] %>% nrow(), corr_test_results[[1]] %>% nrow(), 
+                                       dimnames = list(rownames(corr_test_results[[1]]), colnames(corr_test_results[[1]])))
     }
     cor.df <-
       corr_test_results[1:4] %>%
       purrr::map(~ as.data.frame(.)) %>%
-      purrr::map(~ tibble::rownames_to_column(.)) %>%
-      purrr::map(~ tidyr::gather(., rowname)) %>%
-      dplyr::bind_cols() %>%
+      purrr::map(~ tibble::rownames_to_column(., var = "iv")) %>%
+      purrr::map(~ tidyr::gather(., dv, value, -iv)) %>%
+      purrr::reduce(dplyr::left_join, by = c("iv", "dv")) %>%
       dplyr::select(
-        IV = .data$rowname,
-        DV = .data$rowname1,
-        r = .data$value,
-        n = .data$value1,
-        t = .data$value2,
-        p = .data$value3
+        .data$iv,
+        .data$dv,
+        r = .data$value.x,
+        n = .data$value.y,
+        t = .data$value.x.x,
+        p = .data$value.y.y
       ) %>%
       dplyr::mutate(Sig = dplyr::if_else(.data$p < alpha, TRUE, FALSE)) %>%
-      dplyr::filter(!(.data$IV == .data$DV & .data$r == 1))
+      dplyr::filter(!(.data$iv == .data$dv & .data$r == 1))
     return(cor.df)
   }
