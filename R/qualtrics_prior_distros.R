@@ -79,21 +79,7 @@ qualtrics_prior_distros <-
               id = NA_character_,
               firstName = NA_character_,
               lastName = NA_character_,
-              email = NA_character_,
-              embeddedData.Req.Position.Title = NA_character_,
-              embeddedData.Candidate.ID = NA_character_,
-              embeddedData.Location.Code = NA_character_,
-              embeddedData.Cand.Profile.ID = NA_character_,
-              embeddedData.System.Req.ID = NA_character_,
-              unsubscribed = NA_character_,
-              emailHistory.emailDistributionId = NA_character_,
-              emailHistory.date = NA_character_,
-              emailHistory.type = NA_character_,
-              emailHistory.result = NA_character_,
-              emailHistory.read = NA_character_,
-              emailHistory.surveyId = NA_character_,
-              `embeddedData.Candidate ID` = NA_character_,
-              `embeddedData.Cand Profile ID` = NA_character_
+              email = NA_character_
             )
           )
         )
