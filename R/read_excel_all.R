@@ -38,7 +38,7 @@ read_excel_all <-
         names(workbook) <- make.sheetnames
       }
       if (isTRUE(check.names)) {
-        for (i in 1:length(sheetnames)) {
+        for (i in seq_along(sheetnames)) {
           names(workbook[[i]]) <-
             make.names(names(workbook[[i]]), unique = TRUE)
         }

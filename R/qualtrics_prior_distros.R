@@ -63,9 +63,9 @@ qualtrics_prior_distros <-
     }
     
     distributions.df <-
-      purrr::map_df(1:length(results), function(x) {
+      purrr::map_df(seq_along(results), function(x) {
         purrr::map_df(
-          1:length(results[[x]]),
+          seq_along(results[[x]]),
           purrr::possibly(
             function(y) {
               results[[x]][[y]] %>%
