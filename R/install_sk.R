@@ -4,6 +4,7 @@
 #' @export
 #' @description Installs packages that I like
 #' @details Packages installed with the default arguments include: 
+#' * clipr
 #' * data.table
 #' * knitr
 #' * lavaan
@@ -51,7 +52,8 @@
 
 install_sk <- function(extra = FALSE, dependencies = FALSE) {
   list_of_packages <-
-    c("data.table",
+    c("clipr",
+      "data.table",
       "knitr",
       "lavaan",
       "openxlsx",

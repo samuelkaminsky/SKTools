@@ -17,6 +17,7 @@ Installs packages that I like
 \details{
 Packages installed with the default arguments include:
 \itemize{
+\item clipr
 \item data.table
 \item knitr
 \item lavaan
