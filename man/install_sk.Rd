@@ -50,6 +50,7 @@ Packages installed with the extra=TRUE argument include:
 \item googlesheets
 \item gtools
 \item iopsych
+\item janitor
 \item lmerTest
 \item lsr
 \item multilevel

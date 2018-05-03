@@ -34,6 +34,7 @@
 #' * googlesheets
 #' * gtools
 #' * iopsych
+#' * janitor
 #' * lmerTest
 #' * lsr
 #' * multilevel
@@ -86,6 +87,7 @@ install_sk <- function(extra = FALSE, dependencies = FALSE) {
         "googlesheets",
         "gtools",
         "iopsych",
+        "janitor",
         "lmerTest",
         "lsr",
         "multilevel",
