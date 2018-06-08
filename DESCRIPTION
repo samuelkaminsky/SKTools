@@ -28,7 +28,6 @@ Imports:
     stringr,
     tibble,
     tidyr,
-    utils,
-    writexl
+    utils
 RoxygenNote: 6.0.1
 Suggests: testthat

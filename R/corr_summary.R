@@ -18,7 +18,7 @@ corr_summary <-
       #         nrow()
       #     )
       #   )
-      corr_test_results[[2]] <- matrix(data= corr_test_results[[2]], corr_test_results[[1]] %>% nrow(), corr_test_results[[1]] %>% nrow(), 
+      corr_test_results[[2]] <- matrix(data = corr_test_results[[2]], corr_test_results[[1]] %>% nrow(), corr_test_results[[1]] %>% nrow(), 
                                        dimnames = list(rownames(corr_test_results[[1]]), colnames(corr_test_results[[1]])))
     }
     cor.df <-
@@ -35,7 +35,7 @@ corr_summary <-
         t = .data$value.x.x,
         p = .data$value.y.y
       ) %>%
-      dplyr::mutate(Sig = dplyr::if_else(.data$p < alpha, TRUE, FALSE)) %>%
+      dplyr::mutate(Sig = .data$p < alpha) %>%
       dplyr::filter(!(.data$iv == .data$dv & .data$r == 1))
     return(cor.df)
   }
