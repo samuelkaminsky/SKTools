@@ -9,7 +9,7 @@ hangouts_chat_message(url, message)
 \arguments{
 \item{url}{Character string with the full Webhook URL}
 
-\item{message}{Character string to be sent to Hangouts Chat, does not accept strings with apostrophes}
+\item{message}{Character string to be sent to Hangouts Chat}
 }
 \value{
 POST results
