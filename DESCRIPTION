@@ -1,7 +1,7 @@
 Package: SKTools
 Type: Package
 Title: SK's Tools
-Version: 0.4.2
+Version: 0.4.3
 Author: Samuel Kaminsky
 Maintainer: Samuel Kaminsky <samuel.e.kaminsky@gmail.com>
 Description: Adds some helpful functions for analyzing data.
@@ -16,6 +16,7 @@ Imports:
     devtools,
     dplyr (>= 0.7),
     effsize,
+    foreign,
     httr,
     jsonlite,
     moments,
@@ -25,9 +26,10 @@ Imports:
     readxl,
     rlang,
     rstudioapi,
+    sjlabelled,
     stringr,
     tibble,
     tidyr,
     utils
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Suggests: testthat

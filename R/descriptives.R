@@ -7,13 +7,16 @@
 
 descriptives <-
   function(df, frequencies = FALSE) {
-    df <-
+    df.func <-
       df %>%
-      tibble::set_tidy_names(syntactic = TRUE, quiet = TRUE)
+      tibble::set_tidy_names(syntactic = TRUE, quiet = TRUE) %>% 
+      dplyr::mutate_if(is.factor, as.character) %>% 
+      sjlabelled::remove_all_labels()
+    
     if (isTRUE(frequencies)) {
       freqs <-
-        purrr::map_df(purrr::set_names(names(df)), function(x) {
-          df %>%
+        purrr::map_dfr(purrr::set_names(names(df.func)), function(x) {
+          df.func %>%
             dplyr::count_(x) %>%
             purrr::set_names(c("value", "n")) %>%
             dplyr::mutate(value = as.character(.data$value))
@@ -25,7 +28,7 @@ descriptives <-
     }
     
     missing <-
-      df %>%
+      df.func %>%
       dplyr::mutate_all(dplyr::funs(as.character)) %>%
       tidyr::gather("var", "value") %>%
       dplyr::group_by(.data$var) %>%
@@ -34,13 +37,13 @@ descriptives <-
                        perc_missing = .data$n_missing / n())
     
     class <-
-      df %>%
+      df.func %>%
       purrr::map(class) %>%
-      purrr::map_df(stringr::str_c, collapse = ", ") %>%
+      purrr::map_dfr(stringr::str_c, collapse = ", ") %>%
       tidyr::gather("var", "class")
     
-    df <-
-      df %>%
+    df.func <-
+      df.func %>%
       dplyr::select_if(is.numeric) %>%
       tidyr::gather("var", "value") %>%
       dplyr::group_by(.data$var) %>%
@@ -66,13 +69,13 @@ descriptives <-
     
     if (isTRUE(frequencies))
     {
-      df <-
-        df %>%
+      df.func <-
+        df.func %>%
         dplyr::full_join(freqs, by = "var", na_matches = "never") %>%
         dplyr::mutate(frequencies = .data$frequencies %>% purrr::set_names(.data$var))
     }
     if (isTRUE(frequencies)) {
-      df %>%
+      df.func %>%
         dplyr::select(
           .data$var,
           .data$class,
@@ -84,7 +87,7 @@ descriptives <-
           .data$frequencies
         )
     } else {
-      df %>%
+      df.func %>%
         dplyr::select(
           .data$var,
           .data$class,
