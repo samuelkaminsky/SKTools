@@ -3,6 +3,7 @@
 export(anova_multi)
 export(anova_multi_all)
 export(append_2_prepend)
+export(calculate_ai)
 export(corr_summary)
 export(descriptives)
 export(distinct_2col)
