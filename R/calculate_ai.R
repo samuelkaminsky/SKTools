@@ -97,7 +97,7 @@ calculate_ai <-
         # AI.Detect = dplyr::if_else(.data$AI < cutoff |
         # .data$AI > 1 / cutoff, TRUE, FALSE),
         H = 2*asin(sqrt(.data$SR1))-2*asin(sqrt(.data$SR)),
-        Z = (.data$SR - .data$SR1) / sqrt((.data$stage2 + .data$stage21) / ((.data$stage1 +
+        Z = (.data$SR1-.data$SR) / sqrt((.data$stage2 + .data$stage21) / ((.data$stage1 +
                                                                                .data$stage11)) * (
                                                                                  1 - (.data$stage2 + .data$stage21) / (.data$stage1 + .data$stage11)
                                                                                ) * (1 / .data$stage1 + 1 / .data$stage11))
