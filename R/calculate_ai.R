@@ -43,7 +43,7 @@ calculate_ai <-
         df %>% 
         dplyr::count(!! x) %>% 
         dplyr::mutate(perc = .data$n/sum(.data$n, na.rm = TRUE)) %>% 
-        dplyr::filter(.data$perc >= .data$prop_min) %>% 
+        dplyr::filter(.data$perc >= prop_min) %>% 
         dplyr::select(-.data$n, -.data$perc)
       
       
@@ -60,7 +60,7 @@ calculate_ai <-
         )) %>%
         dplyr::summarize_at(dplyr::vars(.data$stage1, .data$stage2), sum, na.rm = TRUE)
     }) %>%
-      tidyr::gather(.data$Grouping, .data$Group,-(.data$stage1:.data$stage2)) %>%
+      tidyr::gather("Grouping", "Group", -c(.data$stage1, .data$stage2)) %>%
       tidyr::drop_na(.data$Group) %>%
       dplyr::mutate(SR = .data$stage2 / .data$stage1) %>%
       dplyr::select(.data$Grouping,
@@ -68,14 +68,8 @@ calculate_ai <-
                     .data$stage1,
                     .data$stage2,
                     .data$SR) %>%
-      dplyr::filter(.data$stage1 >= n_min,!(
-        .data$Group %in% c(
-          "Not Indicated",
-          "I Prefer Not to Answer",
-          "unknown",
-          "I choose not to disclose"
-        )
-      ))
+      dplyr::filter(.data$stage1 >= n_min)
+    
     l.groups <-
       df.sr %>%
       dplyr::select(.data$Group, .data$SR) %>%
@@ -88,16 +82,16 @@ calculate_ai <-
              Denominator = .data$Group1) %>%
       dplyr::filter(
         .data$Grouping == .data$Grouping1,
-        .data$Numerator != .data$Denominator,
-        .data$Numerator != "white",
-        .data$Numerator != "Majority",
-        .data$Numerator != "male",
-        .data$Numerator != "Male",
-        .data$Numerator != "all_other",
-        .data$Numerator != "white_male"
+        .data$Numerator != .data$Denominator#,
+      #   .data$Numerator != "white",
+      #   .data$Numerator != "Majority",
+      #   .data$Numerator != "male",
+      #   .data$Numerator != "Male",
+      #   .data$Numerator != "all_other",
+      #   .data$Numerator != "white_male"
       ) %>%
       dplyr::arrange(.data$Numerator, .data$Denominator) %>%
-      SKTools::distinct_2col("Numerator", "Denominator") %>%
+      # SKTools::distinct_2col("Numerator", "Denominator") %>%
       dplyr::mutate(
         ai.ratio = .data$SR / .data$SR1,
         # AI.Detect = dplyr::if_else(.data$AI < cutoff |
@@ -110,10 +104,10 @@ calculate_ai <-
       ) %>% 
       dplyr::ungroup() %>%
       dplyr::rowwise() %>%
-      dplyr::mutate(conting = list(dplyr::tibble(
+      dplyr::mutate(conting = list(list(
         pass = c(.data$stage2, .data$stage21),
         fail = c(.data$stage1 - .data$stage2, .data$stage11 - .data$stage21)
-      ))) %>% 
+      ) %>% tibble::as.tibble())) %>%  
       dplyr::mutate(chi = list(stats::prop.test(as.matrix(.data$conting), correct = correct) %>% broom::tidy()),
              f.exact = list(stats::fisher.test(.data$conting) %>% broom::tidy())) %>% 
       tidyr::unnest(.data$chi) %>% 
