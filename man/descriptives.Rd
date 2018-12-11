@@ -9,7 +9,7 @@ descriptives(df, frequencies = FALSE)
 \arguments{
 \item{df}{Dataframe with data}
 
-\item{frequencies}{Logical to indicate whehter or not to calculate frequencies for each variable as a list column}
+\item{frequencies}{Logical to indicate whether or not to calculate frequencies for each variable as a list column}
 }
 \value{
 Dataframe of descriptives and frequencies for each variable and value
