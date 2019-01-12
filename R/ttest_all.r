@@ -23,16 +23,16 @@ ttest_all <-
       names() %>%
       purrr::set_names()
     IVs %>%
-      purrr::map_df(function(x) {
+      purrr::map_dfr(function(x) {
         DVs %>%
-          purrr::map_df(function(y) {
+          purrr::map_dfr(function(y) {
             stats::quantile(df[, x] %>% unlist, seq(
               from = 0.05,
               to = .95,
               by = perc
             ), na.rm = TRUE) %>%
               as.list() %>%
-              purrr::map_df(purrr::possibly(
+              purrr::map_dfr(purrr::possibly(
                 function(z) {
                   df$Grouped <-
                     dplyr::if_else(df[, x] >= z, 1, 0) %>%
