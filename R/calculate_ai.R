@@ -5,6 +5,7 @@
 #' @param stage2 Unquoted column name of column indicating whether or not a row should be counted as a 'Pass' in the calculations (i.e., the numerator). Column must be logical.
 #' @param n_min Minimum n count for a group to be included in the calculation
 #' @param prop_min Minimum percentage for a group to be included in the calculation
+#' @param only_max Only calculate adverse impact using the group with the highest selection ratio as the denominator
 #' @param correct a logical indicating whether Yates' continuity correction should be applied where possible.
 #' @return List with two data frames. The first includes all selection ratios, the second includes all adverse impact calculation
 #' \item{Selection.Ratio}{Dataframe with selection ratios}
@@ -19,7 +20,7 @@ calculate_ai <-
            stage2,
            n_min = 0,
            prop_min = 0,
-           # cutoff = 7 / 10,
+           only_max = FALSE,
            correct = TRUE) {
     grouping.warn <- groupings[!(groupings %in% names(df))]
     groupings <- groupings[groupings %in% names(df)]
@@ -34,7 +35,7 @@ calculate_ai <-
     df <- 
       df %>%
       dplyr::rename(stage1 = !! stage1_quo,
-             stage2 = !! stage2_quo)
+                    stage2 = !! stage2_quo)
     
     df.sr <- groupings %>% purrr::map_dfr(function(x) {
       x <- as.name(x)
@@ -79,28 +80,34 @@ calculate_ai <-
       df.sr %>%
       tidyr::crossing(., .) %>%
       dplyr::rename(Numerator = .data$Group,
-             Denominator = .data$Group1) %>%
+                    Denominator = .data$Group1)
+    
+    if (only_max == TRUE) {
+      max.sr <- 
+        df.sr %>% 
+        dplyr::group_by(.data$Grouping) %>% 
+        dplyr::filter(.data$SR == max(.data$SR)) %>% 
+        dplyr::pull(.data$Group)
+      
+      df.ai <- 
+        df.ai %>% 
+        dplyr::filter(.data$Denominator %in% max.sr)
+    }
+    
+    df.ai <- 
+      df.ai %>% 
       dplyr::filter(
         .data$Grouping == .data$Grouping1,
-        .data$Numerator != .data$Denominator#,
-      #   .data$Numerator != "white",
-      #   .data$Numerator != "Majority",
-      #   .data$Numerator != "male",
-      #   .data$Numerator != "Male",
-      #   .data$Numerator != "all_other",
-      #   .data$Numerator != "white_male"
+        .data$Numerator != .data$Denominator
       ) %>%
       dplyr::arrange(.data$Numerator, .data$Denominator) %>%
-      # SKTools::distinct_2col("Numerator", "Denominator") %>%
       dplyr::mutate(
         ai.ratio = .data$SR / .data$SR1,
-        # AI.Detect = dplyr::if_else(.data$AI < cutoff |
-        # .data$AI > 1 / cutoff, TRUE, FALSE),
         H = 2*asin(sqrt(.data$SR1))-2*asin(sqrt(.data$SR)),
         Z = (.data$SR1-.data$SR) / sqrt((.data$stage2 + .data$stage21) / ((.data$stage1 +
-                                                                               .data$stage11)) * (
-                                                                                 1 - (.data$stage2 + .data$stage21) / (.data$stage1 + .data$stage11)
-                                                                               ) * (1 / .data$stage1 + 1 / .data$stage11))
+                                                                             .data$stage11)) * (
+                                                                               1 - (.data$stage2 + .data$stage21) / (.data$stage1 + .data$stage11)
+                                                                             ) * (1 / .data$stage1 + 1 / .data$stage11))
       ) %>% 
       dplyr::ungroup() %>%
       dplyr::rowwise() %>%
@@ -109,22 +116,23 @@ calculate_ai <-
         fail = c(.data$stage1 - .data$stage2, .data$stage11 - .data$stage21)
       ) %>% tibble::as.tibble())) %>%  
       dplyr::mutate(chi = list(stats::prop.test(as.matrix(.data$conting), correct = correct) %>% broom::tidy()),
-             f.exact = list(stats::fisher.test(.data$conting) %>% broom::tidy())) %>% 
+                    f.exact = list(stats::fisher.test(.data$conting) %>% broom::tidy())) %>% 
       tidyr::unnest(.data$chi) %>% 
       dplyr::select(-.data$conting, -.data$parameter, -.data$alternative, -.data$estimate1, -.data$estimate2, -.data$conf.low, -.data$conf.high) %>%
       dplyr::rename(chi = .data$statistic,
-             p.value.chi = .data$p.value) %>% 
+                    p.value.chi = .data$p.value) %>% 
       tidyr::unnest(.data$f.exact) %>% 
       dplyr::rename(p.value.fisher = .data$p.value,
-             odds.ratio = .data$estimate) %>% 
-      dplyr::select(-.data$conf.low, -.data$conf.high, -.data$Grouping1,-.data$SR,-.data$SR1, -.data$stage1,-.data$stage2,-.data$stage11, -.data$stage21, -.data$method, -.data$method1, -.data$alternative)
-    # pass.rate <-
-    #   df.ai %>% dplyr::summarize(Pass.Rate = 1 - mean(.data$AI.Detect)) %>%
-    #   unlist
+                    odds.ratio = .data$estimate) %>% 
+      dplyr::select(-.data$conf.low, -.data$conf.high, -.data$Grouping1,-.data$SR,-.data$SR1, -.data$stage1,-.data$stage2,-.data$stage11, -.data$stage21, -.data$method, -.data$method1, -.data$alternative) %>% 
+      dplyr::mutate_if(is.double, round, 6)
     
+    df.sr <- 
+      df.sr %>% 
+      dplyr::rename(!! paste0(dplyr::quo_name(stage1_quo),"_n") := .data$stage1,
+                    !! paste0(dplyr::quo_name(stage2_quo),"_n") := .data$stage2)
     list(
       Selection.Ratio = df.sr,
-      Adverse.Impact = df.ai#,
-      # pass.rate = pass.rate
+      Adverse.Impact = df.ai
     )
   }

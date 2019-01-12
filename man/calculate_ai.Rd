@@ -5,7 +5,7 @@
 \title{Calculate Adverse Impact Metrics}
 \usage{
 calculate_ai(df, groupings, stage1, stage2, n_min = 0, prop_min = 0,
-  correct = TRUE)
+  only_max = FALSE, correct = TRUE)
 }
 \arguments{
 \item{df}{Dataframe with passrate information. Must include columns for each grouping of interest and columns with logicals indicating success at each stage}
@@ -19,6 +19,8 @@ calculate_ai(df, groupings, stage1, stage2, n_min = 0, prop_min = 0,
 \item{n_min}{Minimum n count for a group to be included in the calculation}
 
 \item{prop_min}{Minimum percentage for a group to be included in the calculation}
+
+\item{only_max}{Only calculate adverse impact using the group with the highest selection ratio as the denominator}
 
 \item{correct}{a logical indicating whether Yates' continuity correction should be applied where possible.}
 }
