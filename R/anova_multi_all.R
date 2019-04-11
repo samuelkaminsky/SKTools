@@ -87,7 +87,7 @@ anova_multi_all <-
                          cbind(DV = as.character(dv)) %>%
                          dplyr::group_by(.data$DV) %>%
                          dplyr::summarise_all(
-                           dplyr::funs(mean(., na.rm = TRUE)))
+                           list(~mean(., na.rm = TRUE)))
                        mean0 <-
                          df %>%
                          dplyr::filter(.data$Grouped == 0) %>%
@@ -121,7 +121,7 @@ anova_multi_all <-
                                mean_2 = mean2,
                                n) %>%
                          dplyr::mutate_if(
-                           is.factor, dplyr::funs(as.character(.)))
+                           is.factor, list(~as.character(.)))
                        if (isTRUE(print)) {
                          print(paste0(
                            rowid,
@@ -167,8 +167,8 @@ anova_multi_all <-
       ) %>%
       tidyr::drop_na(.data$sumsq) %>%
       dplyr::mutate_at(dplyr::vars(
-        dplyr::contains("p.value")), dplyr::funs(round(., 6))) %>%
+        dplyr::contains("p.value")), list(~round(., 6))) %>%
       dplyr::mutate_at(dplyr::vars(dplyr::contains("mean_")),
-                       dplyr::funs(dplyr::if_else(is.nan(.), NA_real_, .)))
+                       list(~dplyr::if_else(is.nan(.), NA_real_, .)))
     return(final)
   }

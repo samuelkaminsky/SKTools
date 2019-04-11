@@ -41,7 +41,7 @@ anova_multi <-
       tidyr::spread_(key_col = "rowname", value_col = "df.iv.p.adj") %>%
       dplyr::select(-(dplyr::starts_with("df.iv")))  %>%
       dplyr::group_by(.data$DV) %>%
-      dplyr::summarise_all(dplyr::funs(mean(., na.rm = TRUE)))
+      dplyr::summarise_all(list(~mean(., na.rm = TRUE)))
     results <- 
       results.anova %>% 
       dplyr::left_join(results.posthocs, by="DV", na_matches="never")
@@ -49,7 +49,7 @@ anova_multi <-
       df %>%
       dplyr::group_by(iv) %>%
       dplyr::summarise_at(dplyr::vars(!!dvs), 
-                          dplyr::funs(mean(., na.rm = TRUE)))
+                          list(~mean(., na.rm = TRUE)))
     means.t <-
       means[, -1] %>%
       t() %>%
@@ -61,7 +61,7 @@ anova_multi <-
       cbind(means.t,
             p.value = results[, 7:ncol(results)]) %>% 
       as.data.frame() %>%
-      dplyr::mutate_if(is.numeric, dplyr::funs(round(., 4)))
+      dplyr::mutate_if(is.numeric, list(~round(., 4)))
     if(isTRUE(print)) {
     details <- list(
       # IV = iv,

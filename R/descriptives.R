@@ -29,7 +29,7 @@ descriptives <-
     
     missing <-
       df.func %>%
-      dplyr::mutate_all(dplyr::funs(as.character)) %>%
+      dplyr::mutate_all(list(as.character)) %>%
       tidyr::gather("var", "value") %>%
       dplyr::group_by(.data$var) %>%
       dplyr::summarize(n = sum(!is.na(.data$value)),

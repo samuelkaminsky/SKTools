@@ -58,7 +58,7 @@ ttest_all <-
                       Cutoff.Num = z,
                       cd.df
                     ) %>% 
-                    dplyr::mutate_if(is.factor,dplyr::funs(as.character(.)))
+                    dplyr::mutate_if(is.factor, list(~as.character(.)))
                 }
                 ,
                 otherwise = tibble::data_frame(
@@ -89,7 +89,7 @@ ttest_all <-
       tidyr::drop_na(.data$estimate) %>%
       dplyr::mutate(sig = dplyr::if_else(.data$p.value < .05, TRUE, FALSE)) %>%
       dplyr::mutate_at(dplyr::vars(.data$estimate:.data$conf.high, .data$Cutoff.Num),
-                       dplyr::funs(round(., 6))) %>%
+                       list(~round(., 6))) %>%
       dplyr::distinct(.data$IV, .data$DV, .data$estimate, .data$estimate1, 
                       .keep_all = TRUE) %>%
       dplyr::select(.data$IV, .data$DV, .data$Cutoff.Perc, .data$Cutoff.Num, 
