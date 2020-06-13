@@ -7,14 +7,14 @@
 
 corr_summary <-
   function(corr_test_results, alpha = .05) {
-    if (length(corr_test_results[[2]]) == 1) {
-      corr_test_results[[2]] <- matrix(
-        data = corr_test_results[[2]],
-        corr_test_results[[1]] %>% nrow(),
-        corr_test_results[[1]] %>% nrow(),
+    if (length(corr_test_results$n) == 1) {
+      corr_test_results$n <- matrix(
+        data = corr_test_results$n,
+        corr_test_results$r %>% nrow(),
+        corr_test_results$r %>% nrow(),
         dimnames = list(
-          rownames(corr_test_results[[1]]),
-          colnames(corr_test_results[[1]])
+          rownames(corr_test_results$r),
+          colnames(corr_test_results$r)
         )
       )
     }
