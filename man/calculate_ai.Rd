@@ -4,8 +4,16 @@
 \alias{calculate_ai}
 \title{Calculate Adverse Impact Metrics}
 \usage{
-calculate_ai(df, groupings, stage1, stage2, n_min = 0, prop_min = 0,
-  only_max = FALSE, correct = TRUE)
+calculate_ai(
+  df,
+  groupings,
+  stage1,
+  stage2,
+  n_min = 0,
+  prop_min = 0,
+  only_max = FALSE,
+  correct = TRUE
+)
 }
 \arguments{
 \item{df}{Dataframe with passrate information. Must include columns for each grouping of interest and columns with logicals indicating success at each stage}

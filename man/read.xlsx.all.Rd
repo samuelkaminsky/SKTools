@@ -4,8 +4,13 @@
 \alias{read.xlsx.all}
 \title{Read an entire Excel file workbook (using openxlsx functions)}
 \usage{
-read.xlsx.all(xlsxFile, save2env = FALSE, names = "", startRow = 1,
-  detectDates = TRUE)
+read.xlsx.all(
+  xlsxFile,
+  save2env = FALSE,
+  names = "",
+  startRow = 1,
+  detectDates = TRUE
+)
 }
 \arguments{
 \item{xlsxFile}{Path to the xls/xlsx file}
