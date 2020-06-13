@@ -10,8 +10,8 @@ corr_summary <-
     if (length(corr_test_results$n) == 1) {
       corr_test_results$n <- matrix(
         data = corr_test_results$n,
-        corr_test_results$r %>% nrow(),
-        corr_test_results$r %>% nrow(),
+        nrow(corr_test_results$r),
+        nrow(corr_test_results$r),
         dimnames = list(
           rownames(corr_test_results$r),
           colnames(corr_test_results$r)
