@@ -15,9 +15,13 @@ descriptives <-
 
     if (isTRUE(frequencies)) {
       freqs <-
-        purrr::map_dfr(purrr::set_names(names(df.func)), function(x) {
+        df.func %>% 
+        names() %>% 
+        purrr::set_names() %>% 
+        purrr::map_dfr(function(x) {
+          x_quo <- rlang::enquo(x)
           df.func %>%
-            dplyr::count_(x) %>%
+            dplyr::count(!!x) %>%
             purrr::set_names(c("value", "n")) %>%
             dplyr::mutate(value = as.character(.data$value))
         }, .id = "var") %>%
@@ -35,7 +39,7 @@ descriptives <-
       dplyr::summarize(
         n = sum(!is.na(.data$value)),
         n_missing = sum(is.na(.data$value)),
-        perc_missing = .data$n_missing / n()
+        perc_missing = .data$n_missing / dplyr::n()
       )
 
     class <-

@@ -4,7 +4,6 @@
 #' @param dvs Names of dependent variables to be inserted into dplyr::select()
 #' @param perc Nth percentile to conduct T-Test at
 #' @return Data frame of tidy t.test results
-#' @importFrom dplyr n
 #' @description Conduct T-Tests at every 5% interval for list of IVs and DVs
 #' @export
 
@@ -58,7 +57,7 @@ ttest_all <-
                     cbind(
                       df %>%
                         dplyr::group_by(.data$Grouped, !!y_quo) %>%
-                        dplyr::summarize(Count = n()) %>%
+                        dplyr::summarize(Count = dplyr::n()) %>%
                         dplyr::group_by(.data$Grouped) %>%
                         dplyr::summarize(Count = sum(.data$Count)) %>%
                         tidyr::spread(.data$Grouped, .data$Count),

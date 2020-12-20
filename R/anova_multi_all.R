@@ -112,7 +112,7 @@ anova_multi_all <-
           n <-
             df %>%
             dplyr::group_by(.data$Grouped) %>%
-            dplyr::summarize(Count = n()) %>%
+            dplyr::summarize(Count = dplyr::n()) %>%
             tidyr::spread("Grouped", "Count")
           results <-
             results.anova %>%
