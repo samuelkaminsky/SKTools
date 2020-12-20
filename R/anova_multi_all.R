@@ -126,9 +126,7 @@ anova_multi_all <-
               mean_2 = mean2,
               n
             ) %>%
-            dplyr::mutate_if(
-              is.factor, list(~ as.character(.))
-            )
+            dplyr::mutate_if(is.factor, as.character)
           if (isTRUE(print)) {
             print(paste0(
               rowid,
@@ -177,7 +175,7 @@ anova_multi_all <-
       tidyr::drop_na(.data$sumsq) %>%
       dplyr::mutate_at(dplyr::vars(
         dplyr::contains("p.value")
-      ), list(~ round(., 6))) %>%
+      ), round, 6) %>%
       dplyr::mutate_at(
         dplyr::vars(dplyr::contains("mean_")),
         list(~ dplyr::if_else(is.nan(.), NA_real_, .))
