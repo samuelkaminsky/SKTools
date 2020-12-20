@@ -9,10 +9,10 @@ descriptives <-
   function(df, frequencies = FALSE) {
     df.func <-
       df %>%
-      tibble::set_tidy_names(syntactic = TRUE, quiet = TRUE) %>% 
-      dplyr::mutate_if(is.factor, as.character) %>% 
+      tibble::set_tidy_names(syntactic = TRUE, quiet = TRUE) %>%
+      dplyr::mutate_if(is.factor, as.character) %>%
       sjlabelled::remove_all_labels()
-    
+
     if (isTRUE(frequencies)) {
       freqs <-
         purrr::map_dfr(purrr::set_names(names(df.func)), function(x) {
@@ -26,22 +26,24 @@ descriptives <-
         dplyr::mutate(frequencies = .data$frequencies %>% purrr::set_names(.data$var)) %>%
         dplyr::arrange(.data$var)
     }
-    
+
     missing <-
       df.func %>%
       dplyr::mutate_all(list(as.character)) %>%
       tidyr::gather("var", "value") %>%
       dplyr::group_by(.data$var) %>%
-      dplyr::summarize(n = sum(!is.na(.data$value)),
-                       n_missing = sum(is.na(.data$value)),
-                       perc_missing = .data$n_missing / n())
-    
+      dplyr::summarize(
+        n = sum(!is.na(.data$value)),
+        n_missing = sum(is.na(.data$value)),
+        perc_missing = .data$n_missing / n()
+      )
+
     class <-
       df.func %>%
       purrr::map(class) %>%
       purrr::map_dfr(stringr::str_c, collapse = ", ") %>%
       tidyr::gather("var", "class")
-    
+
     df.func <-
       df.func %>%
       dplyr::select_if(is.numeric) %>%
@@ -66,9 +68,8 @@ descriptives <-
       ) %>%
       dplyr::full_join(missing, by = "var", na_matches = "never") %>%
       dplyr::full_join(class, by = "var", na_matches = "never")
-    
-    if (isTRUE(frequencies))
-    {
+
+    if (isTRUE(frequencies)) {
       df.func <-
         df.func %>%
         dplyr::full_join(freqs, by = "var", na_matches = "never") %>%

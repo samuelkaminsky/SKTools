@@ -4,16 +4,16 @@
 \alias{corr_summary}
 \title{Clean corr.test output}
 \usage{
-corr_summary(corr_test_results, alpha = 0.05)
+corr_summary(corr.test.results, alpha = 0.05)
 }
 \arguments{
-\item{corr_test_results}{corr.test object}
+\item{corr.test.results}{corr.test object}
 
 \item{alpha}{Alpha level to test significance}
 }
 \value{
-Dataframe with clean output
+tibble with clean output
 }
 \description{
-Converts corr.test output to tidy dataframe with most important information (IV, DV, r, n, t, p)
+Converts corr.test output to tidy tibble with most important information (IV, DV, r, n, t, p)
 }

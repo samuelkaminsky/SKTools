@@ -3,7 +3,7 @@
 #' @param dependencies TRUE or FALSE to indicate whether you want to pass TRUE to the install.packages() dependencies argument
 #' @export
 #' @description Installs packages that I like
-#' @details Packages installed with the default arguments include: 
+#' @details Packages installed with the default arguments include:
 #' * clipr
 #' * data.table
 #' * knitr
@@ -18,7 +18,7 @@
 #' * sjlabelled
 #' * tidyverse
 #' * writexl
-#' @details Packages installed with the extra=TRUE argument include: 
+#' @details Packages installed with the extra=TRUE argument include:
 #' * anytime
 #' * car
 #' * caret
@@ -53,7 +53,8 @@
 
 install_sk <- function(extra = FALSE, dependencies = FALSE) {
   list_of_packages <-
-    c("clipr",
+    c(
+      "clipr",
       "data.table",
       "knitr",
       "lavaan",
@@ -105,8 +106,8 @@ install_sk <- function(extra = FALSE, dependencies = FALSE) {
       )
   }
   new.packages <-
-    list_of_packages[!(list_of_packages %in% 
-                         utils::installed.packages()[, "Package"])]
+    list_of_packages[!(list_of_packages %in%
+      utils::installed.packages()[, "Package"])]
   if (length(new.packages)) {
     utils::install.packages(new.packages, dependencies = dependencies)
   } else {

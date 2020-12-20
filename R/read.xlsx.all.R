@@ -23,18 +23,18 @@ read.xlsx.all <-
           check.names = TRUE,
           startRow = startRow
         )
-    } else{
+    } else {
       make.sheetnames <- make.names(sheetnames, unique = TRUE)
       workbook <-
-        lapply(sheetnames, function(x)
+        lapply(sheetnames, function(x) {
           openxlsx::read.xlsx(
             xlsxFile = xlsxFile,
             sheet = x,
             detectDates = detectDates,
-            check.names = TRUE
-            ,
+            check.names = TRUE,
             startRow = startRow
-          ))
+          )
+        })
       if (sum(names != "") > 0) {
         names(workbook) <- names
       } else {
@@ -43,7 +43,7 @@ read.xlsx.all <-
       if (isTRUE(save2env)) {
         list2env(workbook, .GlobalEnv)
       }
-      else{
+      else {
         workbook
       }
     }

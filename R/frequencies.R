@@ -7,7 +7,7 @@
 
 frequencies <-
   function(df, perc = FALSE) {
-    result <- 
+    result <-
       df %>%
       names() %>%
       purrr::set_names() %>%
@@ -18,17 +18,17 @@ frequencies <-
           purrr::set_names("value", "n") %>%
           dplyr::mutate(value = as.character(.data$value))
       }, .id = "var")
-    
+
     if (perc == TRUE) {
-      result <- 
-        result %>% 
+      result <-
+        result %>%
         dplyr::group_by(.data$var) %>%
-        dplyr::mutate(perc = .data$n/sum(.data$n, na.rm = TRUE)) %>% 
-        dplyr::ungroup() %>% 
-        dplyr::mutate(missing = dplyr::if_else(is.na(.data$value), TRUE, FALSE)) %>% 
+        dplyr::mutate(perc = .data$n / sum(.data$n, na.rm = TRUE)) %>%
+        dplyr::ungroup() %>%
+        dplyr::mutate(missing = dplyr::if_else(is.na(.data$value), TRUE, FALSE)) %>%
         dplyr::group_by(.data$var, .data$missing) %>%
-        dplyr::mutate(valid.perc = dplyr::if_else(.data$missing == TRUE,NA_real_, .data$n/sum(.data$n))) %>% 
-        dplyr::ungroup() %>% 
+        dplyr::mutate(valid.perc = dplyr::if_else(.data$missing == TRUE, NA_real_, .data$n / sum(.data$n))) %>%
+        dplyr::ungroup() %>%
         dplyr::select(-.data$missing)
     }
     result

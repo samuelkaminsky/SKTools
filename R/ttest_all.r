@@ -22,11 +22,14 @@ ttest_all <-
       dplyr::select(!!dvs) %>%
       names() %>%
       purrr::set_names()
+
     IVs %>%
       purrr::map_dfr(function(x) {
         DVs %>%
           purrr::map_dfr(function(y) {
-            stats::quantile(df[, x] %>% unlist, seq(
+            y_quo <- rlang::enquo(y)
+
+            stats::quantile(df[, x] %>% unlist(), seq(
               from = 0.05,
               to = .95,
               by = perc
@@ -39,29 +42,32 @@ ttest_all <-
                     as.factor()
                   cd <-
                     effsize::cohen.d(
-                      stats::as.formula(paste0(y, " ~ Grouped")), data = df)
+                      stats::as.formula(paste0(y, " ~ Grouped")),
+                      data = df
+                    )
                   cd.df <-
                     tibble::tibble(
                       cd.est = cd$estimate %>% as.numeric(),
                       cd.mag = cd$magnitude %>% as.character()
                     )
                   stats::t.test(
-                    stats::as.formula(paste0(y, " ~ Grouped")), data = df) %>%
+                    stats::as.formula(paste0(y, " ~ Grouped")),
+                    data = df
+                  ) %>%
                     broom::tidy() %>%
                     cbind(
                       df %>%
-                        dplyr::group_by_(c("Grouped", y)) %>%
+                        dplyr::group_by(.data$Grouped, !!y_quo) %>%
                         dplyr::summarize(Count = n()) %>%
                         dplyr::group_by(.data$Grouped) %>%
-                        dplyr::summarize_(Count = "sum(Count)") %>%
-                        tidyr::spread_("Grouped", "Count"),
+                        dplyr::summarize(Count = sum(.data$Count)) %>%
+                        tidyr::spread(.data$Grouped, .data$Count),
                       Cutoff.Num = z,
                       cd.df
-                    ) %>% 
-                    dplyr::mutate_if(is.factor, list(~as.character(.)))
-                }
-                ,
-                otherwise = tibble::data_frame(
+                    ) %>%
+                    dplyr::mutate_if(is.factor, as.character)
+                },
+                otherwise = tibble::tibble(
                   estimate = NA_real_,
                   estimate1 = NA_real_,
                   estimate2 = NA_real_,
@@ -80,18 +86,26 @@ ttest_all <-
                   cd.mag = NA_character_
                 )
               ),
-              .id = "Cutoff.Perc")
-          }
-          , .id = "DV")
-      }
-      , .id = "IV") %>%
+              .id = "Cutoff.Perc"
+              )
+          },
+          .id = "DV"
+          )
+      },
+      .id = "IV"
+      ) %>%
       dplyr::distinct() %>%
       tidyr::drop_na(.data$estimate) %>%
       dplyr::mutate(sig = dplyr::if_else(.data$p.value < .05, TRUE, FALSE)) %>%
-      dplyr::mutate_at(dplyr::vars(.data$estimate:.data$conf.high, .data$Cutoff.Num),
-                       list(~round(., 6))) %>%
-      dplyr::distinct(.data$IV, .data$DV, .data$estimate, .data$estimate1, 
-                      .keep_all = TRUE) %>%
-      dplyr::select(.data$IV, .data$DV, .data$Cutoff.Perc, .data$Cutoff.Num, 
-                    dplyr::everything())
+      dplyr::mutate_at(
+        dplyr::vars(.data$estimate:.data$conf.high, .data$Cutoff.Num),
+        list(~ round(., 6))
+      ) %>%
+      dplyr::distinct(.data$IV, .data$DV, .data$estimate, .data$estimate1,
+        .keep_all = TRUE
+      ) %>%
+      dplyr::select(
+        .data$IV, .data$DV, .data$Cutoff.Perc, .data$Cutoff.Num,
+        dplyr::everything()
+      )
   }

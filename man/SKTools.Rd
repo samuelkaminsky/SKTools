@@ -3,7 +3,6 @@
 \docType{package}
 \name{SKTools}
 \alias{SKTools}
-\alias{SKTools-package}
 \title{\code{SKTools} package}
 \description{
 Samuel Kaminsky's Tools

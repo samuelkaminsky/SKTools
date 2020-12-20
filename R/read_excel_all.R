@@ -18,20 +18,21 @@ read_excel_all <-
     if (length(readxl::excel_sheets(path)) == 1) {
       worksheet <- readxl::read_excel(path = path, skip = skip)
       if (isTRUE(check.names)) {
-        names(worksheet) <-  make.names(names(worksheet), unique = TRUE)
+        names(worksheet) <- make.names(names(worksheet), unique = TRUE)
         worksheet
       } else {
         worksheet
       }
-    } else{
+    } else {
       make.sheetnames <- make.names(sheetnames, unique = TRUE)
       workbook <-
-        lapply(sheetnames, function(x)
+        lapply(sheetnames, function(x) {
           readxl::read_excel(
             path = path,
             sheet = x,
             skip = skip
-          ))
+          )
+        })
       if (sum(names != "") > 0) {
         names(workbook) <- names
       } else {
@@ -46,7 +47,7 @@ read_excel_all <-
       if (isTRUE(save2env)) {
         list2env(workbook, .GlobalEnv)
       }
-      else{
+      else {
         workbook
       }
     }
