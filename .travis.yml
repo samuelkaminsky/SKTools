@@ -4,10 +4,8 @@
 language: r
 cache: packages
 
-r_packages:
-  - covr
-
 r_binary_packages: 
+  - covr
   - dplyr
   - tibble
   - stringr
@@ -20,9 +18,6 @@ r_binary_packages:
   - jsonlite
   - effsize
   - crayon
-  
-apt_packages:
-  - libgit2-dev
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
