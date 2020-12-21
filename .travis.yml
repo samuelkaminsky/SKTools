@@ -7,6 +7,20 @@ cache: packages
 r_packages:
   - covr
 
+r_binary_packages: 
+  - dplyr
+  - tibble
+  - stringr
+  - broom
+  - openxlsx
+  - readxl
+  - readr
+  - tidyr
+  - httr
+  - jsonlite
+  - effsize
+  - crayon
+  
 apt_packages:
   - libgit2-dev
 
