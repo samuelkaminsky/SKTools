@@ -9,7 +9,8 @@ frequencies(df, perc = FALSE)
 \arguments{
 \item{df}{Dataframe with data}
 
-\item{perc}{Logical indicating whether or not to calculate percentages and valid percentages for each value by variable}
+\item{perc}{Logical indicating whether or not to calculate percentages
+and valid percentages for each value by variable}
 }
 \value{
 Dataframe of frequencies for each variable and value

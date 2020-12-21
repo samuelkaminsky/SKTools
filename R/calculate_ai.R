@@ -132,7 +132,8 @@ calculate_ai <-
               .data$stage1 - .data$stage2,
               .data$stage11 - .data$stage21
             )
-          ) %>% tibble::as_tibble())) %>%
+          ) %>%
+            tibble::as_tibble())) %>%
           dplyr::mutate(
             chi = list(
               stats::prop.test(as.matrix(.data$conting), correct = correct) %>% broom::tidy()

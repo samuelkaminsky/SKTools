@@ -4,8 +4,10 @@
 #' @param dvs Names of dependent variables to be inserted into dplyr::select()
 #' @param perc Nth percentile to conduct ANOVA at
 #' @param print TRUE to print progress as it goes
-#' @return Data frame of tidy ANOVA F test and post-hoc results, also includes descriptives about each level of the IV
-#' @description Conduct one-way ANOVAs on multiple DVs at various cutpoints of the iv
+#' @return Data frame of tidy ANOVA F test and post-hoc results,
+#' also includes descriptives about each level of the IV
+#' @description Conduct one-way ANOVAs on multiple DVs at various cutpoints
+#' of the iv
 #' @export
 
 anova_multi_all <-
@@ -84,13 +86,12 @@ anova_multi_all <-
             .[1] %>%
             as.data.frame() %>%
             tibble::rownames_to_column() %>%
-            tidyr::spread("rowname", "df.Grouped.p.adj") %>%
+            tidyr::pivot_wider(names_from = .data$rowname,
+                               values_from = .data$df.Grouped.p.adj) %>%
             dplyr::select(-(dplyr::starts_with("df.Grouped"))) %>%
             cbind(DV = as.character(dv)) %>%
             dplyr::group_by(.data$DV) %>%
-            dplyr::summarise_all(
-              list(~ mean(., na.rm = TRUE))
-            )
+            dplyr::summarise_all(mean, na.rm = TRUE)
           mean0 <-
             df %>%
             dplyr::filter(.data$Grouped == 0) %>%
@@ -113,7 +114,8 @@ anova_multi_all <-
             df %>%
             dplyr::group_by(.data$Grouped) %>%
             dplyr::summarize(Count = dplyr::n()) %>%
-            tidyr::spread("Grouped", "Count")
+            tidyr::pivot_wider(names_from = .data$Grouped,
+                               values_from = .data$Count)
           results <-
             results.anova %>%
             dplyr::left_join(results.posthocs,

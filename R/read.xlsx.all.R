@@ -1,11 +1,14 @@
 #' Read an entire Excel file workbook (using openxlsx functions)
 #'
 #' @param xlsxFile Path to the xls/xlsx file
-#' @param save2env Either TRUE to save each worksheet to the environment or FALSE to return a list of worksheets, which can be saved to the environment
+#' @param save2env Either TRUE to save each worksheet to the environment or
+#' FALSE to return a list of worksheets, which can be saved to the environment
 #' @param names A vector of character data representing preferred sheet names
-#' @param startRow first row to begin looking for data. Empty rows at the top of a file are always skipped, regardless of the value of startRow.
+#' @param startRow first row to begin looking for data. Empty rows at the top
+#' of a file are always skipped, regardless of the value of startRow.
 #' @param detectDates If TRUE, attempt to recognise dates and perform conversion.
-#' @return If there is more than one worksheet, then a list of data frames that represent each worksheet. If there is only one worksheet, then a data frame.
+#' @return If there is more than one worksheet, then a list of data frames that
+#' represent each worksheet. If there is only one worksheet, then a data frame.
 #' @export
 
 read.xlsx.all <-

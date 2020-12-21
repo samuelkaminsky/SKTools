@@ -19,7 +19,6 @@ descriptives <-
         names() %>% 
         purrr::set_names() %>% 
         purrr::map_dfr(function(x) {
-          x_quo <- rlang::enquo(x)
           df.func %>%
             dplyr::count(!!x) %>%
             purrr::set_names(c("value", "n")) %>%
