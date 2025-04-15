@@ -4,11 +4,20 @@
 language: r
 cache: packages
 
-r_packages:
+r_binary_packages: 
   - covr
-
-apt_packages:
-  - libgit2-dev
+  - dplyr
+  - tibble
+  - stringr
+  - broom
+  - openxlsx
+  - readxl
+  - readr
+  - tidyr
+  - httr
+  - jsonlite
+  - effsize
+  - crayon
 
 after_success:
   - Rscript -e 'library(covr); codecov()'
