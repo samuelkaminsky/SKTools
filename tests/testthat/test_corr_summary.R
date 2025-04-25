@@ -1,7 +1,5 @@
 library(SKTools)
 
-context("corr_summary")
-
 test_that("corr_summary works for mtcars", {
   expect_equal(
     psych::corr.test(mtcars) %>%

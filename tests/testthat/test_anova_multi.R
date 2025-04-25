@@ -1,7 +1,5 @@
 library(SKTools)
 
-context("anova_multi")
-
 test_that("anova_multi has predictable result for mtcars", {
   expect_equal(
     {
