@@ -15,18 +15,23 @@ descriptives <-
 
     if (isTRUE(frequencies)) {
       freqs <-
-        df.func %>% 
-        names() %>% 
-        purrr::set_names() %>% 
-        purrr::map_dfr(function(x) {
-          df.func %>%
-            dplyr::count(!!x) %>%
-            purrr::set_names(c("value", "n")) %>%
-            dplyr::mutate(value = as.character(.data$value))
-        }, .id = "var") %>%
+        df.func %>%
+        names() %>%
+        purrr::set_names() %>%
+        purrr::map_dfr(
+          function(x) {
+            df.func %>%
+              dplyr::count(!!x) %>%
+              purrr::set_names(c("value", "n")) %>%
+              dplyr::mutate(value = as.character(.data$value))
+          },
+          .id = "var"
+        ) %>%
         dplyr::group_by(.data$var) %>%
         tidyr::nest(.key = "frequencies") %>%
-        dplyr::mutate(frequencies = .data$frequencies %>% purrr::set_names(.data$var)) %>%
+        dplyr::mutate(
+          frequencies = .data$frequencies %>% purrr::set_names(.data$var)
+        ) %>%
         dplyr::arrange(.data$var)
     }
 
@@ -76,7 +81,9 @@ descriptives <-
       df.func <-
         df.func %>%
         dplyr::full_join(freqs, by = "var", na_matches = "never") %>%
-        dplyr::mutate(frequencies = .data$frequencies %>% purrr::set_names(.data$var))
+        dplyr::mutate(
+          frequencies = .data$frequencies %>% purrr::set_names(.data$var)
+        )
     }
     if (isTRUE(frequencies)) {
       df.func %>%

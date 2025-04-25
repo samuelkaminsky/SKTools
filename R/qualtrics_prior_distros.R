@@ -30,14 +30,16 @@ qualtrics_prior_distros <-
       purrr::map(~ .$recipients$mailingListId) %>%
       unlist() %>%
       purrr::set_names() %>%
-      purrr::map(~ httr::GET(
-        url = paste0(
-          "https://az1.qualtrics.com/API/v3/mailinglists/",
-          .,
-          "/contacts"
-        ),
-        httr::add_headers(header.all)
-      )) %>%
+      purrr::map(
+        ~ httr::GET(
+          url = paste0(
+            "https://az1.qualtrics.com/API/v3/mailinglists/",
+            .,
+            "/contacts"
+          ),
+          httr::add_headers(header.all)
+        )
+      ) %>%
       purrr::map(~ httr::content(.))
 
     results <-
@@ -46,19 +48,24 @@ qualtrics_prior_distros <-
 
     while (
       {
-        length(distributions.list %>%
-          purrr::map(~ .$result$nextPage) %>%
-          purrr::compact()) > 0
-      })
-    {
+        length(
+          distributions.list %>%
+            purrr::map(~ .$result$nextPage) %>%
+            purrr::compact()
+        ) >
+          0
+      }
+    ) {
       distributions.list <-
         distributions.list %>%
         purrr::map(~ .$result$nextPage) %>%
         purrr::compact() %>%
-        purrr::map(~ httr::GET(
-          .,
-          httr::add_headers(header.all)
-        )) %>%
+        purrr::map(
+          ~ httr::GET(
+            .,
+            httr::add_headers(header.all)
+          )
+        ) %>%
         purrr::map(~ httr::content(.))
       results <-
         distributions.list %>%

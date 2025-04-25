@@ -23,17 +23,21 @@ anova_multi <-
       purrr::set_names()
     results.anova <-
       dvs.list %>%
-      purrr::map(~ aov(lm(as.formula(
-        paste0("df$`", ., "` ~ df$iv")
-      )))) %>%
+      purrr::map(
+        ~ aov(lm(as.formula(
+          paste0("df$`", ., "` ~ df$iv")
+        )))
+      ) %>%
       purrr::map_df(broom::tidy, .id = "DV") %>%
       dplyr::filter(.data$term != "Residuals") %>%
       dplyr::select(-.data$term)
     results.posthocs <-
       dvs.list %>%
-      purrr::map(~ aov(lm(as.formula(
-        paste0("df$`", ., "` ~ df$iv")
-      )))) %>%
+      purrr::map(
+        ~ aov(lm(as.formula(
+          paste0("df$`", ., "` ~ df$iv")
+        )))
+      ) %>%
       purrr::map(stats::TukeyHSD) %>%
       purrr::map(~ .[1]) %>%
       purrr::map(as.data.frame) %>%
@@ -56,13 +60,13 @@ anova_multi <-
       means[, -1] %>%
       t() %>%
       as.data.frame() %>%
-      purrr::set_names(means[, 1] %>%
-        unlist()) %>%
+      purrr::set_names(
+        means[, 1] %>%
+          unlist()
+      ) %>%
       tibble::rownames_to_column(var = "DV")
     df.summary <-
-      cbind(means.t,
-        p.value = results[, 7:ncol(results)]
-      ) %>%
+      cbind(means.t, p.value = results[, 7:ncol(results)]) %>%
       as.data.frame() %>%
       dplyr::mutate_if(is.numeric, list(~ round(., 4)))
     if (isTRUE(print)) {

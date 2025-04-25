@@ -11,8 +11,7 @@ quality_check <- function(df) {
   same <- apply(df, 2, function(x) {
     if (length(unique(x)) == 1) {
       return(1)
-    }
-    else {
+    } else {
       return(0)
     }
   })
@@ -25,20 +24,8 @@ quality_check <- function(df) {
   mod.neg <- names(skews)[which(skews < -0.5 & skews > -1)]
   mod.pos <- names(skews)[which(skews > 0.5 & skews < 1)]
   message("\n.........SKEWNESS.........")
-  message(paste("Strong (-): ", paste(high.neg, collapse = ", "),
-    sep =
-      ""
-  ))
-  message(paste("Strong (+): ", paste(high.pos, collapse = ", "),
-    sep =
-      ""
-  ))
-  message(paste("Moderate (-): ", paste(mod.neg, collapse = ", "),
-    sep =
-      ""
-  ))
-  message(paste("Moderate (+): ", paste(mod.pos, collapse = ", "),
-    sep =
-      ""
-  ))
+  message(paste("Strong (-): ", paste(high.neg, collapse = ", "), sep = ""))
+  message(paste("Strong (+): ", paste(high.pos, collapse = ", "), sep = ""))
+  message(paste("Moderate (-): ", paste(mod.neg, collapse = ", "), sep = ""))
+  message(paste("Moderate (+): ", paste(mod.pos, collapse = ", "), sep = ""))
 }

@@ -58,7 +58,10 @@ corr_summary <-
       }) %>%
       purrr::reduce(dplyr::left_join, by = c("iv", "dv")) %>%
       # Calculate significance
-      dplyr::mutate_at(dplyr::vars(.data$p, .data$p.adjust), list(sig = ~ . < alpha)) %>%
+      dplyr::mutate_at(
+        dplyr::vars(.data$p, .data$p.adjust),
+        list(sig = ~ . < alpha)
+      ) %>%
       # Remove rows where dv is matched with iv
       dplyr::filter(!(.data$iv == .data$dv & .data$r == 1))
     return(cor.df)

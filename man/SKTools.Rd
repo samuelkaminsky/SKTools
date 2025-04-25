@@ -2,6 +2,7 @@
 % Please edit documentation in R/SKTools.R
 \docType{package}
 \name{SKTools}
+\alias{-package}
 \alias{SKTools}
 \title{\code{SKTools} package}
 \description{

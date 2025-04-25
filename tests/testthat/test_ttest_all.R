@@ -1,8 +1,12 @@
 library(SKTools)
 
-test.example <- 
+test.example <-
   ttest_all(mtcars, c(carb, mpg), c(cyl, drat), perc = .2) %>%
-  dplyr::filter(.data$IV == "mpg", .data$DV == "cyl", .data$Cutoff.Perc == "45%") %>%
+  dplyr::filter(
+    .data$IV == "mpg",
+    .data$DV == "cyl",
+    .data$Cutoff.Perc == "45%"
+  ) %>%
   dplyr::pull(.data$conf.high) %>%
   round(6)
 

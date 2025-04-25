@@ -9,11 +9,7 @@
 #' @export
 
 read_excel_all <-
-  function(path,
-           save2env = FALSE,
-           check.names = FALSE,
-           names = "",
-           skip = 0) {
+  function(path, save2env = FALSE, check.names = FALSE, names = "", skip = 0) {
     sheetnames <- readxl::excel_sheets(path)
     if (length(readxl::excel_sheets(path)) == 1) {
       worksheet <- readxl::read_excel(path = path, skip = skip)
@@ -46,8 +42,7 @@ read_excel_all <-
       }
       if (isTRUE(save2env)) {
         list2env(workbook, .GlobalEnv)
-      }
-      else {
+      } else {
         workbook
       }
     }

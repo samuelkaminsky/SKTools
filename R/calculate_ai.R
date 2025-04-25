@@ -14,14 +14,16 @@
 #' @description Calculates adverse impact metrics
 
 calculate_ai <-
-  function(df,
-           groupings,
-           stage1,
-           stage2,
-           n_min = 0,
-           prop_min = 0,
-           only_max = FALSE,
-           correct = TRUE) {
+  function(
+    df,
+    groupings,
+    stage1,
+    stage2,
+    n_min = 0,
+    prop_min = 0,
+    only_max = FALSE,
+    correct = TRUE
+  ) {
     grouping.warn <- groupings[!(groupings %in% names(df))]
     groupings <- groupings[groupings %in% names(df)]
 
@@ -53,12 +55,15 @@ calculate_ai <-
           dplyr::filter(.data$perc >= prop_min) %>%
           dplyr::select(-.data$n, -.data$perc)
 
-
         df %>%
           dplyr::semi_join(df.filter, by = as.character(x)) %>%
           dplyr::group_by(!!x) %>%
           tidyr::drop_na(!!x) %>%
-          dplyr::summarize_at(dplyr::vars(.data$stage1, .data$stage2), sum, na.rm = TRUE)
+          dplyr::summarize_at(
+            dplyr::vars(.data$stage1, .data$stage2),
+            sum,
+            na.rm = TRUE
+          )
       }) %>%
       tidyr::gather("Grouping", "Group", -c(.data$stage1, .data$stage2)) %>%
       tidyr::drop_na(.data$Group) %>%
@@ -79,7 +84,9 @@ calculate_ai <-
 
     if (nrow(check) > 0) {
       df.ai <-
-        list(Error = "More people in stage 2 than in stage 1, check the selection ratio table for more information.")
+        list(
+          Error = "More people in stage 2 than in stage 1, check the selection ratio table for more information."
+        )
     } else {
       l.groups <-
         df.sr %>%
@@ -119,24 +126,35 @@ calculate_ai <-
           dplyr::mutate(
             ai.ratio = .data$SR / .data$SR1,
             H = 2 * asin(sqrt(.data$SR1)) - 2 * asin(sqrt(.data$SR)),
-            Z = (.data$SR1 - .data$SR) / sqrt((.data$stage2 + .data$stage21) / ((.data$stage1 +
-              .data$stage11)) * (
-              1 - (.data$stage2 + .data$stage21) / (.data$stage1 + .data$stage11)
-            ) * (1 / .data$stage1 + 1 / .data$stage11))
+            Z = (.data$SR1 - .data$SR) /
+              sqrt(
+                (.data$stage2 + .data$stage21) /
+                  ((.data$stage1 +
+                    .data$stage11)) *
+                  (1 -
+                    (.data$stage2 + .data$stage21) /
+                      (.data$stage1 + .data$stage11)) *
+                  (1 / .data$stage1 + 1 / .data$stage11)
+              )
           ) %>%
           dplyr::ungroup() %>%
           dplyr::rowwise() %>%
-          dplyr::mutate(conting = list(list(
-            pass = c(.data$stage2, .data$stage21),
-            fail = c(
-              .data$stage1 - .data$stage2,
-              .data$stage11 - .data$stage21
+          dplyr::mutate(
+            conting = list(
+              list(
+                pass = c(.data$stage2, .data$stage21),
+                fail = c(
+                  .data$stage1 - .data$stage2,
+                  .data$stage11 - .data$stage21
+                )
+              ) %>%
+                tibble::as_tibble()
             )
           ) %>%
-            tibble::as_tibble())) %>%
           dplyr::mutate(
             chi = list(
-              stats::prop.test(as.matrix(.data$conting), correct = correct) %>% broom::tidy()
+              stats::prop.test(as.matrix(.data$conting), correct = correct) %>%
+                broom::tidy()
             ),
             f.exact = list(stats::fisher.test(.data$conting) %>% broom::tidy())
           ) %>%
@@ -180,7 +198,8 @@ calculate_ai <-
     df.sr <-
       df.sr %>%
       dplyr::rename(
-        !!paste0(dplyr::quo_name(stage1_quo), "_n") := .data$stage1, !!paste0(dplyr::quo_name(stage2_quo), "_n") := .data$stage2
+        !!paste0(dplyr::quo_name(stage1_quo), "_n") := .data$stage1,
+        !!paste0(dplyr::quo_name(stage2_quo), "_n") := .data$stage2
       )
 
     list(

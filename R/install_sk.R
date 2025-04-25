@@ -106,8 +106,10 @@ install_sk <- function(extra = FALSE, dependencies = FALSE) {
       )
   }
   new.packages <-
-    list_of_packages[!(list_of_packages %in%
-      utils::installed.packages()[, "Package"])]
+    list_of_packages[
+      !(list_of_packages %in%
+        utils::installed.packages()[, "Package"])
+    ]
   if (length(new.packages)) {
     utils::install.packages(new.packages, dependencies = dependencies)
   } else {

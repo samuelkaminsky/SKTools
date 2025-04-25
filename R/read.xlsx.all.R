@@ -12,11 +12,13 @@
 #' @export
 
 read.xlsx.all <-
-  function(xlsxFile,
-           save2env = FALSE,
-           names = "",
-           startRow = 1,
-           detectDates = TRUE) {
+  function(
+    xlsxFile,
+    save2env = FALSE,
+    names = "",
+    startRow = 1,
+    detectDates = TRUE
+  ) {
     sheetnames <- openxlsx::getSheetNames(xlsxFile)
     if (length(sheetnames) == 1) {
       worksheet <-
@@ -45,8 +47,7 @@ read.xlsx.all <-
       }
       if (isTRUE(save2env)) {
         list2env(workbook, .GlobalEnv)
-      }
-      else {
+      } else {
         workbook
       }
     }
