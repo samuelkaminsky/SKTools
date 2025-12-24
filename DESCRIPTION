@@ -12,18 +12,15 @@ URL: https://github.com/samuelkaminsky/SKTools
 Depends: R (>= 4.1.0)
 Imports:
     broom,
-    crayon,
     devtools,
     dplyr (>= 0.7),
     effsize,
-    foreign,
     httr,
     jsonlite,
     moments,
     openxlsx, 
     psych,
     purrr,
-    readr,
     readxl,
     rlang,
     rstudioapi,
@@ -33,4 +30,5 @@ Imports:
     tidyr,
     utils
 RoxygenNote: 7.3.3
-Suggests: testthat
+Suggests: testthat,
+    readr

@@ -21,29 +21,29 @@ anova_multi <-
       names() |>
       as.list() |>
       purrr::set_names()
-    results.anova <-
+    models <-
       dvs.list |>
       purrr::map(
-        \(x) aov(lm(as.formula(
-          paste0("df$`", x, "` ~ df$iv")
-        )))
-      ) |>
+        \(x) stats::aov(stats::lm(
+          stats::as.formula(paste0("`", x, "` ~ iv")),
+          data = df
+        ))
+      )
+
+    results.anova <-
+      models |>
       purrr::map_df(broom::tidy, .id = "DV") |>
       dplyr::filter(.data$term != "Residuals") |>
       dplyr::select(-"term")
+
     results.posthocs <-
-      dvs.list |>
-      purrr::map(
-        \(x) aov(lm(as.formula(
-          paste0("df$`", x, "` ~ df$iv")
-        )))
-      ) |>
+      models |>
       purrr::map(stats::TukeyHSD) |>
       purrr::map(\(x) x[1]) |>
       purrr::map(as.data.frame) |>
       purrr::map_df(tibble::rownames_to_column, .id = "DV") |>
-      tidyr::pivot_wider(names_from = "rowname", values_from = "df.iv.p.adj") |>
-      dplyr::select(-(dplyr::starts_with("df.iv"))) |>
+      tidyr::pivot_wider(names_from = "rowname", values_from = "iv.p.adj") |>
+      dplyr::select(-(dplyr::starts_with("iv"))) |>
       dplyr::group_by(.data$DV) |>
       dplyr::summarise(dplyr::across(everything(), \(x) mean(x, na.rm = TRUE)))
     results <-

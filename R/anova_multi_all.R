@@ -83,11 +83,10 @@ anova_multi_all <-
               ) |>
               as.factor()
             temp.anova <-
-              stats::aov(stats::lm(stats::as.formula(paste0(
-                "df$`",
-                dv,
-                "` ~ df$Grouped"
-              ))))
+              stats::aov(stats::lm(
+                stats::as.formula(paste0("`", dv, "` ~ Grouped")),
+                data = df
+              ))
             results.anova <-
               temp.anova |>
               broom::tidy() |>
@@ -102,9 +101,9 @@ anova_multi_all <-
               tibble::rownames_to_column() |>
               tidyr::pivot_wider(
                 names_from = "rowname",
-                values_from = "df.Grouped.p.adj"
+                values_from = "Grouped.p.adj"
               ) |>
-              dplyr::select(-(dplyr::starts_with("df.Grouped"))) |>
+              dplyr::select(-(dplyr::starts_with("Grouped"))) |>
               cbind(DV = as.character(dv)) |>
               dplyr::group_by(.data$DV) |>
               dplyr::summarise(dplyr::across(everything(), \(x) mean(x, na.rm = TRUE)))
@@ -158,6 +157,9 @@ anova_multi_all <-
                 "%"
               ))
             }
+            if (nrow(results) == 0) {
+              return(tibble::tibble(Error = "Empty Results"))
+            }
             results
           },
           otherwise = tibble::tibble(Error = "Y")
@@ -169,7 +171,6 @@ anova_multi_all <-
       dplyr::select(-"rowid")
     final <-
       cbind(index, results.all) |>
-      # dplyr::filter(.data$Error!="Y") |>
       dplyr::distinct() |>
       dplyr::select(
         "iv",
@@ -178,22 +179,24 @@ anova_multi_all <-
         Cutoff.Top = "percentage.top",
         Cutoff.Bottom.Num = "cut.bottom",
         Cutoff.Bottom.Top = "cut.top",
-        "df",
-        "sumsq",
-        "meansq",
-        "statistic",
-        "p.value",
-        "mean_0",
-        "mean_1",
-        "mean_2",
-        n_0 = "0",
-        n_1 = "1",
-        n_2 = "2",
-        `p.value.1-0` = "1-0",
-        `p.value.2-0` = "2-0",
-        `p.value.2-1` = "2-1"
+        dplyr::any_of(c(
+          "df",
+          "sumsq",
+          "meansq",
+          "statistic",
+          "p.value",
+          "mean_0",
+          "mean_1",
+          "mean_2",
+          n_0 = "0",
+          n_1 = "1",
+          n_2 = "2",
+          `p.value.1-0` = "1-0",
+          `p.value.2-0` = "2-0",
+          `p.value.2-1` = "2-1"
+        ))
       ) |>
-      tidyr::drop_na("sumsq") |>
+      tidyr::drop_na(dplyr::any_of("sumsq")) |>
       dplyr::mutate(dplyr::across(
         dplyr::contains("p.value"),
         \(x) round(x, 6)

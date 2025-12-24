@@ -1,12 +1,13 @@
 #' Get prior distributions for a survey
 #' @param surveyId Qualtrics Survey ID
 #' @param api_token Qualtrics api token
+#' @param datacenter Qualtrics data center (default "az1")
 #' @return Data frame of distribution data
 #' @description Retrieves distributions for a survey on Qualtrics
 #' @export
 
 qualtrics_prior_distros <-
-  function(surveyId, api_token) {
+  function(surveyId, api_token, datacenter = "az1") {
     header.all <-
       c(
         "X-API-TOKEN" = api_token,
@@ -15,10 +16,13 @@ qualtrics_prior_distros <-
         "accept-encoding" = "gzip, deflate"
       )
 
+    base_url <- paste0("https://", datacenter, ".qualtrics.com/API/v3")
+
     distributions.response <-
       httr::GET(
         url = paste0(
-          "https://az1.qualtrics.com/API/v3/distributions?surveyId=",
+          base_url,
+          "/distributions?surveyId=",
           surveyId
         ),
         httr::add_headers(header.all)
@@ -33,7 +37,8 @@ qualtrics_prior_distros <-
       purrr::map(
         \(x) httr::GET(
           url = paste0(
-            "https://az1.qualtrics.com/API/v3/mailinglists/",
+            base_url,
+            "/mailinglists/",
             x,
             "/contacts"
           ),

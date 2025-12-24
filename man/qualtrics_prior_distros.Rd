@@ -4,12 +4,14 @@
 \alias{qualtrics_prior_distros}
 \title{Get prior distributions for a survey}
 \usage{
-qualtrics_prior_distros(surveyId, api_token)
+qualtrics_prior_distros(surveyId, api_token, datacenter = "az1")
 }
 \arguments{
 \item{surveyId}{Qualtrics Survey ID}
 
 \item{api_token}{Qualtrics api token}
+
+\item{datacenter}{Qualtrics data center (default "az1")}
 }
 \value{
 Data frame of distribution data
