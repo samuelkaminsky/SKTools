@@ -42,20 +42,20 @@ anova_multi <-
       purrr::map(~ .[1]) %>%
       purrr::map(as.data.frame) %>%
       purrr::map_df(tibble::rownames_to_column, .id = "DV") %>%
-      tidyr::spread("rowname", "df.iv.p.adj") %>%
+      tidyr::pivot_wider(names_from = "rowname", values_from = "df.iv.p.adj") %>%
       dplyr::select(-(dplyr::starts_with("df.iv"))) %>%
       dplyr::group_by(.data$DV) %>%
-      dplyr::summarise_all(list(~ mean(., na.rm = TRUE)))
+      dplyr::summarise(dplyr::across(everything(), ~ mean(., na.rm = TRUE)))
     results <-
       results.anova %>%
       dplyr::left_join(results.posthocs, by = "DV", na_matches = "never")
     means <-
       df %>%
       dplyr::group_by(iv) %>%
-      dplyr::summarise_at(
-        dplyr::vars(!!dvs),
-        list(~ mean(., na.rm = TRUE))
-      )
+      dplyr::summarise(dplyr::across(
+        !!dvs,
+        ~ mean(., na.rm = TRUE)
+      ))
     means.t <-
       means[, -1] %>%
       t() %>%
@@ -68,7 +68,7 @@ anova_multi <-
     df.summary <-
       cbind(means.t, p.value = results[, 7:ncol(results)]) %>%
       as.data.frame() %>%
-      dplyr::mutate_if(is.numeric, list(~ round(., 4)))
+      dplyr::mutate(dplyr::across(where(is.numeric), ~ round(., 4)))
     if (isTRUE(print)) {
       details <- list(
         # IV = iv,

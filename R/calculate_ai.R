@@ -59,14 +59,12 @@ calculate_ai <-
           dplyr::semi_join(df.filter, by = as.character(x)) %>%
           dplyr::group_by(!!x) %>%
           tidyr::drop_na(!!x) %>%
-          dplyr::summarize_at(
-            dplyr::vars("stage1", "stage2"),
-            sum,
-            na.rm = TRUE
-          )
+          dplyr::summarize(dplyr::across(
+            c("stage1", "stage2"),
+            \(x) sum(x, na.rm = TRUE)
+          ))
       }) %>%
-      tidyr::gather("Grouping", "Group", -c("stage1", "stage2")) %>%
-      tidyr::drop_na("Group") %>%
+      tidyr::pivot_longer(!c("stage1", "stage2"), cols_vary = "slowest", names_to = "Grouping", values_to = "Group", values_drop_na = TRUE) %>%
       dplyr::mutate(SR = .data$stage2 / .data$stage1) %>%
       dplyr::select(
         "Grouping",
@@ -94,7 +92,7 @@ calculate_ai <-
         tibble::deframe()
 
       df.sr1 <- df.sr %>%
-        dplyr::rename_all(function(x) paste0(x, "1"))
+        dplyr::rename_with(function(x) paste0(x, "1"))
 
       df.ai <-
         tidyr::crossing(df.sr, df.sr1) %>%
@@ -193,7 +191,7 @@ calculate_ai <-
             -"method",
             -"alternative"
           ) %>%
-          dplyr::mutate_if(is.double, round, 6)
+          dplyr::mutate(dplyr::across(where(is.double), \(x) round(x, 6)))
       }
     }
 

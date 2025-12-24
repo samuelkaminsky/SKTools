@@ -67,11 +67,11 @@ ttest_all <-
                               dplyr::summarize(Count = dplyr::n()) %>%
                               dplyr::group_by(.data$Grouped) %>%
                               dplyr::summarize(Count = sum(.data$Count)) %>%
-                              tidyr::spread("Grouped", "Count"),
+                              tidyr::pivot_wider(names_from = "Grouped", values_from = "Count"),
                             Cutoff.Num = z,
                             cd.df
                           ) %>%
-                          dplyr::mutate_if(is.factor, as.character)
+                          dplyr::mutate(dplyr::across(where(is.factor), as.character))
                       },
                       otherwise = tibble::tibble(
                         estimate = NA_real_,
@@ -103,10 +103,10 @@ ttest_all <-
       dplyr::distinct() %>%
       tidyr::drop_na("estimate") %>%
       dplyr::mutate(sig = dplyr::if_else(.data$p.value < .05, TRUE, FALSE)) %>%
-      dplyr::mutate_at(
-        dplyr::vars("estimate":"conf.high", "Cutoff.Num"),
-        list(~ round(., 6))
-      ) %>%
+      dplyr::mutate(dplyr::across(
+        c("estimate":"conf.high", "Cutoff.Num"),
+        ~ round(., 6)
+      )) %>%
       dplyr::distinct(
         IV,
         DV,

@@ -10,7 +10,7 @@ descriptives <-
     df.func <-
       df %>%
       tibble::set_tidy_names(syntactic = TRUE, quiet = TRUE) %>%
-      dplyr::mutate_if(is.factor, as.character) %>%
+      dplyr::mutate(dplyr::across(where(is.factor), as.character)) %>%
       sjlabelled::remove_all_labels()
 
     if (isTRUE(frequencies)) {
@@ -28,7 +28,7 @@ descriptives <-
           .id = "var"
         ) %>%
         dplyr::group_by(.data$var) %>%
-        tidyr::nest(.key = "frequencies") %>%
+        tidyr::nest(frequencies = c("value", "n")) %>%
         dplyr::mutate(
           frequencies = .data$frequencies %>% purrr::set_names(.data$var)
         ) %>%
@@ -37,8 +37,8 @@ descriptives <-
 
     missing <-
       df.func %>%
-      dplyr::mutate_all(list(as.character)) %>%
-      tidyr::gather("var", "value") %>%
+      dplyr::mutate(dplyr::across(everything(), as.character)) %>%
+      tidyr::pivot_longer(everything(), names_to = "var", values_to = "value") %>%
       dplyr::group_by(.data$var) %>%
       dplyr::summarize(
         n = sum(!is.na(.data$value)),
@@ -50,12 +50,12 @@ descriptives <-
       df.func %>%
       purrr::map(class) %>%
       purrr::map_dfr(stringr::str_c, collapse = ", ") %>%
-      tidyr::gather("var", "class")
+      tidyr::pivot_longer(everything(), names_to = "var", values_to = "class")
 
     df.func <-
       df.func %>%
-      dplyr::select_if(is.numeric) %>%
-      tidyr::gather("var", "value") %>%
+      dplyr::select(where(is.numeric)) %>%
+      tidyr::pivot_longer(everything(), names_to = "var", values_to = "value") %>%
       dplyr::group_by(.data$var) %>%
       dplyr::summarize(
         mean = mean(.data$value, na.rm = TRUE),

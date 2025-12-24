@@ -40,11 +40,11 @@ anova_multi_all <-
       ) %>%
       as.data.frame() %>%
       tibble::rownames_to_column("percentage") %>%
-      tidyr::gather("iv", "cut", -"percentage") %>%
+      tidyr::pivot_longer(!percentage, cols_vary = "slowest", names_to = "iv", values_to = "cut") %>%
       dplyr::distinct(.data$iv, .data$cut, .keep_all = TRUE)
     iv.dv <-
       tidyr::crossing(dv = DVs, iv = IVs) %>%
-      dplyr::mutate_all(as.character)
+      dplyr::mutate(dplyr::across(everything(), as.character))
     index <-
       cuts %>%
       dplyr::left_join(
@@ -107,7 +107,7 @@ anova_multi_all <-
               dplyr::select(-(dplyr::starts_with("df.Grouped"))) %>%
               cbind(DV = as.character(dv)) %>%
               dplyr::group_by(.data$DV) %>%
-              dplyr::summarise_all(mean, na.rm = TRUE)
+              dplyr::summarise(dplyr::across(everything(), \(x) mean(x, na.rm = TRUE)))
             mean0 <-
               df %>%
               dplyr::filter(.data$Grouped == 0) %>%
@@ -147,7 +147,7 @@ anova_multi_all <-
                 mean_2 = mean2,
                 n
               ) %>%
-              dplyr::mutate_if(is.factor, as.character)
+              dplyr::mutate(dplyr::across(where(is.factor), as.character))
             if (isTRUE(print)) {
               print(paste0(
                 rowid,
@@ -194,16 +194,13 @@ anova_multi_all <-
         `p.value.2-1` = "2-1"
       ) %>%
       tidyr::drop_na("sumsq") %>%
-      dplyr::mutate_at(
-        dplyr::vars(
-          dplyr::contains("p.value")
-        ),
-        round,
-        6
-      ) %>%
-      dplyr::mutate_at(
-        dplyr::vars(dplyr::contains("mean_")),
-        list(~ dplyr::if_else(is.nan(.), NA_real_, .))
-      )
+      dplyr::mutate(dplyr::across(
+        dplyr::contains("p.value"),
+        \(x) round(x, 6)
+      )) %>%
+      dplyr::mutate(dplyr::across(
+        dplyr::contains("mean_"),
+        ~ dplyr::if_else(is.nan(.), NA_real_, .)
+      ))
     return(final)
   }
