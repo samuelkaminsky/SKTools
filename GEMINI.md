@@ -61,4 +61,4 @@ devtools::document()
 
 ## Version Control
 -   **Git:** The project is version-controlled with Git.
--   **CI/CD:** Configuration exists for Travis CI (`.travis.yml`) and GitHub Actions (in `.github/workflows`).
+-   **CI/CD:** Configuration exists for GitHub Actions (in `.github/workflows`).
