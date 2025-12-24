@@ -27,3 +27,6 @@ vignettes/*.pdf
 .Rbuildignore
 .DS_Store
 .Rhistory
+
+.gemini/
+gha-creds-*.json

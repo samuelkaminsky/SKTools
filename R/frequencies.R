@@ -41,7 +41,7 @@ frequencies <-
           )
         ) %>%
         dplyr::ungroup() %>%
-        dplyr::select(-.data$missing)
+        dplyr::select(-"missing")
     }
     result
   }

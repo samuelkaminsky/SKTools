@@ -60,7 +60,7 @@ corr_summary <-
       }) %>%
       purrr::reduce(dplyr::left_join, by = c("iv", "dv")) %>%
       # Calculate significance
-      dplyr::mutate(across(c(.data$p, .data$p.adjust),
+      dplyr::mutate(across(c("p", "p.adjust"),
         list(sig = ~ . < alpha)
       ))
     return(cor.df)

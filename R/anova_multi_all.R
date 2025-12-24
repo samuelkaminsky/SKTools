@@ -40,17 +40,22 @@ anova_multi_all <-
       ) %>%
       as.data.frame() %>%
       tibble::rownames_to_column("percentage") %>%
-      tidyr::gather("iv", "cut", -.data$percentage) %>%
+      tidyr::gather("iv", "cut", -"percentage") %>%
       dplyr::distinct(.data$iv, .data$cut, .keep_all = TRUE)
     iv.dv <-
       tidyr::crossing(dv = DVs, iv = IVs) %>%
       dplyr::mutate_all(as.character)
     index <-
       cuts %>%
-      dplyr::left_join(cuts, by = "iv", suffix = c(".bottom", ".top")) %>%
+      dplyr::left_join(
+        cuts,
+        by = "iv",
+        suffix = c(".bottom", ".top"),
+        relationship = "many-to-many"
+      ) %>%
       dplyr::distinct() %>%
       dplyr::filter(.data$cut.top >= .data$cut.bottom) %>%
-      dplyr::left_join(iv.dv, by = "iv") %>%
+      dplyr::left_join(iv.dv, by = "iv", relationship = "many-to-many") %>%
       dplyr::distinct() %>%
       tibble::rowid_to_column()
     index <-
@@ -87,7 +92,7 @@ anova_multi_all <-
               temp.anova %>%
               broom::tidy() %>%
               dplyr::filter(.data$term != "Residuals") %>%
-              dplyr::select(-.data$term) %>%
+              dplyr::select(-"term") %>%
               cbind(DV = as.character(dv))
             results.posthocs <-
               temp.anova %>%
@@ -96,8 +101,8 @@ anova_multi_all <-
               as.data.frame() %>%
               tibble::rownames_to_column() %>%
               tidyr::pivot_wider(
-                names_from = .data$rowname,
-                values_from = .data$df.Grouped.p.adj
+                names_from = "rowname",
+                values_from = "df.Grouped.p.adj"
               ) %>%
               dplyr::select(-(dplyr::starts_with("df.Grouped"))) %>%
               cbind(DV = as.character(dv)) %>%
@@ -126,8 +131,8 @@ anova_multi_all <-
               dplyr::group_by(.data$Grouped) %>%
               dplyr::summarize(Count = dplyr::n()) %>%
               tidyr::pivot_wider(
-                names_from = .data$Grouped,
-                values_from = .data$Count
+                names_from = "Grouped",
+                values_from = "Count"
               )
             results <-
               results.anova %>%
@@ -161,34 +166,34 @@ anova_multi_all <-
       )
     index <-
       dplyr::bind_cols(index) %>%
-      dplyr::select(-.data$rowid)
+      dplyr::select(-"rowid")
     final <-
       cbind(index, results.all) %>%
       # dplyr::filter(.data$Error!="Y") %>%
       dplyr::distinct() %>%
       dplyr::select(
-        .data$iv,
-        .data$dv,
-        Cutoff.Bottom = .data$percentage.bottom,
-        Cutoff.Top = .data$percentage.top,
-        Cutoff.Bottom.Num = .data$cut.bottom,
-        Cutoff.Bottom.Top = .data$cut.top,
-        .data$df,
-        .data$sumsq,
-        .data$meansq,
-        .data$statistic,
-        .data$p.value,
-        .data$mean_0,
-        .data$mean_1,
-        .data$mean_2,
-        n_0 = .data$`0`,
-        n_1 = .data$`1`,
-        n_2 = .data$`2`,
-        `p.value.1-0` = .data$`1-0`,
-        `p.value.2-0` = .data$`2-0`,
-        `p.value.2-1` = .data$`2-1`
+        "iv",
+        "dv",
+        Cutoff.Bottom = "percentage.bottom",
+        Cutoff.Top = "percentage.top",
+        Cutoff.Bottom.Num = "cut.bottom",
+        Cutoff.Bottom.Top = "cut.top",
+        "df",
+        "sumsq",
+        "meansq",
+        "statistic",
+        "p.value",
+        "mean_0",
+        "mean_1",
+        "mean_2",
+        n_0 = "0",
+        n_1 = "1",
+        n_2 = "2",
+        `p.value.1-0` = "1-0",
+        `p.value.2-0` = "2-0",
+        `p.value.2-1` = "2-1"
       ) %>%
-      tidyr::drop_na(.data$sumsq) %>%
+      tidyr::drop_na("sumsq") %>%
       dplyr::mutate_at(
         dplyr::vars(
           dplyr::contains("p.value")

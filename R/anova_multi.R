@@ -30,7 +30,7 @@ anova_multi <-
       ) %>%
       purrr::map_df(broom::tidy, .id = "DV") %>%
       dplyr::filter(.data$term != "Residuals") %>%
-      dplyr::select(-.data$term)
+      dplyr::select(-"term")
     results.posthocs <-
       dvs.list %>%
       purrr::map(
@@ -42,7 +42,7 @@ anova_multi <-
       purrr::map(~ .[1]) %>%
       purrr::map(as.data.frame) %>%
       purrr::map_df(tibble::rownames_to_column, .id = "DV") %>%
-      tidyr::spread(.data$rowname, .data$df.iv.p.adj) %>%
+      tidyr::spread("rowname", "df.iv.p.adj") %>%
       dplyr::select(-(dplyr::starts_with("df.iv"))) %>%
       dplyr::group_by(.data$DV) %>%
       dplyr::summarise_all(list(~ mean(., na.rm = TRUE)))

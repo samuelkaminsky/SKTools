@@ -88,25 +88,25 @@ descriptives <-
     if (isTRUE(frequencies)) {
       df.func %>%
         dplyr::select(
-          .data$var,
-          .data$class,
-          .data$mean:.data$n_unique,
-          .data$n,
-          .data$n_missing,
-          .data$perc_missing,
-          .data$`1%`:.data$`99%`,
-          .data$frequencies
+          "var",
+          "class",
+          "mean":"n_unique",
+          "n",
+          "n_missing",
+          "perc_missing",
+          "1%":"99%",
+          "frequencies"
         )
     } else {
       df.func %>%
         dplyr::select(
-          .data$var,
-          .data$class,
-          .data$mean:.data$n_unique,
-          .data$n,
-          .data$n_missing,
-          .data$perc_missing,
-          .data$`1%`:.data$`99%`
+          "var",
+          "class",
+          "mean":"n_unique",
+          "n",
+          "n_missing",
+          "perc_missing",
+          "1%":"99%"
         )
     }
   }
