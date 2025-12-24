@@ -8,18 +8,18 @@
 
 append_2_prepend <-
   function(df, string, sep = "_") {
-    df %>%
+    df |>
       purrr::set_names(dplyr::if_else(
-        endsWith(names(.), string),
+        endsWith(names(df), string),
         stringr::str_c(
           string,
           stringr::str_sub(
-            names(.),
+            names(df),
             start = 1,
-            end = as.data.frame(stringr::str_locate(names(.), string))$start - 2
+            end = as.data.frame(stringr::str_locate(names(df), string))$start - 2
           ),
           sep = sep
         ),
-        names(.)
+        names(df)
       ))
   }

@@ -31,7 +31,7 @@ read.xlsx.all <-
     } else {
       make.sheetnames <- make.names(sheetnames, unique = TRUE)
       workbook <-
-        lapply(sheetnames, function(x) {
+        lapply(sheetnames, \(x) {
           openxlsx::read.xlsx(
             xlsxFile = xlsxFile,
             sheet = x,

@@ -8,7 +8,7 @@
 quality_check <- function(df) {
   classes <- sapply(df, class) # get classes of all columns
   num.cols <- df[, which(classes == "integer")]
-  same <- apply(df, 2, function(x) {
+  same <- apply(df, 2, \(x) {
     if (length(unique(x)) == 1) {
       return(1)
     } else {

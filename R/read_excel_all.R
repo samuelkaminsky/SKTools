@@ -22,7 +22,7 @@ read_excel_all <-
     } else {
       make.sheetnames <- make.names(sheetnames, unique = TRUE)
       workbook <-
-        lapply(sheetnames, function(x) {
+        lapply(sheetnames, \(x) {
           readxl::read_excel(
             path = path,
             sheet = x,

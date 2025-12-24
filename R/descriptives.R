@@ -8,38 +8,38 @@
 descriptives <-
   function(df, frequencies = FALSE) {
     df.func <-
-      df %>%
-      tibble::set_tidy_names(syntactic = TRUE, quiet = TRUE) %>%
-      dplyr::mutate(dplyr::across(where(is.factor), as.character)) %>%
+      df |>
+      tibble::set_tidy_names(syntactic = TRUE, quiet = TRUE) |>
+      dplyr::mutate(dplyr::across(where(is.factor), as.character)) |>
       sjlabelled::remove_all_labels()
 
     if (isTRUE(frequencies)) {
       freqs <-
-        df.func %>%
-        names() %>%
-        purrr::set_names() %>%
+        df.func |>
+        names() |>
+        purrr::set_names() |>
         purrr::map_dfr(
-          function(x) {
-            df.func %>%
-              dplyr::count(!!x) %>%
-              purrr::set_names(c("value", "n")) %>%
+          \(x) {
+            df.func |>
+              dplyr::count(!!x) |>
+              purrr::set_names(c("value", "n")) |>
               dplyr::mutate(value = as.character(.data$value))
           },
           .id = "var"
-        ) %>%
-        dplyr::group_by(.data$var) %>%
-        tidyr::nest(frequencies = c("value", "n")) %>%
+        ) |>
+        dplyr::group_by(.data$var) |>
+        tidyr::nest(frequencies = c("value", "n")) |>
         dplyr::mutate(
-          frequencies = .data$frequencies %>% purrr::set_names(.data$var)
-        ) %>%
+          frequencies = .data$frequencies |> purrr::set_names(.data$var)
+        ) |>
         dplyr::arrange(.data$var)
     }
 
     missing <-
-      df.func %>%
-      dplyr::mutate(dplyr::across(everything(), as.character)) %>%
-      tidyr::pivot_longer(everything(), names_to = "var", values_to = "value") %>%
-      dplyr::group_by(.data$var) %>%
+      df.func |>
+      dplyr::mutate(dplyr::across(everything(), as.character)) |>
+      tidyr::pivot_longer(everything(), names_to = "var", values_to = "value") |>
+      dplyr::group_by(.data$var) |>
       dplyr::summarize(
         n = sum(!is.na(.data$value)),
         n_missing = sum(is.na(.data$value)),
@@ -47,16 +47,16 @@ descriptives <-
       )
 
     class <-
-      df.func %>%
-      purrr::map(class) %>%
-      purrr::map_dfr(stringr::str_c, collapse = ", ") %>%
+      df.func |>
+      purrr::map(class) |>
+      purrr::map_dfr(stringr::str_c, collapse = ", ") |>
       tidyr::pivot_longer(everything(), names_to = "var", values_to = "class")
 
     df.func <-
-      df.func %>%
-      dplyr::select(where(is.numeric)) %>%
-      tidyr::pivot_longer(everything(), names_to = "var", values_to = "value") %>%
-      dplyr::group_by(.data$var) %>%
+      df.func |>
+      dplyr::select(where(is.numeric)) |>
+      tidyr::pivot_longer(everything(), names_to = "var", values_to = "value") |>
+      dplyr::group_by(.data$var) |>
       dplyr::summarize(
         mean = mean(.data$value, na.rm = TRUE),
         median = stats::median(.data$value, na.rm = TRUE),
@@ -73,20 +73,20 @@ descriptives <-
         `50%` = stats::quantile(.data$value, .5, na.rm = TRUE),
         `75%` = stats::quantile(.data$value, .75, na.rm = TRUE),
         `99%` = stats::quantile(.data$value, .99, na.rm = TRUE)
-      ) %>%
-      dplyr::full_join(missing, by = "var", na_matches = "never") %>%
+      ) |>
+      dplyr::full_join(missing, by = "var", na_matches = "never") |>
       dplyr::full_join(class, by = "var", na_matches = "never")
 
     if (isTRUE(frequencies)) {
       df.func <-
-        df.func %>%
-        dplyr::full_join(freqs, by = "var", na_matches = "never") %>%
+        df.func |>
+        dplyr::full_join(freqs, by = "var", na_matches = "never") |>
         dplyr::mutate(
-          frequencies = .data$frequencies %>% purrr::set_names(.data$var)
+          frequencies = .data$frequencies |> purrr::set_names(.data$var)
         )
     }
     if (isTRUE(frequencies)) {
-      df.func %>%
+      df.func |>
         dplyr::select(
           "var",
           "class",
@@ -98,7 +98,7 @@ descriptives <-
           "frequencies"
         )
     } else {
-      df.func %>%
+      df.func |>
         dplyr::select(
           "var",
           "class",

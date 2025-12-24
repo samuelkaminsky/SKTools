@@ -12,39 +12,39 @@ ttest_all <-
     dvs <- dplyr::enquo(dvs)
     ivs <- dplyr::enquo(ivs)
     IVs <-
-      df %>%
-      dplyr::select(!!ivs) %>%
-      names() %>%
+      df |>
+      dplyr::select(!!ivs) |>
+      names() |>
       purrr::set_names()
     DVs <-
-      df %>%
-      dplyr::select(!!dvs) %>%
-      names() %>%
+      df |>
+      dplyr::select(!!dvs) |>
+      names() |>
       purrr::set_names()
 
-    IVs %>%
+    IVs |>
       purrr::map_dfr(
-        function(x) {
-          DVs %>%
+        \(x) {
+          DVs |>
             purrr::map_dfr(
-              function(y) {
+              \(y) {
                 y_quo <- rlang::enquo(y)
 
                 stats::quantile(
-                  df[, x] %>% unlist(),
+                  df[, x] |> unlist(),
                   seq(
                     from = 0.05,
                     to = .95,
                     by = perc
                   ),
                   na.rm = TRUE
-                ) %>%
-                  as.list() %>%
+                ) |>
+                  as.list() |>
                   purrr::map_dfr(
                     purrr::possibly(
-                      function(z) {
+                      \(z) {
                         df$Grouped <-
-                          dplyr::if_else(df[, x] >= z, 1, 0) %>%
+                          dplyr::if_else(df[, x] >= z, 1, 0) |>
                           as.factor()
                         cd <-
                           effsize::cohen.d(
@@ -53,24 +53,24 @@ ttest_all <-
                           )
                         cd.df <-
                           tibble::tibble(
-                            cd.est = cd$estimate %>% as.numeric(),
-                            cd.mag = cd$magnitude %>% as.character()
+                            cd.est = cd$estimate |> as.numeric(),
+                            cd.mag = cd$magnitude |> as.character()
                           )
                         stats::t.test(
                           stats::as.formula(paste0(y, " ~ Grouped")),
                           data = df
-                        ) %>%
-                          broom::tidy() %>%
+                        ) |>
+                          broom::tidy() |>
                           cbind(
-                            df %>%
-                              dplyr::group_by(.data$Grouped, !!y_quo) %>%
-                              dplyr::summarize(Count = dplyr::n()) %>%
-                              dplyr::group_by(.data$Grouped) %>%
-                              dplyr::summarize(Count = sum(.data$Count)) %>%
+                            df |>
+                              dplyr::group_by(.data$Grouped, !!y_quo) |>
+                              dplyr::summarize(Count = dplyr::n()) |>
+                              dplyr::group_by(.data$Grouped) |>
+                              dplyr::summarize(Count = sum(.data$Count)) |>
                               tidyr::pivot_wider(names_from = "Grouped", values_from = "Count"),
                             Cutoff.Num = z,
                             cd.df
-                          ) %>%
+                          ) |>
                           dplyr::mutate(dplyr::across(where(is.factor), as.character))
                       },
                       otherwise = tibble::tibble(
@@ -99,21 +99,21 @@ ttest_all <-
             )
         },
         .id = "IV"
-      ) %>%
-      dplyr::distinct() %>%
-      tidyr::drop_na("estimate") %>%
-      dplyr::mutate(sig = dplyr::if_else(.data$p.value < .05, TRUE, FALSE)) %>%
+      ) |>
+      dplyr::distinct() |>
+      tidyr::drop_na("estimate") |>
+      dplyr::mutate(sig = dplyr::if_else(.data$p.value < .05, TRUE, FALSE)) |>
       dplyr::mutate(dplyr::across(
         c("estimate":"conf.high", "Cutoff.Num"),
-        ~ round(., 6)
-      )) %>%
+        \(x) round(x, 6)
+      )) |>
       dplyr::distinct(
         IV,
         DV,
         estimate,
         estimate1,
         .keep_all = TRUE
-      ) %>%
+      ) |>
       dplyr::select(
         "IV",
         "DV",

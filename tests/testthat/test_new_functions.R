@@ -14,8 +14,8 @@ test_that("calculate_ai works correctly", {
   
   sr <- res$Selection.Ratio
   expect_equal(nrow(sr), 2)
-  expect_equal(sr %>% dplyr::filter(Group == "A") %>% dplyr::pull(SR), 0.8)
-  expect_equal(sr %>% dplyr::filter(Group == "B") %>% dplyr::pull(SR), 0.4)
+  expect_equal(sr |> dplyr::filter(Group == "A") |> dplyr::pull(SR), 0.8)
+  expect_equal(sr |> dplyr::filter(Group == "B") |> dplyr::pull(SR), 0.4)
   
   ai <- res$Adverse.Impact
   # Should compare A and B
@@ -23,7 +23,7 @@ test_that("calculate_ai works correctly", {
   # The function creates all crossings.
   
   # Check if A vs B exists
-  pair <- ai %>% dplyr::filter(Numerator == "B", Denominator == "A")
+  pair <- ai |> dplyr::filter(Numerator == "B", Denominator == "A")
   expect_equal(nrow(pair), 1)
   expect_equal(pair$ai.ratio, 0.5)
 })
@@ -52,7 +52,7 @@ test_that("frequencies works", {
   expect_true("n" %in% names(res))
   
   # Check specific value
-  cyl_freq <- res %>% dplyr::filter(var == "cyl", value == "4")
+  cyl_freq <- res |> dplyr::filter(var == "cyl", value == "4")
   expect_equal(cyl_freq$n, 11)
   
   # Test with perc=TRUE

@@ -27,41 +27,41 @@ corr_summary <-
       )
     # browser()
     cor.df <-
-      corr.test.results.sub.named %>%
+      corr.test.results.sub.named |>
       # Replace bottom (unadjusted p values with NA)
-      purrr::map_at("p.adjust", function(x) {
+      purrr::map_at("p.adjust", \(x) {
         x[lower.tri(x)] <- NA_real_
         x
-      }) %>%
+      }) |>
       # Replace top (adjusted p values with NA)
-      purrr::map_at("p", function(x) {
+      purrr::map_at("p", \(x) {
         x[upper.tri(x)] <- NA_real_
         x
       }) |> 
       # Convert to tibble and create column with rownames
-      purrr::map(\(x) tibble::as_tibble(x, rownames = "iv")) %>%
+      purrr::map(\(x) tibble::as_tibble(x, rownames = "iv")) |>
       # Convert to long format
       purrr::imap(
-        ~ tidyr::pivot_longer(
-          .x,
+        \(x, y) tidyr::pivot_longer(
+          x,
           cols = -"iv",
           names_to = "dv",
-          values_to = .y,
+          values_to = y,
           # Removes rows with no p values
           values_drop_na = TRUE
         )
       ) |> 
         purrr::map(\(x) dplyr::filter(x, !(.data$iv == .data$dv))) |> 
       # For p value table, stack to create rows with dv/iv pairs
-      purrr::map_at(c("p", "p.adjust"), function(x) {
+      purrr::map_at(c("p", "p.adjust"), \(x) {
         x.rev <-
           dplyr::rename(x, dv = "iv", iv = "dv")
         dplyr::bind_rows(x, x.rev)
-      }) %>%
-      purrr::reduce(dplyr::left_join, by = c("iv", "dv")) %>%
+      }) |>
+      purrr::reduce(dplyr::left_join, by = c("iv", "dv")) |>
       # Calculate significance
       dplyr::mutate(across(c("p", "p.adjust"),
-        list(sig = ~ . < alpha)
+        list(sig = \(x) x < alpha)
       ))
     return(cor.df)
   }

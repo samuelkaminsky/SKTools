@@ -8,8 +8,8 @@
 list_names <-
   function(df, ...) {
     vars <- rlang::quos(...)
-    df %>%
-      dplyr::select(!!!vars) %>%
-      names() %>%
+    df |>
+      dplyr::select(!!!vars) |>
+      names() |>
       purrr::set_names()
   }

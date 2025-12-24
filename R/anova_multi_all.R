@@ -15,21 +15,21 @@ anova_multi_all <-
     dvs <- dplyr::enquo(dvs)
     ivs <- dplyr::enquo(ivs)
     IVs <-
-      df %>%
-      dplyr::select(!!ivs) %>%
-      names() %>%
+      df |>
+      dplyr::select(!!ivs) |>
+      names() |>
       purrr::set_names()
     DVs <-
-      df %>%
-      dplyr::select(!!dvs) %>%
-      names() %>%
+      df |>
+      dplyr::select(!!dvs) |>
+      names() |>
       purrr::set_names()
     cuts <-
-      IVs %>%
-      purrr::map(~ dplyr::pull(df, .)) %>%
+      IVs |>
+      purrr::map(\(x) dplyr::pull(df, x)) |>
       purrr::map(
-        ~ stats::quantile(
-          .,
+        \(x) stats::quantile(
+          x,
           seq(
             from = 0.05,
             to = .95,
@@ -37,26 +37,26 @@ anova_multi_all <-
           ),
           na.rm = TRUE
         )
-      ) %>%
-      as.data.frame() %>%
-      tibble::rownames_to_column("percentage") %>%
-      tidyr::pivot_longer(!percentage, cols_vary = "slowest", names_to = "iv", values_to = "cut") %>%
+      ) |>
+      as.data.frame() |>
+      tibble::rownames_to_column("percentage") |>
+      tidyr::pivot_longer(!percentage, cols_vary = "slowest", names_to = "iv", values_to = "cut") |>
       dplyr::distinct(.data$iv, .data$cut, .keep_all = TRUE)
     iv.dv <-
-      tidyr::crossing(dv = DVs, iv = IVs) %>%
+      tidyr::crossing(dv = DVs, iv = IVs) |>
       dplyr::mutate(dplyr::across(everything(), as.character))
     index <-
-      cuts %>%
+      cuts |>
       dplyr::left_join(
         cuts,
         by = "iv",
         suffix = c(".bottom", ".top"),
         relationship = "many-to-many"
-      ) %>%
-      dplyr::distinct() %>%
-      dplyr::filter(.data$cut.top >= .data$cut.bottom) %>%
-      dplyr::left_join(iv.dv, by = "iv", relationship = "many-to-many") %>%
-      dplyr::distinct() %>%
+      ) |>
+      dplyr::distinct() |>
+      dplyr::filter(.data$cut.top >= .data$cut.bottom) |>
+      dplyr::left_join(iv.dv, by = "iv", relationship = "many-to-many") |>
+      dplyr::distinct() |>
       tibble::rowid_to_column()
     index <-
       as.list(index)
@@ -64,7 +64,7 @@ anova_multi_all <-
       purrr::pmap_df(
         index,
         purrr::possibly(
-          function(
+          \(
             iv,
             cut.bottom,
             cut.top,
@@ -80,7 +80,7 @@ anova_multi_all <-
                   df[, iv] < cut.top ~
                   1,
                 df[, iv] >= cut.top ~ 2
-              ) %>%
+              ) |>
               as.factor()
             temp.anova <-
               stats::aov(stats::lm(stats::as.formula(paste0(
@@ -89,64 +89,64 @@ anova_multi_all <-
                 "` ~ df$Grouped"
               ))))
             results.anova <-
-              temp.anova %>%
-              broom::tidy() %>%
-              dplyr::filter(.data$term != "Residuals") %>%
-              dplyr::select(-"term") %>%
+              temp.anova |>
+              broom::tidy() |>
+              dplyr::filter(.data$term != "Residuals") |>
+              dplyr::select(-"term") |>
               cbind(DV = as.character(dv))
             results.posthocs <-
-              temp.anova %>%
-              stats::TukeyHSD() %>%
-              .[1] %>%
-              as.data.frame() %>%
-              tibble::rownames_to_column() %>%
+              temp.anova |>
+              stats::TukeyHSD() |>
+              (\(x) x[1])() |>
+              as.data.frame() |>
+              tibble::rownames_to_column() |>
               tidyr::pivot_wider(
                 names_from = "rowname",
                 values_from = "df.Grouped.p.adj"
-              ) %>%
-              dplyr::select(-(dplyr::starts_with("df.Grouped"))) %>%
-              cbind(DV = as.character(dv)) %>%
-              dplyr::group_by(.data$DV) %>%
+              ) |>
+              dplyr::select(-(dplyr::starts_with("df.Grouped"))) |>
+              cbind(DV = as.character(dv)) |>
+              dplyr::group_by(.data$DV) |>
               dplyr::summarise(dplyr::across(everything(), \(x) mean(x, na.rm = TRUE)))
             mean0 <-
-              df %>%
-              dplyr::filter(.data$Grouped == 0) %>%
-              dplyr::select(paste0(dv)) %>%
-              unlist() %>%
+              df |>
+              dplyr::filter(.data$Grouped == 0) |>
+              dplyr::select(paste0(dv)) |>
+              unlist() |>
               mean(na.rm = TRUE)
             mean1 <-
-              df %>%
-              dplyr::filter(.data$Grouped == 1) %>%
-              dplyr::select(paste0(dv)) %>%
-              unlist() %>%
+              df |>
+              dplyr::filter(.data$Grouped == 1) |>
+              dplyr::select(paste0(dv)) |>
+              unlist() |>
               mean(na.rm = TRUE)
             mean2 <-
-              df %>%
-              dplyr::filter(.data$Grouped == 2) %>%
-              dplyr::select(paste0(dv)) %>%
-              unlist() %>%
+              df |>
+              dplyr::filter(.data$Grouped == 2) |>
+              dplyr::select(paste0(dv)) |>
+              unlist() |>
               mean(na.rm = TRUE)
             n <-
-              df %>%
-              dplyr::group_by(.data$Grouped) %>%
-              dplyr::summarize(Count = dplyr::n()) %>%
+              df |>
+              dplyr::group_by(.data$Grouped) |>
+              dplyr::summarize(Count = dplyr::n()) |>
               tidyr::pivot_wider(
                 names_from = "Grouped",
                 values_from = "Count"
               )
             results <-
-              results.anova %>%
+              results.anova |>
               dplyr::left_join(
                 results.posthocs,
                 by = "DV",
                 na_matches = "never"
-              ) %>%
+              ) |>
               cbind(
                 mean_0 = mean0,
                 mean_1 = mean1,
                 mean_2 = mean2,
                 n
-              ) %>%
+              ) |>
               dplyr::mutate(dplyr::across(where(is.factor), as.character))
             if (isTRUE(print)) {
               print(paste0(
@@ -165,12 +165,12 @@ anova_multi_all <-
         .id = "Source"
       )
     index <-
-      dplyr::bind_cols(index) %>%
+      dplyr::bind_cols(index) |>
       dplyr::select(-"rowid")
     final <-
-      cbind(index, results.all) %>%
-      # dplyr::filter(.data$Error!="Y") %>%
-      dplyr::distinct() %>%
+      cbind(index, results.all) |>
+      # dplyr::filter(.data$Error!="Y") |>
+      dplyr::distinct() |>
       dplyr::select(
         "iv",
         "dv",
@@ -192,15 +192,15 @@ anova_multi_all <-
         `p.value.1-0` = "1-0",
         `p.value.2-0` = "2-0",
         `p.value.2-1` = "2-1"
-      ) %>%
-      tidyr::drop_na("sumsq") %>%
+      ) |>
+      tidyr::drop_na("sumsq") |>
       dplyr::mutate(dplyr::across(
         dplyr::contains("p.value"),
         \(x) round(x, 6)
-      )) %>%
+      )) |>
       dplyr::mutate(dplyr::across(
         dplyr::contains("mean_"),
-        ~ dplyr::if_else(is.nan(.), NA_real_, .)
+        \(x) dplyr::if_else(is.nan(x), NA_real_, x)
       ))
     return(final)
   }

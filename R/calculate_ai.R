@@ -38,46 +38,46 @@ calculate_ai <-
     stage2_quo <- dplyr::enquo(stage2)
 
     df <-
-      df %>%
+      df |>
       dplyr::rename(
         stage1 = !!stage1_quo,
         stage2 = !!stage2_quo
       )
 
-    df.sr <- groupings %>%
-      purrr::map_dfr(function(x) {
+    df.sr <- groupings |>
+      purrr::map_dfr(\(x) {
         x <- as.name(x)
 
         df.filter <-
-          df %>%
-          dplyr::count(!!x) %>%
-          dplyr::mutate(perc = .data$n / sum(.data$n, na.rm = TRUE)) %>%
-          dplyr::filter(.data$perc >= prop_min) %>%
+          df |>
+          dplyr::count(!!x) |>
+          dplyr::mutate(perc = .data$n / sum(.data$n, na.rm = TRUE)) |>
+          dplyr::filter(.data$perc >= prop_min) |>
           dplyr::select(-"n", -"perc")
 
-        df %>%
-          dplyr::semi_join(df.filter, by = as.character(x)) %>%
-          dplyr::group_by(!!x) %>%
-          tidyr::drop_na(!!x) %>%
+        df |>
+          dplyr::semi_join(df.filter, by = as.character(x)) |>
+          dplyr::group_by(!!x) |>
+          tidyr::drop_na(!!x) |>
           dplyr::summarize(dplyr::across(
             c("stage1", "stage2"),
             \(x) sum(x, na.rm = TRUE)
           ))
-      }) %>%
-      tidyr::pivot_longer(!c("stage1", "stage2"), cols_vary = "slowest", names_to = "Grouping", values_to = "Group", values_drop_na = TRUE) %>%
-      dplyr::mutate(SR = .data$stage2 / .data$stage1) %>%
+      }) |>
+      tidyr::pivot_longer(!c("stage1", "stage2"), cols_vary = "slowest", names_to = "Grouping", values_to = "Group", values_drop_na = TRUE) |>
+      dplyr::mutate(SR = .data$stage2 / .data$stage1) |>
       dplyr::select(
         "Grouping",
         "Group",
         "stage1",
         "stage2",
         "SR"
-      ) %>%
+      ) |>
       dplyr::filter(.data$stage1 >= n_min)
 
     check <-
-      df.sr %>%
-      dplyr::mutate(check = dplyr::if_else(.data$SR > 1, TRUE, FALSE)) %>%
+      df.sr |>
+      dplyr::mutate(check = dplyr::if_else(.data$SR > 1, TRUE, FALSE)) |>
       dplyr::filter(check == TRUE)
 
     if (nrow(check) > 0) {
@@ -87,15 +87,15 @@ calculate_ai <-
         )
     } else {
       l.groups <-
-        df.sr %>%
-        dplyr::select("Group", "SR") %>%
+        df.sr |>
+        dplyr::select("Group", "SR") |>
         tibble::deframe()
 
-      df.sr1 <- df.sr %>%
-        dplyr::rename_with(function(x) paste0(x, "1"))
+      df.sr1 <- df.sr |>
+        dplyr::rename_with(\(x) paste0(x, "1"))
 
       df.ai <-
-        tidyr::crossing(df.sr, df.sr1) %>%
+        tidyr::crossing(df.sr, df.sr1) |>
         dplyr::rename(
           Numerator = "Group",
           Denominator = "Group1"
@@ -103,13 +103,13 @@ calculate_ai <-
 
       if (only_max == TRUE) {
         max.sr <-
-          df.sr %>%
-          dplyr::group_by(.data$Grouping) %>%
-          dplyr::filter(.data$SR == max(.data$SR)) %>%
+          df.sr |>
+          dplyr::group_by(.data$Grouping) |>
+          dplyr::filter(.data$SR == max(.data$SR)) |>
           dplyr::pull(.data$Group)
 
         df.ai <-
-          df.ai %>%
+          df.ai |>
           dplyr::filter(.data$Denominator %in% max.sr)
       }
       if (nrow(df.ai) == 0) {
@@ -117,12 +117,12 @@ calculate_ai <-
           list(Error = "No adverse impact comparisons possible")
       } else {
         df.ai <-
-          df.ai %>%
+          df.ai |>
           dplyr::filter(
             .data$Grouping == .data$Grouping1,
             .data$Numerator != .data$Denominator
-          ) %>%
-          dplyr::arrange(.data$Numerator, .data$Denominator) %>%
+          ) |>
+          dplyr::arrange(.data$Numerator, .data$Denominator) |>
           dplyr::mutate(
             ai.ratio = .data$SR / .data$SR1,
             H = 2 * asin(sqrt(.data$SR1)) - 2 * asin(sqrt(.data$SR)),
@@ -136,9 +136,9 @@ calculate_ai <-
                       (.data$stage1 + .data$stage11)) *
                   (1 / .data$stage1 + 1 / .data$stage11)
               )
-          ) %>%
-          dplyr::ungroup() %>%
-          dplyr::rowwise() %>%
+          ) |>
+          dplyr::ungroup() |>
+          dplyr::rowwise() |>
           dplyr::mutate(
             conting = list(
               list(
@@ -147,18 +147,18 @@ calculate_ai <-
                   .data$stage1 - .data$stage2,
                   .data$stage11 - .data$stage21
                 )
-              ) %>%
+              ) |>
                 tibble::as_tibble()
             )
-          ) %>%
+          ) |>
           dplyr::mutate(
             chi = list(
-              stats::prop.test(as.matrix(.data$conting), correct = correct) %>%
+              stats::prop.test(as.matrix(.data$conting), correct = correct) |>
                 broom::tidy()
             ),
-            f.exact = list(stats::fisher.test(.data$conting) %>% broom::tidy())
-          ) %>%
-          tidyr::unnest("chi") %>%
+            f.exact = list(stats::fisher.test(.data$conting) |> broom::tidy())
+          ) |>
+          tidyr::unnest("chi") |>
           dplyr::select(
             -"conting",
             -"parameter",
@@ -168,16 +168,16 @@ calculate_ai <-
             -"conf.low",
             -"conf.high",
             -"method"
-          ) %>%
+          ) |>
           dplyr::rename(
             chi = "statistic",
             p.value.chi = "p.value"
-          ) %>%
-          tidyr::unnest("f.exact") %>%
+          ) |>
+          tidyr::unnest("f.exact") |>
           dplyr::rename(
             p.value.fisher = "p.value",
             odds.ratio = "estimate"
-          ) %>%
+          ) |>
           dplyr::select(
             -"conf.low",
             -"conf.high",
@@ -190,13 +190,13 @@ calculate_ai <-
             -"stage21",
             -"method",
             -"alternative"
-          ) %>%
+          ) |>
           dplyr::mutate(dplyr::across(where(is.double), \(x) round(x, 6)))
       }
     }
 
     df.sr <-
-      df.sr %>%
+      df.sr |>
       dplyr::rename(
         !!paste0(dplyr::quo_name(stage1_quo), "_n") := "stage1",
         !!paste0(dplyr::quo_name(stage2_quo), "_n") := "stage2"

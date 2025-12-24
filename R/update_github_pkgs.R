@@ -7,13 +7,13 @@ update_github_pkgs <- function() {
   if (check) {
     detach("package:SKTools", unload = TRUE)
   }
-  utils::installed.packages() %>%
-    tibble::as_tibble() %>%
-    .$Package %>%
-    purrr::set_names() %>%
-    purrr::map(utils::packageDescription) %>%
-    purrr::map(~ paste0(.$GithubUsername, "/", .$GithubRepo)) %>%
-    purrr::map_if(nchar(.) > 3, purrr::safely(~ devtools::install_github(.)))
+  utils::installed.packages() |>
+    tibble::as_tibble() |>
+    dplyr::pull("Package") |>
+    purrr::set_names() |>
+    purrr::map(utils::packageDescription) |>
+    purrr::map(\(x) paste0(x$GithubUsername, "/", x$GithubRepo)) |>
+    purrr::map_if(\(x) nchar(x) > 3, purrr::safely(\(x) devtools::install_github(x)))
   if (check) {
     library("SKTools")
   }

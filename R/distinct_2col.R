@@ -8,17 +8,17 @@
 distinct_2col <- function(df, col1, col2) {
   col1q <- rlang::enquo(col1)
   col2q <- rlang::enquo(col2)
-  df %>%
+  df |>
     dplyr::mutate(
       dupevec = purrr::map2(
         !!col1q,
         !!col2q,
-        ~ sort(as.character(c(
-          .x,
-          .y
+        \(x, y) sort(as.character(c(
+          x,
+          y
         )))
       )
-    ) %>%
-    dplyr::distinct(.data$dupevec, .keep_all = TRUE) %>%
+    ) |>
+    dplyr::distinct(.data$dupevec, .keep_all = TRUE) |>
     dplyr::select(-"dupevec")
 }
