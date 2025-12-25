@@ -21,6 +21,7 @@ qualtrics_prior_distros <-
 
     base_url <- paste0("https://", datacenter, ".qualtrics.com/API/v3")
 
+    # Initial Request to get distributions
     distributions_response <-
       httr::GET(
         url = paste0(
@@ -32,6 +33,7 @@ qualtrics_prior_distros <-
       ) |>
       httr::content()
 
+    # Get mailing list IDs and initial contacts
     distributions_list <-
       distributions_response$result$elements |>
       purrr::map(\(x) x$recipients$mailingListId) |>
@@ -56,6 +58,7 @@ qualtrics_prior_distros <-
       distributions_list |>
       purrr::map(\(x) x$result$elements)
 
+    # Pagination Loop: Keep fetching while 'nextPage' exists
     while ({
       length(
         distributions_list |>
@@ -85,6 +88,7 @@ qualtrics_prior_distros <-
       results <- c(results, new_results)
     }
 
+    # Parse results into a single dataframe
     distributions_df <-
       purrr::map_df(seq_along(results), \(x) {
         purrr::map_df(

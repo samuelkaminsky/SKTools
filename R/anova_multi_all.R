@@ -25,6 +25,8 @@ anova_multi_all <-
       dplyr::select(!!dvs) |>
       names() |>
       purrr::set_names()
+
+    # Calculate quantiles for each IV to determine cutpoints
     cuts <-
       ivs_list |>
       purrr::map(\(x) dplyr::pull(df, x)) |>
@@ -50,9 +52,12 @@ anova_multi_all <-
         values_to = "cut"
       ) |>
       dplyr::distinct(.data$iv, .data$cut, .keep_all = TRUE)
+
     iv_dv <-
       tidyr::crossing(dv = dvs_list, iv = ivs_list) |>
       dplyr::mutate(dplyr::across(everything(), as.character))
+
+    # Create an index of all combinations of IVs, DVs, and cutpoints
     index <-
       cuts |>
       dplyr::left_join(
@@ -68,6 +73,8 @@ anova_multi_all <-
       tibble::rowid_to_column()
     index <-
       as.list(index)
+
+    # Execute ANOVA for each combination
     results_all <-
       purrr::pmap_df(
         index,
@@ -81,6 +88,7 @@ anova_multi_all <-
             dv,
             rowid
           ) {
+            # Categorize the IV based on cutpoints
             df$Grouped <-
               dplyr::case_when(
                 df[, iv] < cut.bottom ~ 0,
@@ -90,6 +98,8 @@ anova_multi_all <-
                 df[, iv] >= cut.top ~ 2
               ) |>
               as.factor()
+
+            # Run ANOVA
             temp_anova <-
               stats::aov(stats::lm(
                 stats::as.formula(paste0("`", dv, "` ~ Grouped")),
@@ -101,6 +111,8 @@ anova_multi_all <-
               dplyr::filter(.data$term != "Residuals") |>
               dplyr::select(-"term") |>
               cbind(DV = as.character(dv))
+
+            # Run Post-Hoc Tests (Tukey HSD)
             results_posthocs <-
               temp_anova |>
               stats::TukeyHSD() |>
@@ -117,6 +129,8 @@ anova_multi_all <-
               dplyr::summarise(dplyr::across(everything(), \(x) {
                 mean(x, na.rm = TRUE)
               }))
+
+            # Calculate means for each group
             mean0 <-
               df |>
               dplyr::filter(.data$Grouped == 0) |>
@@ -143,6 +157,8 @@ anova_multi_all <-
                 names_from = "Grouped",
                 values_from = "Count"
               )
+
+            # Combine results
             results <-
               results_anova |>
               dplyr::left_join(

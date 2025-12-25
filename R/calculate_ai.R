@@ -51,10 +51,12 @@ calculate_ai <-
         stage2 = !!stage2_quo
       )
 
+    # Calculate Selection Ratios
     df_sr <- groupings |>
       purrr::map_dfr(\(x) {
         x <- as.name(x)
 
+        # Filter out groups with insufficient N or proportion
         df_filter <-
           df |>
           dplyr::count(!!x) |>
@@ -88,6 +90,7 @@ calculate_ai <-
       ) |>
       dplyr::filter(.data$stage1 >= n_min)
 
+    # Sanity Check
     check <-
       df_sr |>
       dplyr::mutate(check = dplyr::if_else(.data$SR > 1, TRUE, FALSE)) |>
@@ -107,6 +110,7 @@ calculate_ai <-
       df_sr1 <- df_sr |>
         dplyr::rename_with(\(x) paste0(x, "1"))
 
+      # Cross join to create all pairwise comparisons
       df_ai <-
         tidyr::crossing(df_sr, df_sr1) |>
         dplyr::rename(
@@ -115,6 +119,7 @@ calculate_ai <-
         )
 
       if (only_max == TRUE) {
+        # Keep only comparisons against the group with the highest selection ratio
         max_sr <-
           df_sr |>
           dplyr::group_by(.data$Grouping) |>
@@ -129,6 +134,7 @@ calculate_ai <-
         df_ai <-
           list(Error = "No adverse impact comparisons possible")
       } else {
+        # Calculate Adverse Impact Stats
         df_ai <-
           df_ai |>
           dplyr::filter(
@@ -139,6 +145,7 @@ calculate_ai <-
           dplyr::mutate(
             ai_ratio = .data$SR / .data$SR1,
             H = 2 * asin(sqrt(.data$SR1)) - 2 * asin(sqrt(.data$SR)),
+            # Z-test for two proportions
             Z = (.data$SR1 - .data$SR) /
               sqrt(
                 (.data$stage2 + .data$stage21) /
@@ -164,6 +171,7 @@ calculate_ai <-
                 tibble::as_tibble()
             )
           ) |>
+          # Run Chi-Square and Fisher's Exact tests on contingency tables
           dplyr::mutate(
             chi = list(
               stats::prop.test(as.matrix(.data$conting), correct = correct) |>
