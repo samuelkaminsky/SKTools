@@ -53,16 +53,14 @@ qualtrics_prior_distros <-
       distributions.list |>
       purrr::map(\(x) x$result$elements)
 
-    while (
-      {
-        length(
-          distributions.list |>
-            purrr::map(\(x) x$result$nextPage) |>
-            purrr::compact()
-        ) >
-          0
-      }
-    ) {
+    while ({
+      length(
+        distributions.list |>
+          purrr::map(\(x) x$result$nextPage) |>
+          purrr::compact()
+      ) >
+        0
+    }) {
       distributions.list <-
         distributions.list |>
         purrr::map(\(x) x$result$nextPage) |>
