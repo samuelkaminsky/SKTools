@@ -43,7 +43,7 @@ anova_multi_all <-
       as.data.frame() |>
       tibble::rownames_to_column("percentage") |>
       tidyr::pivot_longer(
-        !.data$percentage,
+        !"percentage",
         cols_vary = "slowest",
         names_to = "iv",
         values_to = "cut"
