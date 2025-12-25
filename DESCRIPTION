@@ -19,7 +19,6 @@ Imports:
     jsonlite,
     moments,
     openxlsx, 
-    psych,
     purrr,
     readxl,
     rlang,
@@ -31,4 +30,5 @@ Imports:
     utils
 RoxygenNote: 7.3.3
 Suggests: testthat,
-    readr
+    readr,
+    psych
