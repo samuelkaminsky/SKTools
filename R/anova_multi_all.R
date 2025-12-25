@@ -9,7 +9,8 @@
 #' @description Conduct one-way ANOVAs on multiple DVs at various cutpoints
 #' of the iv
 #' @export
-
+#' @examples
+#' anova_multi_all(mtcars, ivs = c(disp, hp), dvs = mpg)
 anova_multi_all <-
   function(df, ivs, dvs, perc = .05, print = FALSE) {
     dvs <- dplyr::enquo(dvs)

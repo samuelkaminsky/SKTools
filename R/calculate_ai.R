@@ -10,9 +10,16 @@
 #' @return List with two data frames. The first includes all selection ratios, the second includes all adverse impact calculation
 #' \item{selection_ratio}{Dataframe with selection ratios}
 #' \item{adverse_impact}{Dataframe with adverse impact metrics, including adverse impact ratio, Cohen's H, Z score test of two proportions, Pearson's chi-squared test of proportions, and Fisher's exact}
+#' @details Calculates selection ratios and adverse impact using Fisher's Exact Test, Z-test for two proportions, and Chi-Squared test.
 #' @export
 #' @description Calculates adverse impact metrics
-
+#' @examples
+#' df <- tibble::tibble(
+#'   gender = c(rep("Male", 10), rep("Female", 10)),
+#'   applied = c(rep(TRUE, 10), rep(TRUE, 10)),
+#'   hired = c(rep(TRUE, 5), rep(FALSE, 5), rep(TRUE, 8), rep(FALSE, 2))
+#' )
+#' calculate_ai(df, groupings = "gender", stage1 = applied, stage2 = hired)
 calculate_ai <-
   function(
     df,

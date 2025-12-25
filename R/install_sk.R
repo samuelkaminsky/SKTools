@@ -50,7 +50,10 @@
 #' * semTools
 #' * shinythemes
 #' @md
-
+#' @examples
+#' \dontrun{
+#' install_sk()
+#' }
 install_sk <- function(extra = FALSE, dependencies = FALSE) {
   list_of_packages <-
     c(

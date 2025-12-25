@@ -19,3 +19,10 @@ Dataframe with duplicates removed
 \description{
 Remove duplicates based on two columns, ignoring their order
 }
+\examples{
+df <- tibble::tibble(
+  a = c("A", "B", "C"),
+  b = c("B", "A", "D")
+)
+distinct_2col(df, "a", "b")
+}

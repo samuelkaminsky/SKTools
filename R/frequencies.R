@@ -5,7 +5,8 @@
 #' @return Dataframe of frequencies for each variable and value
 #' @description Calculates frequencies of every Column in a dataframe
 #' @export
-
+#' @examples
+#' frequencies(mtcars)
 frequencies <-
   function(df, perc = FALSE) {
     result <-

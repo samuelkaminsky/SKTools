@@ -4,7 +4,10 @@
 #' @return POST results
 #' @description Send a message to a room in Hangouts Chat
 #' @export
-
+#' @examples
+#' \dontrun{
+#' hangouts_chat_message("https://chat.googleapis.com/...", "Hello World")
+#' }
 hangouts_chat_message <- function(url, message) {
   stopifnot(is.character(url), nchar(as.character(message)) > 0)
   header <- httr::add_headers(c(

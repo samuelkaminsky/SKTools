@@ -17,3 +17,9 @@ tibble with clean output
 \description{
 Converts corr.test output to tidy tibble with most important information (IV, DV, r, n, t, p)
 }
+\examples{
+if (requireNamespace("psych", quietly = TRUE)) {
+  ct <- psych::corr.test(mtcars[1:5])
+  corr_summary(ct)
+}
+}

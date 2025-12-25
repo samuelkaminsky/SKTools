@@ -8,3 +8,18 @@ A collection of R functions that help with importing and analyzing data frames.
   <li>If not installed already, install <code>remotes</code> package: <code>install.packages("remotes")</code>.</li>
 <li>Use <code>remotes::install_github("samuelkaminsky/SKTools")</code> to install the package.</li>
 
+## Usage
+
+```r
+library(SKTools)
+
+# Calculate descriptives
+descriptives(mtcars)
+
+# Calculate frequencies
+frequencies(mtcars)
+
+# Read all sheets from an Excel file
+# df_list <- read_excel_all("path/to/file.xlsx")
+```
+

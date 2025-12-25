@@ -29,3 +29,8 @@ If there is more than one worksheet, then a list of data frames that represent e
 \description{
 Read an entire Excel file workbook (using readxl functions)
 }
+\examples{
+\dontrun{
+df_list <- read_excel_all("path/to/file.xlsx")
+}
+}

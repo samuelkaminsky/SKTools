@@ -25,3 +25,6 @@ also includes descriptives about each level of the IV
 Conduct one-way ANOVAs on multiple DVs at various cutpoints
 of the iv
 }
+\examples{
+anova_multi_all(mtcars, ivs = c(disp, hp), dvs = mpg)
+}

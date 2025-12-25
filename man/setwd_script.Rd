@@ -9,3 +9,8 @@ setwd_script()
 \description{
 Sets working directory to current script's location
 }
+\examples{
+\dontrun{
+setwd_script()
+}
+}

@@ -18,3 +18,6 @@ Dataframe of frequencies for each variable and value
 \description{
 Calculates frequencies of every Column in a dataframe
 }
+\examples{
+frequencies(mtcars)
+}

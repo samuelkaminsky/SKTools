@@ -7,7 +7,10 @@
 #' @param skip Number of rows to skip when reading in data
 #' @return If there is more than one worksheet, then a list of data frames that represent each worksheet. If there is only one worksheet, then a data frame.
 #' @export
-
+#' @examples
+#' \dontrun{
+#' df_list <- read_excel_all("path/to/file.xlsx")
+#' }
 read_excel_all <-
   function(path, save2env = FALSE, check_names = FALSE, names = "", skip = 0) {
     sheetnames <- readxl::excel_sheets(path)

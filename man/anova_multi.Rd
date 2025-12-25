@@ -2,7 +2,7 @@
 % Please edit documentation in R/anova_multi.R
 \name{anova_multi}
 \alias{anova_multi}
-\title{Conducts One-Way ANOVAs on Multiple DVs}
+\title{Conduct One-Way ANOVAs on Multiple DVs}
 \usage{
 anova_multi(df, iv, dvs, print = FALSE)
 }
@@ -20,4 +20,7 @@ Data frame of tidy ANOVA post-hoc results, also prints Ns and percentages in eac
 }
 \description{
 Conduct one-way ANOVAs on multiple DVs
+}
+\examples{
+anova_multi(mtcars, iv = cyl, dvs = c(mpg, disp))
 }

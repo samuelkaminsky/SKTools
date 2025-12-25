@@ -67,3 +67,8 @@ Packages installed with the extra=TRUE argument include:
 \item shinythemes
 }
 }
+\examples{
+\dontrun{
+install_sk()
+}
+}

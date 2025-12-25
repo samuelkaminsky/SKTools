@@ -4,7 +4,12 @@
 #' @param col2 Quoted name of second column
 #' @return Dataframe with duplicates removed
 #' @export
-
+#' @examples
+#' df <- tibble::tibble(
+#'   a = c("A", "B", "C"),
+#'   b = c("B", "A", "D")
+#' )
+#' distinct_2col(df, "a", "b")
 distinct_2col <- function(df, col1, col2) {
   col1q <- rlang::enquo(col1)
   col2q <- rlang::enquo(col2)

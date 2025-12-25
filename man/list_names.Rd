@@ -17,3 +17,6 @@ Named vector of variables
 \description{
 Creates a vector of variable names from a dataframe or tibble
 }
+\examples{
+list_names(mtcars, mpg, cyl)
+}

@@ -5,7 +5,13 @@
 #' @return Data frame with corrected column names
 #' @description Move string at end of column name to beginning
 #' @export
-
+#' @examples
+#' df <- tibble::tibble(
+#'   x_suff = 1:5,
+#'   y_suff = 1:5,
+#'   z = 1:5
+#' )
+#' append_2_prepend(df, "suff", "_")
 append_2_prepend <-
   function(df, string, sep = "_") {
     df |>

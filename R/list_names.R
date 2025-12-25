@@ -4,7 +4,8 @@
 #' @return Named vector of variables
 #' @description Creates a vector of variable names from a dataframe or tibble
 #' @export
-
+#' @examples
+#' list_names(mtcars, mpg, cyl)
 list_names <-
   function(df, ...) {
     vars <- rlang::quos(...)

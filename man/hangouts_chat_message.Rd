@@ -17,3 +17,8 @@ POST results
 \description{
 Send a message to a room in Hangouts Chat
 }
+\examples{
+\dontrun{
+hangouts_chat_message("https://chat.googleapis.com/...", "Hello World")
+}
+}

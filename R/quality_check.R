@@ -4,7 +4,12 @@
 #' @author Eric Knudsen <eknudsen88@gmail.com>
 #' @return Prints message that identifies columns with no variance and those with strong or moderate skewness.
 #' @export
-
+#' @examples
+#' df <- tibble::tibble(
+#'   no_var = c(1, 1, 1, 1),
+#'   skewed = c(1, 1, 1, 100)
+#' )
+#' quality_check(df)
 quality_check <- function(df) {
   classes <- sapply(df, class) # get classes of all columns
   num_cols <- df[, which(classes == "integer")]

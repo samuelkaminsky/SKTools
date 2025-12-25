@@ -9,11 +9,16 @@ num2letter(x, number = "")
 \arguments{
 \item{x}{Number to be converted to letter (only works for numbers less than or equal to 702)}
 
-\item{number}{Number to be appended to letter}
+\item{number}{Optional suffix to append to letter}
 }
 \value{
 Character string a letter and optional appended number
 }
 \description{
 Converts a number to an equivalent letter, with an option to concatenate a row value. Useful for adding data to existing Google Sheets
+}
+\examples{
+num2letter(1)
+num2letter(26)
+num2letter(1, 1)
 }

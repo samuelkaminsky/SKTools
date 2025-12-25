@@ -4,7 +4,11 @@
 #' @return tibble with clean output
 #' @description Converts corr.test output to tidy tibble with most important information (IV, DV, r, n, t, p)
 #' @export
-
+#' @examples
+#' if (requireNamespace("psych", quietly = TRUE)) {
+#'   ct <- psych::corr.test(mtcars[1:5])
+#'   corr_summary(ct)
+#' }
 corr_summary <-
   function(corr_test_results, alpha = .05) {
     if (length(corr_test_results$n) == 1L) {

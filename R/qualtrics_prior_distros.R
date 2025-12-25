@@ -5,7 +5,10 @@
 #' @return Data frame of distribution data
 #' @description Retrieves distributions for a survey on Qualtrics
 #' @export
-
+#' @examples
+#' \dontrun{
+#' qualtrics_prior_distros("SV_12345", "API_TOKEN")
+#' }
 qualtrics_prior_distros <-
   function(surveyId, api_token, datacenter = "az1") {
     header_all <-

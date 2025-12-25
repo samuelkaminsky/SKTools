@@ -32,3 +32,8 @@ represent each worksheet. If there is only one worksheet, then a data frame.
 \description{
 Read an entire Excel file workbook (using openxlsx functions)
 }
+\examples{
+\dontrun{
+df_list <- read_xlsx_all("path/to/file.xlsx")
+}
+}

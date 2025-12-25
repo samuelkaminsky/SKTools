@@ -15,6 +15,13 @@ Prints message that identifies columns with no variance and those with strong or
 \description{
 Checks quality of data in a data frame
 }
+\examples{
+df <- tibble::tibble(
+  no_var = c(1, 1, 1, 1),
+  skewed = c(1, 1, 1, 100)
+)
+quality_check(df)
+}
 \author{
 Eric Knudsen <eknudsen88@gmail.com>
 }

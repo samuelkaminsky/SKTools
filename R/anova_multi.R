@@ -1,4 +1,4 @@
-#' Conducts One-Way ANOVAs on Multiple DVs
+#' Conduct One-Way ANOVAs on Multiple DVs
 #' @param df Dataframe with test data
 #' @param iv Name of independent variable
 #' @param dvs Names of dependent variables to be inserted into dplyr::select()
@@ -6,7 +6,8 @@
 #' @return Data frame of tidy ANOVA post-hoc results, also prints Ns and percentages in each level of the IV
 #' @description Conduct one-way ANOVAs on multiple DVs
 #' @export
-
+#' @examples
+#' anova_multi(mtcars, iv = cyl, dvs = c(mpg, disp))
 anova_multi <-
   function(df, iv, dvs, print = FALSE) {
     iv <- dplyr::enquo(iv)

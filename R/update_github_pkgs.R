@@ -1,7 +1,10 @@
 #' Update Packages from Github
 #' @export
 #' @description Updates packages that have been installed from public Github repositories
-
+#' @examples
+#' \dontrun{
+#' update_github_pkgs()
+#' }
 update_github_pkgs <- function() {
   check <- "SKTools" %in% .packages()
   if (check) {
