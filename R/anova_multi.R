@@ -15,14 +15,14 @@ anova_multi <-
       df |>
       dplyr::mutate(iv = as.factor(!!iv)) |>
       tidyr::drop_na(iv)
-    dvs.list <-
+    dvs_list <-
       df |>
       dplyr::select(!!dvs) |>
       names() |>
       as.list() |>
       purrr::set_names()
     models <-
-      dvs.list |>
+      dvs_list |>
       purrr::map(
         \(x) {
           stats::aov(stats::lm(
@@ -32,13 +32,13 @@ anova_multi <-
         }
       )
 
-    results.anova <-
+    results_anova <-
       models |>
       purrr::map_df(broom::tidy, .id = "DV") |>
       dplyr::filter(.data$term != "Residuals") |>
       dplyr::select(-"term")
 
-    results.posthocs <-
+    results_posthocs <-
       models |>
       purrr::map(stats::TukeyHSD) |>
       purrr::map(\(x) x[1]) |>
@@ -49,8 +49,8 @@ anova_multi <-
       dplyr::group_by(.data$DV) |>
       dplyr::summarise(dplyr::across(everything(), \(x) mean(x, na.rm = TRUE)))
     results <-
-      results.anova |>
-      dplyr::left_join(results.posthocs, by = "DV", na_matches = "never")
+      results_anova |>
+      dplyr::left_join(results_posthocs, by = "DV", na_matches = "never")
     means <-
       df |>
       dplyr::group_by(iv) |>
@@ -58,7 +58,7 @@ anova_multi <-
         !!dvs,
         \(x) mean(x, na.rm = TRUE)
       ))
-    means.t <-
+    means_t <-
       means[, -1] |>
       t() |>
       as.data.frame() |>
@@ -67,8 +67,8 @@ anova_multi <-
           unlist()
       ) |>
       tibble::rownames_to_column(var = "DV")
-    df.summary <-
-      cbind(means.t, p.value = results[, 7:ncol(results)]) |>
+    df_summary <-
+      cbind(means_t, p_value = results[, 7:ncol(results)]) |>
       as.data.frame() |>
       dplyr::mutate(dplyr::across(where(is.numeric), \(x) round(x, 4)))
     if (isTRUE(print)) {
@@ -80,5 +80,5 @@ anova_multi <-
       )
       print(details)
     }
-    return(df.summary)
+    return(df_summary)
   }

@@ -2,6 +2,6 @@
 #' @export
 #' @description Inserts %in% into text editor
 
-insertInAddin <- function() {
+insert_in_addin <- function() {
   rstudioapi::insertText(" %in% ")
 }

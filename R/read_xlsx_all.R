@@ -11,7 +11,7 @@
 #' represent each worksheet. If there is only one worksheet, then a data frame.
 #' @export
 
-read.xlsx.all <-
+read_xlsx_all <-
   function(
     xlsxFile,
     save2env = FALSE,
@@ -29,7 +29,7 @@ read.xlsx.all <-
           startRow = startRow
         )
     } else {
-      make.sheetnames <- make.names(sheetnames, unique = TRUE)
+      make_sheetnames <- make.names(sheetnames, unique = TRUE)
       workbook <-
         lapply(sheetnames, \(x) {
           openxlsx::read.xlsx(
@@ -43,7 +43,7 @@ read.xlsx.all <-
       if (sum(names != "") > 0) {
         names(workbook) <- names
       } else {
-        names(workbook) <- make.sheetnames
+        names(workbook) <- make_sheetnames
       }
       if (isTRUE(save2env)) {
         list2env(workbook, .GlobalEnv)

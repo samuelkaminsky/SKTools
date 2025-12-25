@@ -7,7 +7,7 @@
 
 quality_check <- function(df) {
   classes <- sapply(df, class) # get classes of all columns
-  num.cols <- df[, which(classes == "integer")]
+  num_cols <- df[, which(classes == "integer")]
   same <- apply(df, 2, \(x) {
     if (length(unique(x)) == 1) {
       return(1)
@@ -17,15 +17,15 @@ quality_check <- function(df) {
   })
   message(".........NO VARIANCE.........")
   message(paste(names(df)[which(same == 1)], collapse = ", "))
-  skews <- apply(num.cols, 2, moments::skewness)
+  skews <- apply(num_cols, 2, moments::skewness)
   skews <- skews[!is.na(skews)]
-  high.neg <- names(skews)[which(skews < -1)]
-  high.pos <- names(skews)[which(skews > 1)]
-  mod.neg <- names(skews)[which(skews < -0.5 & skews > -1)]
-  mod.pos <- names(skews)[which(skews > 0.5 & skews < 1)]
+  high_neg <- names(skews)[which(skews < -1)]
+  high_pos <- names(skews)[which(skews > 1)]
+  mod_neg <- names(skews)[which(skews < -0.5 & skews > -1)]
+  mod_pos <- names(skews)[which(skews > 0.5 & skews < 1)]
   message("\n.........SKEWNESS.........")
-  message(paste("Strong (-): ", paste(high.neg, collapse = ", "), sep = ""))
-  message(paste("Strong (+): ", paste(high.pos, collapse = ", "), sep = ""))
-  message(paste("Moderate (-): ", paste(mod.neg, collapse = ", "), sep = ""))
-  message(paste("Moderate (+): ", paste(mod.pos, collapse = ", "), sep = ""))
+  message(paste("Strong (-): ", paste(high_neg, collapse = ", "), sep = ""))
+  message(paste("Strong (+): ", paste(high_pos, collapse = ", "), sep = ""))
+  message(paste("Moderate (-): ", paste(mod_neg, collapse = ", "), sep = ""))
+  message(paste("Moderate (+): ", paste(mod_pos, collapse = ", "), sep = ""))
 }

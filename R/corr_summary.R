@@ -1,33 +1,33 @@
 #' Clean corr.test output
-#' @param corr.test.results corr.test object
+#' @param corr_test_results corr.test object
 #' @param alpha Alpha level to test significance
 #' @return tibble with clean output
 #' @description Converts corr.test output to tidy tibble with most important information (IV, DV, r, n, t, p)
 #' @export
 
 corr_summary <-
-  function(corr.test.results, alpha = .05) {
-    if (length(corr.test.results$n) == 1L) {
-      corr.test.results$n <-
+  function(corr_test_results, alpha = .05) {
+    if (length(corr_test_results$n) == 1L) {
+      corr_test_results$n <-
         matrix(
-          data = corr.test.results$n,
-          nrow(corr.test.results$r),
-          nrow(corr.test.results$r),
+          data = corr_test_results$n,
+          nrow(corr_test_results$r),
+          nrow(corr_test_results$r),
           dimnames = list(
-            rownames(corr.test.results$r),
-            colnames(corr.test.results$r)
+            rownames(corr_test_results$r),
+            colnames(corr_test_results$r)
           )
         )
     }
-    corr.test.results.sub <- corr.test.results[c("r", "n", "t", "p", "p")]
-    corr.test.results.sub.named <-
+    corr_test_results_sub <- corr_test_results[c("r", "n", "t", "p", "p")]
+    corr_test_results_sub_named <-
       purrr::set_names(
-        corr.test.results.sub,
+        corr_test_results_sub,
         c("r", "n", "t", "p", "p.adjust")
       )
     # browser()
-    cor.df <-
-      corr.test.results.sub.named |>
+    cor_df <-
+      corr_test_results_sub_named |>
       # Replace bottom (unadjusted p values with NA)
       purrr::map_at("p.adjust", \(x) {
         x[lower.tri(x)] <- NA_real_
@@ -56,12 +56,12 @@ corr_summary <-
       purrr::map(\(x) dplyr::filter(x, !(.data$iv == .data$dv))) |>
       # For p value table, stack to create rows with dv/iv pairs
       purrr::map_at(c("p", "p.adjust"), \(x) {
-        x.rev <-
+        x_rev <-
           dplyr::rename(x, dv = "iv", iv = "dv")
-        dplyr::bind_rows(x, x.rev)
+        dplyr::bind_rows(x, x_rev)
       }) |>
       purrr::reduce(dplyr::left_join, by = c("iv", "dv")) |>
       # Calculate significance
       dplyr::mutate(across(c("p", "p.adjust"), list(sig = \(x) x < alpha)))
-    return(cor.df)
+    return(cor_df)
   }

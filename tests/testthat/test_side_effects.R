@@ -5,9 +5,9 @@ test_that("hangouts_chat_message exists", {
   expect_true(is.function(hangouts_chat_message))
 })
 
-test_that("insertInAddin exists", {
+test_that("insert_in_addin exists", {
   skip("Requires RStudio API")
-  expect_true(is.function(insertInAddin))
+  expect_true(is.function(insert_in_addin))
 })
 
 test_that("install_sk exists", {

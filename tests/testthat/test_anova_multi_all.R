@@ -1,6 +1,6 @@
 library(SKTools)
 
-anova.multi.result <-
+anova_multi_result <-
   SKTools::anova_multi_all(mtcars, c(carb, mpg), c(cyl, drat), perc = .2) |>
   dplyr::slice(37) |>
   dplyr::pull(`p.value.2-1`) |>
@@ -8,7 +8,7 @@ anova.multi.result <-
 
 test_that("anova_multi_all has predictable result for mtcars", {
   expect_equal(
-    anova.multi.result,
+    anova_multi_result,
     0.829579
   )
 })

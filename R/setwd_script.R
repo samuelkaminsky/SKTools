@@ -8,7 +8,7 @@ setwd_script <- function() {
   slash <-
     stringr::str_locate_all(location$path, "/") |>
     unlist()
-  slash.last <- length(slash)
-  wd <- stringr::str_sub(location$path, start = 1, slash[slash.last])
+  slash_last <- length(slash)
+  wd <- stringr::str_sub(location$path, start = 1, slash[slash_last])
   setwd(wd)
 }

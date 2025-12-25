@@ -1,4 +1,4 @@
 Name: Insert %in%
 Description: Inserts `%in%` at the cursor position.
-Binding: insertInAddin
+Binding: insert_in_addin
 Interactive: false

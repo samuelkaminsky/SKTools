@@ -8,7 +8,7 @@
 descriptives <-
   function(df, frequencies = FALSE) {
     # Prepare dataframe
-    df.func <-
+    df_func <-
       df |>
       tibble::set_tidy_names(syntactic = TRUE, quiet = TRUE) |>
       dplyr::mutate(dplyr::across(where(is.factor), as.character)) |>
@@ -16,13 +16,13 @@ descriptives <-
 
     # 1. Class
     class_df <-
-      df.func |>
+      df_func |>
       purrr::map_chr(\(x) paste(class(x), collapse = ", ")) |>
       tibble::enframe(name = "var", value = "class")
 
     # 2. Missing / N
     missing_df <-
-      df.func |>
+      df_func |>
       purrr::map_dfr(
         \(x) {
           n_miss <- sum(is.na(x))
@@ -36,7 +36,7 @@ descriptives <-
       )
 
     # 3. Numeric Stats
-    df_num <- df.func |> dplyr::select(where(is.numeric))
+    df_num <- df_func |> dplyr::select(where(is.numeric))
 
     if (ncol(df_num) > 0) {
       stats_df <-
@@ -94,7 +94,7 @@ descriptives <-
     }
 
     # Join basic stats
-    df.final <-
+    df_final <-
       class_df |>
       dplyr::left_join(stats_df, by = "var") |>
       dplyr::left_join(missing_df, by = "var")
@@ -102,12 +102,12 @@ descriptives <-
     # 4. Frequencies (Optional)
     if (isTRUE(frequencies)) {
       freqs <-
-        df.func |>
+        df_func |>
         names() |>
         purrr::set_names() |>
         purrr::map_dfr(
           \(x) {
-            df.func |>
+            df_func |>
               dplyr::count(!!dplyr::sym(x)) |>
               purrr::set_names(c("value", "n")) |>
               dplyr::mutate(value = as.character(.data$value))
@@ -120,8 +120,8 @@ descriptives <-
           frequencies = .data$frequencies |> purrr::set_names(.data$var)
         )
 
-      df.final <-
-        df.final |>
+      df_final <-
+        df_final |>
         dplyr::left_join(freqs, by = "var")
     }
 
@@ -154,8 +154,8 @@ descriptives <-
     }
 
     # Ensure all columns exist (in case no numeric vars)
-    existing_cols <- intersect(cols_to_select, names(df.final))
+    existing_cols <- intersect(cols_to_select, names(df_final))
 
-    df.final |>
+    df_final |>
       dplyr::select(dplyr::all_of(existing_cols))
   }

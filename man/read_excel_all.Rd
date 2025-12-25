@@ -7,7 +7,7 @@
 read_excel_all(
   path,
   save2env = FALSE,
-  check.names = FALSE,
+  check_names = FALSE,
   names = "",
   skip = 0
 )
@@ -17,7 +17,7 @@ read_excel_all(
 
 \item{save2env}{Either TRUE to save each worksheet to the environment or FALSE to return a list of worksheets, which can be saved to the environment}
 
-\item{check.names}{Either TRUE to make variable names syntactically valid or FALSE to preserve original names}
+\item{check_names}{Either TRUE to make variable names syntactically valid or FALSE to preserve original names}
 
 \item{names}{A vector of character data representing preferred sheet names}
 

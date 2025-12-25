@@ -8,8 +8,8 @@
 #' @param only_max Only calculate adverse impact using the group with the highest selection ratio as the denominator
 #' @param correct a logical indicating whether Yates' continuity correction should be applied where possible.
 #' @return List with two data frames. The first includes all selection ratios, the second includes all adverse impact calculation
-#' \item{Selection.Ratio}{Dataframe with selection ratios}
-#' \item{Adverse.Impact}{Dataframe with adverse impact metrics, including adverse impact ratio, Cohen's H, Z score test of two proportions, Pearson's chi-squared test of proportions, and Fisher's exact}
+#' \item{selection_ratio}{Dataframe with selection ratios}
+#' \item{adverse_impact}{Dataframe with adverse impact metrics, including adverse impact ratio, Cohen's H, Z score test of two proportions, Pearson's chi-squared test of proportions, and Fisher's exact}
 #' @export
 #' @description Calculates adverse impact metrics
 
@@ -24,13 +24,13 @@ calculate_ai <-
     only_max = FALSE,
     correct = TRUE
   ) {
-    grouping.warn <- groupings[!(groupings %in% names(df))]
+    grouping_warn <- groupings[!(groupings %in% names(df))]
     groupings <- groupings[groupings %in% names(df)]
 
-    if (length(grouping.warn > 0)) {
+    if (length(grouping_warn > 0)) {
       warning(paste(
         "Groupings not found in file:",
-        stringr::str_c(grouping.warn, collapse = ", ")
+        stringr::str_c(grouping_warn, collapse = ", ")
       ))
     }
 
@@ -44,11 +44,11 @@ calculate_ai <-
         stage2 = !!stage2_quo
       )
 
-    df.sr <- groupings |>
+    df_sr <- groupings |>
       purrr::map_dfr(\(x) {
         x <- as.name(x)
 
-        df.filter <-
+        df_filter <-
           df |>
           dplyr::count(!!x) |>
           dplyr::mutate(perc = .data$n / sum(.data$n, na.rm = TRUE)) |>
@@ -56,7 +56,7 @@ calculate_ai <-
           dplyr::select(-"n", -"perc")
 
         df |>
-          dplyr::semi_join(df.filter, by = as.character(x)) |>
+          dplyr::semi_join(df_filter, by = as.character(x)) |>
           dplyr::group_by(!!x) |>
           tidyr::drop_na(!!x) |>
           dplyr::summarize(dplyr::across(
@@ -82,55 +82,55 @@ calculate_ai <-
       dplyr::filter(.data$stage1 >= n_min)
 
     check <-
-      df.sr |>
+      df_sr |>
       dplyr::mutate(check = dplyr::if_else(.data$SR > 1, TRUE, FALSE)) |>
       dplyr::filter(check == TRUE)
 
     if (nrow(check) > 0) {
-      df.ai <-
+      df_ai <-
         list(
           Error = "More people in stage 2 than in stage 1, check the selection ratio table for more information."
         )
     } else {
-      l.groups <-
-        df.sr |>
+      list_groups <-
+        df_sr |>
         dplyr::select("Group", "SR") |>
         tibble::deframe()
 
-      df.sr1 <- df.sr |>
+      df_sr1 <- df_sr |>
         dplyr::rename_with(\(x) paste0(x, "1"))
 
-      df.ai <-
-        tidyr::crossing(df.sr, df.sr1) |>
+      df_ai <-
+        tidyr::crossing(df_sr, df_sr1) |>
         dplyr::rename(
           Numerator = "Group",
           Denominator = "Group1"
         )
 
       if (only_max == TRUE) {
-        max.sr <-
-          df.sr |>
+        max_sr <-
+          df_sr |>
           dplyr::group_by(.data$Grouping) |>
           dplyr::filter(.data$SR == max(.data$SR)) |>
           dplyr::pull(.data$Group)
 
-        df.ai <-
-          df.ai |>
-          dplyr::filter(.data$Denominator %in% max.sr)
+        df_ai <-
+          df_ai |>
+          dplyr::filter(.data$Denominator %in% max_sr)
       }
-      if (nrow(df.ai) == 0) {
-        df.ai <-
+      if (nrow(df_ai) == 0) {
+        df_ai <-
           list(Error = "No adverse impact comparisons possible")
       } else {
-        df.ai <-
-          df.ai |>
+        df_ai <-
+          df_ai |>
           dplyr::filter(
             .data$Grouping == .data$Grouping1,
             .data$Numerator != .data$Denominator
           ) |>
           dplyr::arrange(.data$Numerator, .data$Denominator) |>
           dplyr::mutate(
-            ai.ratio = .data$SR / .data$SR1,
+            ai_ratio = .data$SR / .data$SR1,
             H = 2 * asin(sqrt(.data$SR1)) - 2 * asin(sqrt(.data$SR)),
             Z = (.data$SR1 - .data$SR) /
               sqrt(
@@ -162,7 +162,7 @@ calculate_ai <-
               stats::prop.test(as.matrix(.data$conting), correct = correct) |>
                 broom::tidy()
             ),
-            f.exact = list(stats::fisher.test(.data$conting) |> broom::tidy())
+            f_exact = list(stats::fisher.test(.data$conting) |> broom::tidy())
           ) |>
           tidyr::unnest("chi") |>
           dplyr::select(
@@ -177,12 +177,12 @@ calculate_ai <-
           ) |>
           dplyr::rename(
             chi = "statistic",
-            p.value.chi = "p.value"
+            p_value_chi = "p.value"
           ) |>
-          tidyr::unnest("f.exact") |>
+          tidyr::unnest("f_exact") |>
           dplyr::rename(
-            p.value.fisher = "p.value",
-            odds.ratio = "estimate"
+            p_value_fisher = "p.value",
+            odds_ratio = "estimate"
           ) |>
           dplyr::select(
             -"conf.low",
@@ -201,15 +201,15 @@ calculate_ai <-
       }
     }
 
-    df.sr <-
-      df.sr |>
+    df_sr <-
+      df_sr |>
       dplyr::rename(
         !!paste0(dplyr::quo_name(stage1_quo), "_n") := "stage1",
         !!paste0(dplyr::quo_name(stage2_quo), "_n") := "stage2"
       )
 
     list(
-      Selection.Ratio = df.sr,
-      Adverse.Impact = df.ai
+      selection_ratio = df_sr,
+      adverse_impact = df_ai
     )
   }

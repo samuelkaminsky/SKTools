@@ -1,6 +1,6 @@
 library(SKTools)
 
-test.example <-
+test_example <-
   ttest_all(mtcars, c(carb, mpg), c(cyl, drat), perc = .2) |>
   dplyr::filter(
     .data$IV == "mpg",
@@ -12,7 +12,7 @@ test.example <-
 
 test_that("ttest_all has predictable result for mtcars", {
   expect_equal(
-    test.example,
+    test_example,
     3.506439
   )
 })

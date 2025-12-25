@@ -8,7 +8,7 @@
 
 qualtrics_prior_distros <-
   function(surveyId, api_token, datacenter = "az1") {
-    header.all <-
+    header_all <-
       c(
         "X-API-TOKEN" = api_token,
         "Content-Type" = "application/json",
@@ -18,19 +18,19 @@ qualtrics_prior_distros <-
 
     base_url <- paste0("https://", datacenter, ".qualtrics.com/API/v3")
 
-    distributions.response <-
+    distributions_response <-
       httr::GET(
         url = paste0(
           base_url,
           "/distributions?surveyId=",
           surveyId
         ),
-        httr::add_headers(header.all)
+        httr::add_headers(header_all)
       ) |>
       httr::content()
 
-    distributions.list <-
-      distributions.response$result$elements |>
+    distributions_list <-
+      distributions_response$result$elements |>
       purrr::map(\(x) x$recipients$mailingListId) |>
       unlist() |>
       purrr::set_names() |>
@@ -43,46 +43,46 @@ qualtrics_prior_distros <-
               x,
               "/contacts"
             ),
-            httr::add_headers(header.all)
+            httr::add_headers(header_all)
           )
         }
       ) |>
       purrr::map(\(x) httr::content(x))
 
     results <-
-      distributions.list |>
+      distributions_list |>
       purrr::map(\(x) x$result$elements)
 
     while ({
       length(
-        distributions.list |>
+        distributions_list |>
           purrr::map(\(x) x$result$nextPage) |>
           purrr::compact()
       ) >
         0
     }) {
-      distributions.list <-
-        distributions.list |>
+      distributions_list <-
+        distributions_list |>
         purrr::map(\(x) x$result$nextPage) |>
         purrr::compact() |>
         purrr::map(
           \(x) {
             httr::GET(
               x,
-              httr::add_headers(header.all)
+              httr::add_headers(header_all)
             )
           }
         ) |>
         purrr::map(\(x) httr::content(x))
 
       new_results <-
-        distributions.list |>
+        distributions_list |>
         purrr::map(\(x) x$result$elements)
 
       results <- c(results, new_results)
     }
 
-    distributions.df <-
+    distributions_df <-
       purrr::map_df(seq_along(results), \(x) {
         purrr::map_df(
           seq_along(results[[x]]),
@@ -104,5 +104,5 @@ qualtrics_prior_distros <-
           )
         )
       })
-    distributions.df
+    distributions_df
   }

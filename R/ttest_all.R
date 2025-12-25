@@ -11,21 +11,21 @@ ttest_all <-
   function(df, ivs, dvs, perc = .05) {
     dvs <- dplyr::enquo(dvs)
     ivs <- dplyr::enquo(ivs)
-    IVs <-
+    ivs_list <-
       df |>
       dplyr::select(!!ivs) |>
       names() |>
       purrr::set_names()
-    DVs <-
+    dvs_list <-
       df |>
       dplyr::select(!!dvs) |>
       names() |>
       purrr::set_names()
 
-    IVs |>
+    ivs_list |>
       purrr::map_dfr(
         \(x) {
-          DVs |>
+          dvs_list |>
             purrr::map_dfr(
               \(y) {
                 y_quo <- rlang::enquo(y)
@@ -51,7 +51,7 @@ ttest_all <-
                             stats::as.formula(paste0(y, " ~ Grouped")),
                             data = df
                           )
-                        cd.df <-
+                        cd_df <-
                           tibble::tibble(
                             cd.est = cd$estimate |> as.numeric(),
                             cd.mag = cd$magnitude |> as.character()
@@ -72,7 +72,7 @@ ttest_all <-
                                 values_from = "Count"
                               ),
                             Cutoff.Num = z,
-                            cd.df
+                            cd_df
                           ) |>
                           dplyr::mutate(dplyr::across(
                             where(is.factor),

@@ -34,8 +34,8 @@ calculate_ai(
 }
 \value{
 List with two data frames. The first includes all selection ratios, the second includes all adverse impact calculation
-\item{Selection.Ratio}{Dataframe with selection ratios}
-\item{Adverse.Impact}{Dataframe with adverse impact metrics, including adverse impact ratio, Cohen's H, Z score test of two proportions, Pearson's chi-squared test of proportions, and Fisher's exact}
+\item{selection_ratio}{Dataframe with selection ratios}
+\item{adverse_impact}{Dataframe with adverse impact metrics, including adverse impact ratio, Cohen's H, Z score test of two proportions, Pearson's chi-squared test of proportions, and Fisher's exact}
 }
 \description{
 Calculates adverse impact metrics

@@ -7,9 +7,9 @@ test_that("read_excel_all has predictable result", {
   )
 })
 
-test_that("read.xlsx.all has predictable result", {
+test_that("read_xlsx_all has predictable result", {
   expect_equal(
-    read.xlsx.all("excel_test.xlsx"),
+    read_xlsx_all("excel_test.xlsx"),
     readr::read_rds("excel_test_open.rds")
   )
 })

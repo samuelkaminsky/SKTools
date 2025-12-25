@@ -14,18 +14,18 @@ anova_multi_all <-
   function(df, ivs, dvs, perc = .05, print = FALSE) {
     dvs <- dplyr::enquo(dvs)
     ivs <- dplyr::enquo(ivs)
-    IVs <-
+    ivs_list <-
       df |>
       dplyr::select(!!ivs) |>
       names() |>
       purrr::set_names()
-    DVs <-
+    dvs_list <-
       df |>
       dplyr::select(!!dvs) |>
       names() |>
       purrr::set_names()
     cuts <-
-      IVs |>
+      ivs_list |>
       purrr::map(\(x) dplyr::pull(df, x)) |>
       purrr::map(
         \(x) {
@@ -49,8 +49,8 @@ anova_multi_all <-
         values_to = "cut"
       ) |>
       dplyr::distinct(.data$iv, .data$cut, .keep_all = TRUE)
-    iv.dv <-
-      tidyr::crossing(dv = DVs, iv = IVs) |>
+    iv_dv <-
+      tidyr::crossing(dv = dvs_list, iv = ivs_list) |>
       dplyr::mutate(dplyr::across(everything(), as.character))
     index <-
       cuts |>
@@ -62,12 +62,12 @@ anova_multi_all <-
       ) |>
       dplyr::distinct() |>
       dplyr::filter(.data$cut.top >= .data$cut.bottom) |>
-      dplyr::left_join(iv.dv, by = "iv", relationship = "many-to-many") |>
+      dplyr::left_join(iv_dv, by = "iv", relationship = "many-to-many") |>
       dplyr::distinct() |>
       tibble::rowid_to_column()
     index <-
       as.list(index)
-    results.all <-
+    results_all <-
       purrr::pmap_df(
         index,
         purrr::possibly(
@@ -89,19 +89,19 @@ anova_multi_all <-
                 df[, iv] >= cut.top ~ 2
               ) |>
               as.factor()
-            temp.anova <-
+            temp_anova <-
               stats::aov(stats::lm(
                 stats::as.formula(paste0("`", dv, "` ~ Grouped")),
                 data = df
               ))
-            results.anova <-
-              temp.anova |>
+            results_anova <-
+              temp_anova |>
               broom::tidy() |>
               dplyr::filter(.data$term != "Residuals") |>
               dplyr::select(-"term") |>
               cbind(DV = as.character(dv))
-            results.posthocs <-
-              temp.anova |>
+            results_posthocs <-
+              temp_anova |>
               stats::TukeyHSD() |>
               (\(x) x[1])() |>
               as.data.frame() |>
@@ -143,9 +143,9 @@ anova_multi_all <-
                 values_from = "Count"
               )
             results <-
-              results.anova |>
+              results_anova |>
               dplyr::left_join(
-                results.posthocs,
+                results_posthocs,
                 by = "DV",
                 na_matches = "never"
               ) |>
@@ -178,8 +178,8 @@ anova_multi_all <-
     index <-
       dplyr::bind_cols(index) |>
       dplyr::select(-"rowid")
-    final <-
-      cbind(index, results.all) |>
+    final_results <-
+      cbind(index, results_all) |>
       dplyr::distinct() |>
       dplyr::select(
         "iv",
@@ -214,5 +214,5 @@ anova_multi_all <-
         dplyr::contains("mean_"),
         \(x) dplyr::if_else(is.nan(x), NA_real_, x)
       ))
-    return(final)
+    return(final_results)
   }
