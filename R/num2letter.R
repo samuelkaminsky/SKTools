@@ -6,6 +6,8 @@
 #' @description Converts a number to an equivalent letter, with an option to concatenate a row value. Useful for adding data to existing Google Sheets
 
 num2letter <- function(x, number = "") {
-  if (any(x <= 0)) stop("Input must be positive integer")
+  if (any(x <= 0)) {
+    stop("Input must be positive integer")
+  }
   paste0(openxlsx::int2col(x), number)
 }

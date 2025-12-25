@@ -64,7 +64,13 @@ calculate_ai <-
             \(x) sum(x, na.rm = TRUE)
           ))
       }) |>
-      tidyr::pivot_longer(!c("stage1", "stage2"), cols_vary = "slowest", names_to = "Grouping", values_to = "Group", values_drop_na = TRUE) |>
+      tidyr::pivot_longer(
+        !c("stage1", "stage2"),
+        cols_vary = "slowest",
+        names_to = "Grouping",
+        values_to = "Group",
+        values_drop_na = TRUE
+      ) |>
       dplyr::mutate(SR = .data$stage2 / .data$stage1) |>
       dplyr::select(
         "Grouping",

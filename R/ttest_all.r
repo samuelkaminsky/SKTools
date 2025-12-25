@@ -67,11 +67,17 @@ ttest_all <-
                               dplyr::summarize(Count = dplyr::n()) |>
                               dplyr::group_by(.data$Grouped) |>
                               dplyr::summarize(Count = sum(.data$Count)) |>
-                              tidyr::pivot_wider(names_from = "Grouped", values_from = "Count"),
+                              tidyr::pivot_wider(
+                                names_from = "Grouped",
+                                values_from = "Count"
+                              ),
                             Cutoff.Num = z,
                             cd.df
                           ) |>
-                          dplyr::mutate(dplyr::across(where(is.factor), as.character))
+                          dplyr::mutate(dplyr::across(
+                            where(is.factor),
+                            as.character
+                          ))
                       },
                       otherwise = tibble::tibble(
                         estimate = NA_real_,

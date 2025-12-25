@@ -11,7 +11,10 @@ hangouts_chat_message <- function(url, message) {
     "Content-Type" = "application/json",
     "charset" = "UTF-8"
   ))
-  
-  body <- jsonlite::toJSON(list(text = as.character(message)), auto_unbox = TRUE)
+
+  body <- jsonlite::toJSON(
+    list(text = as.character(message)),
+    auto_unbox = TRUE
+  )
   httr::POST(url, header, body = body)
 }

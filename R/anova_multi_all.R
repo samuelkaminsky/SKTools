@@ -28,19 +28,26 @@ anova_multi_all <-
       IVs |>
       purrr::map(\(x) dplyr::pull(df, x)) |>
       purrr::map(
-        \(x) stats::quantile(
-          x,
-          seq(
-            from = 0.05,
-            to = .95,
-            by = perc
-          ),
-          na.rm = TRUE
-        )
+        \(x) {
+          stats::quantile(
+            x,
+            seq(
+              from = 0.05,
+              to = .95,
+              by = perc
+            ),
+            na.rm = TRUE
+          )
+        }
       ) |>
       as.data.frame() |>
       tibble::rownames_to_column("percentage") |>
-      tidyr::pivot_longer(!percentage, cols_vary = "slowest", names_to = "iv", values_to = "cut") |>
+      tidyr::pivot_longer(
+        !percentage,
+        cols_vary = "slowest",
+        names_to = "iv",
+        values_to = "cut"
+      ) |>
       dplyr::distinct(.data$iv, .data$cut, .keep_all = TRUE)
     iv.dv <-
       tidyr::crossing(dv = DVs, iv = IVs) |>
@@ -106,7 +113,9 @@ anova_multi_all <-
               dplyr::select(-(dplyr::starts_with("Grouped"))) |>
               cbind(DV = as.character(dv)) |>
               dplyr::group_by(.data$DV) |>
-              dplyr::summarise(dplyr::across(everything(), \(x) mean(x, na.rm = TRUE)))
+              dplyr::summarise(dplyr::across(everything(), \(x) {
+                mean(x, na.rm = TRUE)
+              }))
             mean0 <-
               df |>
               dplyr::filter(.data$Grouped == 0) |>

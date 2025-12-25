@@ -37,21 +37,23 @@ corr_summary <-
       purrr::map_at("p", \(x) {
         x[upper.tri(x)] <- NA_real_
         x
-      }) |> 
+      }) |>
       # Convert to tibble and create column with rownames
       purrr::map(\(x) tibble::as_tibble(x, rownames = "iv")) |>
       # Convert to long format
       purrr::imap(
-        \(x, y) tidyr::pivot_longer(
-          x,
-          cols = -"iv",
-          names_to = "dv",
-          values_to = y,
-          # Removes rows with no p values
-          values_drop_na = TRUE
-        )
-      ) |> 
-        purrr::map(\(x) dplyr::filter(x, !(.data$iv == .data$dv))) |> 
+        \(x, y) {
+          tidyr::pivot_longer(
+            x,
+            cols = -"iv",
+            names_to = "dv",
+            values_to = y,
+            # Removes rows with no p values
+            values_drop_na = TRUE
+          )
+        }
+      ) |>
+      purrr::map(\(x) dplyr::filter(x, !(.data$iv == .data$dv))) |>
       # For p value table, stack to create rows with dv/iv pairs
       purrr::map_at(c("p", "p.adjust"), \(x) {
         x.rev <-
@@ -60,8 +62,6 @@ corr_summary <-
       }) |>
       purrr::reduce(dplyr::left_join, by = c("iv", "dv")) |>
       # Calculate significance
-      dplyr::mutate(across(c("p", "p.adjust"),
-        list(sig = \(x) x < alpha)
-      ))
+      dplyr::mutate(across(c("p", "p.adjust"), list(sig = \(x) x < alpha)))
     return(cor.df)
   }

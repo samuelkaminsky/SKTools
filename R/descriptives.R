@@ -23,53 +23,72 @@ descriptives <-
     # 2. Missing / N
     missing_df <-
       df.func |>
-      purrr::map_dfr(\(x) {
-        n_miss <- sum(is.na(x))
-        tibble::tibble(
-          n = length(x) - n_miss,
-          n_missing = n_miss,
-          perc_missing = n_miss / length(x)
-        )
-      }, .id = "var")
+      purrr::map_dfr(
+        \(x) {
+          n_miss <- sum(is.na(x))
+          tibble::tibble(
+            n = length(x) - n_miss,
+            n_missing = n_miss,
+            perc_missing = n_miss / length(x)
+          )
+        },
+        .id = "var"
+      )
 
     # 3. Numeric Stats
     df_num <- df.func |> dplyr::select(where(is.numeric))
-    
+
     if (ncol(df_num) > 0) {
       stats_df <-
         df_num |>
-        purrr::map_dfr(\(x) {
-          x_clean <- stats::na.omit(x)
-          if (length(x_clean) == 0) {
-            return(tibble::tibble(
-              mean = NA_real_, median = NA_real_, max = NA_real_, min = NA_real_,
-              sd = NA_real_, range = NA_real_, iqr = NA_real_,
-              skewness = NA_real_, kurtosis = NA_real_, n_unique = 0L,
-              `1%` = NA_real_, `25%` = NA_real_, `50%` = NA_real_,
-              `75%` = NA_real_, `99%` = NA_real_
-            ))
-          }
-          
-          q <- stats::quantile(x_clean, probs = c(0.01, 0.25, 0.5, 0.75, 0.99))
-          
-          tibble::tibble(
-            mean = mean(x_clean),
-            median = stats::median(x_clean),
-            max = max(x_clean),
-            min = min(x_clean),
-            sd = stats::sd(x_clean),
-            range = max(x_clean) - min(x_clean),
-            iqr = stats::IQR(x_clean),
-            skewness = moments::skewness(x_clean),
-            kurtosis = moments::kurtosis(x_clean),
-            n_unique = length(unique(x_clean)),
-            `1%` = q[1],
-            `25%` = q[2],
-            `50%` = q[3],
-            `75%` = q[4],
-            `99%` = q[5]
-          )
-        }, .id = "var")
+        purrr::map_dfr(
+          \(x) {
+            x_clean <- stats::na.omit(x)
+            if (length(x_clean) == 0) {
+              return(tibble::tibble(
+                mean = NA_real_,
+                median = NA_real_,
+                max = NA_real_,
+                min = NA_real_,
+                sd = NA_real_,
+                range = NA_real_,
+                iqr = NA_real_,
+                skewness = NA_real_,
+                kurtosis = NA_real_,
+                n_unique = 0L,
+                `1%` = NA_real_,
+                `25%` = NA_real_,
+                `50%` = NA_real_,
+                `75%` = NA_real_,
+                `99%` = NA_real_
+              ))
+            }
+
+            q <- stats::quantile(
+              x_clean,
+              probs = c(0.01, 0.25, 0.5, 0.75, 0.99)
+            )
+
+            tibble::tibble(
+              mean = mean(x_clean),
+              median = stats::median(x_clean),
+              max = max(x_clean),
+              min = min(x_clean),
+              sd = stats::sd(x_clean),
+              range = max(x_clean) - min(x_clean),
+              iqr = stats::IQR(x_clean),
+              skewness = moments::skewness(x_clean),
+              kurtosis = moments::kurtosis(x_clean),
+              n_unique = length(unique(x_clean)),
+              `1%` = q[1],
+              `25%` = q[2],
+              `50%` = q[3],
+              `75%` = q[4],
+              `99%` = q[5]
+            )
+          },
+          .id = "var"
+        )
     } else {
       stats_df <- tibble::tibble(var = character())
     }
@@ -100,7 +119,7 @@ descriptives <-
         dplyr::mutate(
           frequencies = .data$frequencies |> purrr::set_names(.data$var)
         )
-      
+
       df.final <-
         df.final |>
         dplyr::left_join(freqs, by = "var")
@@ -108,18 +127,35 @@ descriptives <-
 
     # Final Selection
     cols_to_select <- c(
-      "var", "class", "mean", "median", "max", "min", "sd", "range", 
-      "iqr", "skewness", "kurtosis", "n_unique", "n", "n_missing", 
-      "perc_missing", "1%", "25%", "50%", "75%", "99%"
+      "var",
+      "class",
+      "mean",
+      "median",
+      "max",
+      "min",
+      "sd",
+      "range",
+      "iqr",
+      "skewness",
+      "kurtosis",
+      "n_unique",
+      "n",
+      "n_missing",
+      "perc_missing",
+      "1%",
+      "25%",
+      "50%",
+      "75%",
+      "99%"
     )
-    
+
     if (isTRUE(frequencies)) {
       cols_to_select <- c(cols_to_select, "frequencies")
     }
-    
+
     # Ensure all columns exist (in case no numeric vars)
     existing_cols <- intersect(cols_to_select, names(df.final))
-    
+
     df.final |>
       dplyr::select(dplyr::all_of(existing_cols))
   }

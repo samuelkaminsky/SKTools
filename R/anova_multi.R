@@ -24,10 +24,12 @@ anova_multi <-
     models <-
       dvs.list |>
       purrr::map(
-        \(x) stats::aov(stats::lm(
-          stats::as.formula(paste0("`", x, "` ~ iv")),
-          data = df
-        ))
+        \(x) {
+          stats::aov(stats::lm(
+            stats::as.formula(paste0("`", x, "` ~ iv")),
+            data = df
+          ))
+        }
       )
 
     results.anova <-

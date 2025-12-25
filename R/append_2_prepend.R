@@ -16,7 +16,8 @@ append_2_prepend <-
           stringr::str_sub(
             names(df),
             start = 1,
-            end = as.data.frame(stringr::str_locate(names(df), string))$start - 2
+            end = as.data.frame(stringr::str_locate(names(df), string))$start -
+              2
           ),
           sep = sep
         ),

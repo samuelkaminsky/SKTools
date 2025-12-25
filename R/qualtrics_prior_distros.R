@@ -35,15 +35,17 @@ qualtrics_prior_distros <-
       unlist() |>
       purrr::set_names() |>
       purrr::map(
-        \(x) httr::GET(
-          url = paste0(
-            base_url,
-            "/mailinglists/",
-            x,
-            "/contacts"
-          ),
-          httr::add_headers(header.all)
-        )
+        \(x) {
+          httr::GET(
+            url = paste0(
+              base_url,
+              "/mailinglists/",
+              x,
+              "/contacts"
+            ),
+            httr::add_headers(header.all)
+          )
+        }
       ) |>
       purrr::map(\(x) httr::content(x))
 
@@ -66,17 +68,19 @@ qualtrics_prior_distros <-
         purrr::map(\(x) x$result$nextPage) |>
         purrr::compact() |>
         purrr::map(
-          \(x) httr::GET(
-            x,
-            httr::add_headers(header.all)
-          )
+          \(x) {
+            httr::GET(
+              x,
+              httr::add_headers(header.all)
+            )
+          }
         ) |>
         purrr::map(\(x) httr::content(x))
-      
+
       new_results <-
         distributions.list |>
         purrr::map(\(x) x$result$elements)
-      
+
       results <- c(results, new_results)
     }
 
