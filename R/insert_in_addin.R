@@ -1,6 +1,6 @@
-#' Insert %in% Operator in RStudio
+#' Insert \%in\% Operator in RStudio
 #' @export
-#' @description Inserts %in% into text editor
+#' @description Inserts \%in\% into text editor
 #' @examples
 #' \dontrun{
 #' # This function is intended to be used as an RStudio Addin

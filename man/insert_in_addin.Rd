@@ -2,12 +2,12 @@
 % Please edit documentation in R/insert_in_addin.R
 \name{insert_in_addin}
 \alias{insert_in_addin}
-\title{Insert %in% Operator in RStudio}
+\title{Insert \%in\% Operator in RStudio}
 \usage{
 insert_in_addin()
 }
 \description{
-Inserts %in% into text editor
+Inserts \%in\% into text editor
 }
 \examples{
 \dontrun{
