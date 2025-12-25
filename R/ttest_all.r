@@ -114,10 +114,10 @@ ttest_all <-
         \(x) round(x, 6)
       )) |>
       dplyr::distinct(
-        IV,
-        DV,
-        estimate,
-        estimate1,
+        .data$IV,
+        .data$DV,
+        .data$estimate,
+        .data$estimate1,
         .keep_all = TRUE
       ) |>
       dplyr::select(
