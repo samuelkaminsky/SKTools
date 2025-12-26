@@ -2,7 +2,7 @@ pandoc: 3.1.11
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles: {}
-last_built: 2025-12-26T06:43Z
+last_built: 2025-12-26T06:45Z
 urls:
   reference: https://samuelkaminsky.github.io/SKTools/reference
   article: https://samuelkaminsky.github.io/SKTools/articles
