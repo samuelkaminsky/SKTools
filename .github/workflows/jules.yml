@@ -21,10 +21,9 @@ jobs:
       pull-requests: write
     steps:
       - name: Invoke Jules
-        uses: google-labs-code/jules-invoke@v1
+        uses: google-labs-code/jules-action@v1.0.0
         with:
           jules_api_key: ${{ secrets.JULES_API_KEY }}
-          model: 'gemini-exp-1206' # Using the recommended model for Jules
           prompt: >
             The workflow '${{ github.event.workflow_run.name }}' (Run ID: ${{ github.event.workflow_run.id }}) failed.
             Please analyze the logs, reproduce the failure locally (e.g. using `devtools::check()`), and implement a fix.
