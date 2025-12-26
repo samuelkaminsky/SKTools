@@ -28,7 +28,7 @@ jobs:
 
       - name: Test coverage
         run: |
-          covr::to_cobertura(covr::package_coverage(quiet = FALSE, clean = FALSE, install_path = file.path(Sys.getenv("RUNNER_TEMP"), "package")))
+          covr::to_cobertura(covr::package_coverage(quiet = FALSE, clean = FALSE, install_path = file.path(Sys.getenv("RUNNER_TEMP"), "package")), filename = "cobertura.xml")
         shell: Rscript {0}
 
       - name: Upload coverage reports to Codecov
@@ -36,3 +36,5 @@ jobs:
         with:
           file: ./cobertura.xml
           token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          verbose: true
