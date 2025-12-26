@@ -4,7 +4,8 @@
 #' @param dvs Names of dependent variables to be inserted into dplyr::select()
 #' @param perc Nth percentile to conduct T-Test at
 #' @return Data frame of tidy t.test results
-#' @description Conduct T-Tests at specified percentile intervals for list of IVs and DVs
+#' @description Conduct T-Tests at specified percentile intervals for list of
+#'   IVs and DVs
 #' @export
 #' @examples
 #' ttest_all(mtcars, ivs = c("disp", "hp"), dvs = "mpg")
@@ -32,7 +33,7 @@ ttest_all <-
                 y_quo <- rlang::enquo(y)
 
                 stats::quantile(
-                  df[, x] |> unlist(),
+                  df[[x]] |> unlist(),
                   seq(
                     from = 0.05,
                     to = .95,
@@ -45,7 +46,7 @@ ttest_all <-
                     purrr::possibly(
                       \(z) {
                         df$Grouped <-
-                          dplyr::if_else(df[, x] >= z, 1, 0) |>
+                          dplyr::if_else(df[[x]] >= z, 1, 0) |>
                           as.factor()
                         cd <-
                           effsize::cohen.d(

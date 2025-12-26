@@ -63,11 +63,11 @@ anova_multi_all <-
       dplyr::left_join(
         cuts,
         by = "iv",
-        suffix = c(".bottom", ".top"),
+        suffix = c("_bottom", "_top"),
         relationship = "many-to-many"
       ) |>
       dplyr::distinct() |>
-      dplyr::filter(.data$cut.top >= .data$cut.bottom) |>
+      dplyr::filter(.data$cut_top >= .data$cut_bottom) |>
       dplyr::left_join(iv_dv, by = "iv", relationship = "many-to-many") |>
       dplyr::distinct() |>
       tibble::rowid_to_column()
@@ -81,21 +81,21 @@ anova_multi_all <-
         purrr::possibly(
           \(
             iv,
-            cut.bottom,
-            cut.top,
-            percentage.bottom,
-            percentage.top,
+            cut_bottom,
+            cut_top,
+            percentage_bottom,
+            percentage_top,
             dv,
             rowid
           ) {
             # Categorize the IV based on cutpoints
             df$Grouped <-
               dplyr::case_when(
-                df[, iv] < cut.bottom ~ 0,
-                df[, iv] >= cut.bottom &
-                  df[, iv] < cut.top ~
+                df[[iv]] < cut_bottom ~ 0,
+                df[[iv]] >= cut_bottom &
+                  df[[iv]] < cut_top ~
                   1,
-                df[, iv] >= cut.top ~ 2
+                df[[iv]] >= cut_top ~ 2
               ) |>
               as.factor()
 
@@ -116,7 +116,7 @@ anova_multi_all <-
             results_posthocs <-
               temp_anova |>
               stats::TukeyHSD() |>
-              (\(x) x[1])() |>
+              (\(x) x["Grouped"])() |>
               as.data.frame() |>
               tibble::rownames_to_column() |>
               tidyr::pivot_wider(
@@ -201,10 +201,10 @@ anova_multi_all <-
       dplyr::select(
         "iv",
         "dv",
-        Cutoff.Bottom = "percentage.bottom",
-        Cutoff.Top = "percentage.top",
-        Cutoff.Bottom.Num = "cut.bottom",
-        Cutoff.Bottom.Top = "cut.top",
+        Cutoff.Bottom = "percentage_bottom",
+        Cutoff.Top = "percentage_top",
+        Cutoff.Bottom.Num = "cut_bottom",
+        Cutoff.Bottom.Top = "cut_top",
         dplyr::any_of(c(
           "df",
           "sumsq",
@@ -231,5 +231,5 @@ anova_multi_all <-
         dplyr::contains("mean_"),
         \(x) dplyr::if_else(is.nan(x), NA_real_, x)
       ))
-    return(final_results)
+    final_results
   }

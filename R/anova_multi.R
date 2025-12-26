@@ -2,8 +2,10 @@
 #' @param df Dataframe with test data
 #' @param iv Name of independent variable
 #' @param dvs Names of dependent variables to be inserted into dplyr::select()
-#' @param print Logical indicating whether or not ns and proportions of iv are printed
-#' @return Data frame of tidy ANOVA post-hoc results, also prints Ns and percentages in each level of the IV
+#' @param print Logical indicating whether or not ns and proportions of iv are
+#'   printed
+#' @return Data frame of tidy ANOVA post-hoc results, also prints Ns and
+#'   percentages in each level of the IV
 #' @description Conduct one-way ANOVAs on multiple DVs
 #' @export
 #' @examples
@@ -39,7 +41,7 @@ anova_multi <-
     results_posthocs <-
       models |>
       purrr::map(stats::TukeyHSD) |>
-      purrr::map(\(x) x[1]) |>
+      purrr::map(\(x) x["iv"]) |>
       purrr::map(as.data.frame) |>
       purrr::map_df(tibble::rownames_to_column, .id = "DV") |>
       tidyr::pivot_wider(names_from = "rowname", values_from = "iv.p.adj") |>
@@ -57,17 +59,22 @@ anova_multi <-
         \(x) mean(x, na.rm = TRUE)
       ))
     means_t <-
-      means[, -1] |>
+      means |>
+      dplyr::select(-"iv") |>
       t() |>
       as.data.frame() |>
       purrr::set_names(
-        means[, 1] |>
+        means |>
+          dplyr::pull("iv") |>
           unlist()
       ) |>
       tibble::rownames_to_column(var = "DV")
     df_summary <-
       means_t |>
-      dplyr::bind_cols(results |> dplyr::select(7:dplyr::last_col())) |>
+      dplyr::bind_cols(
+        results |>
+          dplyr::select(7:dplyr::last_col())
+      ) |>
       as.data.frame() |>
       dplyr::mutate(dplyr::across(where(is.numeric), \(x) round(x, 4)))
     if (isTRUE(print)) {
@@ -77,5 +84,5 @@ anova_multi <-
       )
       print(details)
     }
-    return(df_summary)
+    df_summary
   }
