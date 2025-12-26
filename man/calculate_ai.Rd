@@ -16,32 +16,46 @@ calculate_ai(
 )
 }
 \arguments{
-\item{df}{Dataframe with passrate information. Must include columns for each grouping of interest and columns with logicals indicating success at each stage}
+\item{df}{Dataframe with passrate information. Must include columns for each
+grouping of interest and columns with logicals indicating success at each
+stage}
 
-\item{groupings}{Character vector with names of each column containing grouping variables (e.g, race, gender, etc.)}
+\item{groupings}{Character vector with names of each column containing
+grouping variables (e.g, race, gender, etc.)}
 
-\item{stage1}{Unquoted column name of column indicating whether or not a row should be counted in the calculations (i.e., the denominator). Column must be logical.}
+\item{stage1}{Unquoted column name of column indicating whether or not a row
+should be counted in the calculations (i.e., the denominator). Column must
+be logical.}
 
-\item{stage2}{Unquoted column name of column indicating whether or not a row should be counted as a 'Pass' in the calculations (i.e., the numerator). Column must be logical.}
+\item{stage2}{Unquoted column name of column indicating whether or not a row
+should be counted as a 'Pass' in the calculations (i.e., the numerator).
+Column must be logical.}
 
 \item{n_min}{Minimum n count for a group to be included in the calculation}
 
-\item{prop_min}{Minimum percentage for a group to be included in the calculation}
+\item{prop_min}{Minimum percentage for a group to be included in the
+calculation}
 
-\item{only_max}{Only calculate adverse impact using the group with the highest selection ratio as the denominator}
+\item{only_max}{Only calculate adverse impact using the group with the
+highest selection ratio as the denominator}
 
-\item{correct}{a logical indicating whether Yates' continuity correction should be applied where possible.}
+\item{correct}{a logical indicating whether Yates' continuity correction
+should be applied where possible.}
 }
 \value{
-List with two data frames. The first includes all selection ratios, the second includes all adverse impact calculation
+List with two data frames. The first includes all selection ratios,
+  the second includes all adverse impact calculation
 \item{selection_ratio}{Dataframe with selection ratios}
-\item{adverse_impact}{Dataframe with adverse impact metrics, including adverse impact ratio, Cohen's H, Z score test of two proportions, Pearson's chi-squared test of proportions, and Fisher's exact}
+\item{adverse_impact}{Dataframe with adverse impact metrics, including
+adverse impact ratio, Cohen's H, Z score test of two proportions, Pearson's
+chi-squared test of proportions, and Fisher's exact}
 }
 \description{
 Calculates adverse impact metrics
 }
 \details{
-Calculates selection ratios and adverse impact using Fisher's Exact Test, Z-test for two proportions, and Chi-Squared test.
+Calculates selection ratios and adverse impact using Fisher's Exact
+  Test, Z-test for two proportions, and Chi-Squared test.
 }
 \examples{
 df <- tibble::tibble(

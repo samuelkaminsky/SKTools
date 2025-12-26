@@ -13,10 +13,12 @@ anova_multi(df, iv, dvs, print = FALSE)
 
 \item{dvs}{Names of dependent variables to be inserted into dplyr::select()}
 
-\item{print}{Logical indicating whether or not ns and proportions of iv are printed}
+\item{print}{Logical indicating whether or not ns and proportions of iv are
+printed}
 }
 \value{
-Data frame of tidy ANOVA post-hoc results, also prints Ns and percentages in each level of the IV
+Data frame of tidy ANOVA post-hoc results, also prints Ns and
+  percentages in each level of the IV
 }
 \description{
 Conduct one-way ANOVAs on multiple DVs

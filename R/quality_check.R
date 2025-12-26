@@ -2,7 +2,8 @@
 #'
 #' @param df name of dataframe
 #' @author Eric Knudsen <eknudsen88@gmail.com>
-#' @return Prints message that identifies columns with no variance and those with strong or moderate skewness.
+#' @return Prints message that identifies columns with no variance and those
+#'   with strong or moderate skewness.
 #' @export
 #' @examples
 #' df <- tibble::tibble(
@@ -15,9 +16,9 @@ quality_check <- function(df) {
   num_cols <- df[, which(classes == "integer")]
   same <- apply(df, 2, \(x) {
     if (length(unique(x)) == 1) {
-      return(1)
+      1
     } else {
-      return(0)
+      0
     }
   })
   message(".........NO VARIANCE.........")

@@ -1,5 +1,6 @@
 #' Sends a message to room in Hangouts Chat using a configured webhook
-#' @param url Character string with the full Webhook URL for a Hangouts Chat room
+#' @param url Character string with the full Webhook URL for a Hangouts Chat
+#'   room
 #' @param message Character string to be sent to Hangouts Chat
 #' @return POST results
 #' @description Send a message to a room in Hangouts Chat

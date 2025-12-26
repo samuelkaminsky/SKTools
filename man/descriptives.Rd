@@ -9,13 +9,15 @@ descriptives(df, frequencies = FALSE)
 \arguments{
 \item{df}{Dataframe with data}
 
-\item{frequencies}{Logical to indicate whether or not to calculate frequencies for each variable as a list column}
+\item{frequencies}{Logical to indicate whether or not to calculate
+frequencies for each variable as a list column}
 }
 \value{
 Dataframe of descriptives and frequencies for each variable and value
 }
 \description{
-Calculates descriptives and frequencies of every Column in a dataframe. Heavily inspired by Ujjwal Karn's XDA package.
+Calculates descriptives and frequencies of every Column in a
+  dataframe. Heavily inspired by Ujjwal Karn's XDA package.
 }
 \examples{
 descriptives(mtcars)

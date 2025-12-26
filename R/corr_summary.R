@@ -2,7 +2,8 @@
 #' @param corr_test_results corr.test object
 #' @param alpha Alpha level to test significance
 #' @return tibble with clean output
-#' @description Converts corr.test output to tidy tibble with most important information (IV, DV, r, n, t, p)
+#' @description Converts corr.test output to tidy tibble with most important
+#'   information (IV, DV, r, n, t, p)
 #' @export
 #' @examples
 #' if (requireNamespace("psych", quietly = TRUE)) {
@@ -29,7 +30,6 @@ corr_summary <-
         corr_test_results_sub,
         c("r", "n", "t", "p", "p.adjust")
       )
-    # browser()
     cor_df <-
       corr_test_results_sub_named |>
       # Replace bottom (unadjusted p values with NA)
@@ -67,5 +67,5 @@ corr_summary <-
       purrr::reduce(dplyr::left_join, by = c("iv", "dv")) |>
       # Calculate significance
       dplyr::mutate(across(c("p", "p.adjust"), list(sig = \(x) x < alpha)))
-    return(cor_df)
+    cor_df
   }

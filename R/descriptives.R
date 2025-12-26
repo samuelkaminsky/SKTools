@@ -1,8 +1,10 @@
 #' Dataframe Descriptives and Frequencies
 #' @param df Dataframe with data
-#' @param frequencies Logical to indicate whether or not to calculate frequencies for each variable as a list column
+#' @param frequencies Logical to indicate whether or not to calculate
+#'   frequencies for each variable as a list column
 #' @return Dataframe of descriptives and frequencies for each variable and value
-#' @description Calculates descriptives and frequencies of every Column in a dataframe. Heavily inspired by Ujjwal Karn's XDA package.
+#' @description Calculates descriptives and frequencies of every Column in a
+#'   dataframe. Heavily inspired by Ujjwal Karn's XDA package.
 #' @export
 #' @examples
 #' descriptives(mtcars)

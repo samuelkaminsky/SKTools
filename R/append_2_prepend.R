@@ -1,7 +1,8 @@
 #' append_2_prepend
 #' @param df Dataframe
 #' @param string String at end to move to beginning
-#' @param sep String to insert between prepended string and rest of variable name
+#' @param sep String to insert between prepended string and rest of variable
+#'   name
 #' @return Data frame with corrected column names
 #' @description Move string at end of column name to beginning
 #' @export

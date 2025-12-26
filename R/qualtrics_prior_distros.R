@@ -1,5 +1,5 @@
 #' Get prior distributions for a survey
-#' @param surveyId Qualtrics Survey ID
+#' @param survey_id Qualtrics Survey ID
 #' @param api_token Qualtrics api token
 #' @param datacenter Qualtrics data center (default "az1")
 #' @return Data frame of distribution data
@@ -10,7 +10,7 @@
 #' qualtrics_prior_distros("SV_12345", "API_TOKEN")
 #' }
 qualtrics_prior_distros <-
-  function(surveyId, api_token, datacenter = "az1") {
+  function(survey_id, api_token, datacenter = "az1") {
     header_all <-
       c(
         "X-API-TOKEN" = api_token,
@@ -27,7 +27,7 @@ qualtrics_prior_distros <-
         url = paste0(
           base_url,
           "/distributions?surveyId=",
-          surveyId
+          survey_id
         ),
         httr::add_headers(header_all)
       ) |>

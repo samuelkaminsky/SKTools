@@ -1,11 +1,15 @@
 #' Read an entire Excel file workbook (using readxl functions)
 #'
 #' @param path Path to the xls/xlsx file
-#' @param save2env Either TRUE to save each worksheet to the environment or FALSE to return a list of worksheets, which can be saved to the environment
-#' @param check_names Either TRUE to make variable names syntactically valid or FALSE to preserve original names
+#' @param save2env Either TRUE to save each worksheet to the environment or
+#'   FALSE to return a list of worksheets, which can be saved to the environment
+#' @param check_names Either TRUE to make variable names syntactically valid or
+#'   FALSE to preserve original names
 #' @param names A vector of character data representing preferred sheet names
 #' @param skip Number of rows to skip when reading in data
-#' @return If there is more than one worksheet, then a list of data frames that represent each worksheet. If there is only one worksheet, then a data frame.
+#' @return If there is more than one worksheet, then a list of data frames that
+#'   represent each worksheet. If there is only one worksheet, then a data
+#'   frame.
 #' @export
 #' @examples
 #' \dontrun{
@@ -23,30 +27,28 @@ read_excel_all <-
         worksheet
       }
     } else {
-      make.sheetnames <- make.names(sheetnames, unique = TRUE)
-      workbook <-
-        lapply(sheetnames, \(x) {
-          readxl::read_excel(
-            path = path,
-            sheet = x,
-            skip = skip
-          )
-        })
-      if (sum(names != "") > 0) {
-        names(workbook) <- names
-      } else {
-        names(workbook) <- make.sheetnames
-      }
+      make_sheetnames <- make.names(sheetnames, unique = TRUE)
+      worksheet <-
+        purrr::map(
+          sheetnames,
+          \(x) readxl::read_excel(path = path, sheet = x, skip = skip)
+        )
       if (isTRUE(check_names)) {
-        for (i in seq_along(sheetnames)) {
-          names(workbook[[i]]) <-
-            make.names(names(workbook[[i]]), unique = TRUE)
-        }
+        worksheet <-
+          worksheet |>
+          purrr::map(
+            \(x) purrr::set_names(x, make.names(names(x), unique = TRUE))
+          )
+      }
+      if (names != "") {
+        names(worksheet) <- names
+      } else {
+        names(worksheet) <- make_sheetnames
       }
       if (isTRUE(save2env)) {
-        list2env(workbook, .GlobalEnv)
+        list2env(worksheet, .GlobalEnv)
       } else {
-        workbook
+        worksheet
       }
     }
   }

@@ -11,7 +11,8 @@ append_2_prepend(df, string, sep = "_")
 
 \item{string}{String at end to move to beginning}
 
-\item{sep}{String to insert between prepended string and rest of variable name}
+\item{sep}{String to insert between prepended string and rest of variable
+name}
 }
 \value{
 Data frame with corrected column names

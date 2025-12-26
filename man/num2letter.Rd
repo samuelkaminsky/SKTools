@@ -7,7 +7,8 @@
 num2letter(x, number = "")
 }
 \arguments{
-\item{x}{Number to be converted to letter (only works for numbers less than or equal to 702)}
+\item{x}{Number to be converted to letter (only works for numbers less than
+or equal to 702)}
 
 \item{number}{Optional suffix to append to letter}
 }
@@ -15,7 +16,8 @@ num2letter(x, number = "")
 Character string a letter and optional appended number
 }
 \description{
-Converts a number to an equivalent letter, with an option to concatenate a row value. Useful for adding data to existing Google Sheets
+Converts a number to an equivalent letter, with an option to
+  concatenate a row value. Useful for adding data to existing Google Sheets
 }
 \examples{
 num2letter(1)

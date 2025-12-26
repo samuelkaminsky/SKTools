@@ -7,7 +7,8 @@
 hangouts_chat_message(url, message)
 }
 \arguments{
-\item{url}{Character string with the full Webhook URL for a Hangouts Chat room}
+\item{url}{Character string with the full Webhook URL for a Hangouts Chat
+room}
 
 \item{message}{Character string to be sent to Hangouts Chat}
 }

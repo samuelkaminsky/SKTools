@@ -4,10 +4,10 @@
 \alias{qualtrics_prior_distros}
 \title{Get prior distributions for a survey}
 \usage{
-qualtrics_prior_distros(surveyId, api_token, datacenter = "az1")
+qualtrics_prior_distros(survey_id, api_token, datacenter = "az1")
 }
 \arguments{
-\item{surveyId}{Qualtrics Survey ID}
+\item{survey_id}{Qualtrics Survey ID}
 
 \item{api_token}{Qualtrics api token}
 

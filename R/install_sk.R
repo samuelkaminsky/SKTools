@@ -1,6 +1,8 @@
 #' Install commonly used packages
-#' @param extra TRUE or FALSE to indicate whether you want to install supplemental packages
-#' @param dependencies TRUE or FALSE to indicate whether you want to pass TRUE to the install.packages() dependencies argument
+#' @param extra TRUE or FALSE to indicate whether you want to install
+#'   supplemental packages
+#' @param dependencies TRUE or FALSE to indicate whether you want to pass TRUE
+#'   to the install.packages() dependencies argument
 #' @export
 #' @description Installs packages that I like
 #' @details Packages installed with the default arguments include:

@@ -5,25 +5,26 @@
 \title{Read an entire Excel file workbook (using openxlsx functions)}
 \usage{
 read_xlsx_all(
-  xlsxFile,
+  xlsx_file,
   save2env = FALSE,
   names = "",
-  startRow = 1,
-  detectDates = TRUE
+  start_row = 1,
+  detect_dates = TRUE
 )
 }
 \arguments{
-\item{xlsxFile}{Path to the xls/xlsx file}
+\item{xlsx_file}{Path to the xls/xlsx file}
 
 \item{save2env}{Either TRUE to save each worksheet to the environment or
 FALSE to return a list of worksheets, which can be saved to the environment}
 
 \item{names}{A vector of character data representing preferred sheet names}
 
-\item{startRow}{first row to begin looking for data. Empty rows at the top
-of a file are always skipped, regardless of the value of startRow.}
+\item{start_row}{first row to begin looking for data. Empty rows at the top
+of a file are always skipped, regardless of the value of start_row.}
 
-\item{detectDates}{If TRUE, attempt to recognise dates and perform conversion.}
+\item{detect_dates}{If TRUE, attempt to recognise dates and perform
+conversion.}
 }
 \value{
 If there is more than one worksheet, then a list of data frames that

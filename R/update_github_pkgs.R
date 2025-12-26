@@ -1,6 +1,7 @@
 #' Update Packages from Github
 #' @export
-#' @description Updates packages that have been installed from public Github repositories
+#' @description Updates packages that have been installed from public Github
+#'   repositories
 #' @examples
 #' \dontrun{
 #' update_github_pkgs()

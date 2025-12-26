@@ -1,16 +1,30 @@
 #' Calculate Adverse Impact Metrics
-#' @param df Dataframe with passrate information. Must include columns for each grouping of interest and columns with logicals indicating success at each stage
-#' @param groupings Character vector with names of each column containing grouping variables (e.g, race, gender, etc.)
-#' @param stage1 Unquoted column name of column indicating whether or not a row should be counted in the calculations (i.e., the denominator). Column must be logical.
-#' @param stage2 Unquoted column name of column indicating whether or not a row should be counted as a 'Pass' in the calculations (i.e., the numerator). Column must be logical.
+#' @param df Dataframe with passrate information. Must include columns for each
+#'   grouping of interest and columns with logicals indicating success at each
+#'   stage
+#' @param groupings Character vector with names of each column containing
+#'   grouping variables (e.g, race, gender, etc.)
+#' @param stage1 Unquoted column name of column indicating whether or not a row
+#'   should be counted in the calculations (i.e., the denominator). Column must
+#'   be logical.
+#' @param stage2 Unquoted column name of column indicating whether or not a row
+#'   should be counted as a 'Pass' in the calculations (i.e., the numerator).
+#'   Column must be logical.
 #' @param n_min Minimum n count for a group to be included in the calculation
-#' @param prop_min Minimum percentage for a group to be included in the calculation
-#' @param only_max Only calculate adverse impact using the group with the highest selection ratio as the denominator
-#' @param correct a logical indicating whether Yates' continuity correction should be applied where possible.
-#' @return List with two data frames. The first includes all selection ratios, the second includes all adverse impact calculation
+#' @param prop_min Minimum percentage for a group to be included in the
+#'   calculation
+#' @param only_max Only calculate adverse impact using the group with the
+#'   highest selection ratio as the denominator
+#' @param correct a logical indicating whether Yates' continuity correction
+#'   should be applied where possible.
+#' @return List with two data frames. The first includes all selection ratios,
+#'   the second includes all adverse impact calculation
 #' \item{selection_ratio}{Dataframe with selection ratios}
-#' \item{adverse_impact}{Dataframe with adverse impact metrics, including adverse impact ratio, Cohen's H, Z score test of two proportions, Pearson's chi-squared test of proportions, and Fisher's exact}
-#' @details Calculates selection ratios and adverse impact using Fisher's Exact Test, Z-test for two proportions, and Chi-Squared test.
+#' \item{adverse_impact}{Dataframe with adverse impact metrics, including
+#' adverse impact ratio, Cohen's H, Z score test of two proportions, Pearson's
+#' chi-squared test of proportions, and Fisher's exact}
+#' @details Calculates selection ratios and adverse impact using Fisher's Exact
+#'   Test, Z-test for two proportions, and Chi-Squared test.
 #' @export
 #' @description Calculates adverse impact metrics
 #' @examples
@@ -99,14 +113,12 @@ calculate_ai <-
     if (nrow(check) > 0) {
       df_ai <-
         list(
-          Error = "More people in stage 2 than in stage 1, check the selection ratio table for more information."
+          Error = paste(
+            "More people in stage 2 than in stage 1,",
+            "check the selection ratio table for more information."
+          )
         )
     } else {
-      list_groups <-
-        df_sr |>
-        dplyr::select("Group", "SR") |>
-        tibble::deframe()
-
       df_sr1 <- df_sr |>
         dplyr::rename_with(\(x) paste0(x, "1"))
 
@@ -119,7 +131,8 @@ calculate_ai <-
         )
 
       if (only_max == TRUE) {
-        # Keep only comparisons against the group with the highest selection ratio
+        # Keep only comparisons against the group with the highest selection
+        # ratio
         max_sr <-
           df_sr |>
           dplyr::group_by(.data$Grouping) |>
@@ -150,10 +163,10 @@ calculate_ai <-
               sqrt(
                 (.data$stage2 + .data$stage21) /
                   ((.data$stage1 +
-                    .data$stage11)) *
+                      .data$stage11)) *
                   (1 -
-                    (.data$stage2 + .data$stage21) /
-                      (.data$stage1 + .data$stage11)) *
+                     (.data$stage2 + .data$stage21) /
+                       (.data$stage1 + .data$stage11)) *
                   (1 / .data$stage1 + 1 / .data$stage11)
               )
           ) |>

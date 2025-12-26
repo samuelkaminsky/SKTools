@@ -19,7 +19,8 @@ ttest_all(df, ivs, dvs, perc = 0.05)
 Data frame of tidy t.test results
 }
 \description{
-Conduct T-Tests at specified percentile intervals for list of IVs and DVs
+Conduct T-Tests at specified percentile intervals for list of
+  IVs and DVs
 }
 \examples{
 ttest_all(mtcars, ivs = c("disp", "hp"), dvs = "mpg")

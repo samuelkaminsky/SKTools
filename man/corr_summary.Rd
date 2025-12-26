@@ -15,7 +15,8 @@ corr_summary(corr_test_results, alpha = 0.05)
 tibble with clean output
 }
 \description{
-Converts corr.test output to tidy tibble with most important information (IV, DV, r, n, t, p)
+Converts corr.test output to tidy tibble with most important
+  information (IV, DV, r, n, t, p)
 }
 \examples{
 if (requireNamespace("psych", quietly = TRUE)) {
