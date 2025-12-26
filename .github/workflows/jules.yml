@@ -3,10 +3,10 @@ name: '⚡ Jules Auto-Fix'
 on:
   workflow_run:
     workflows:
-      - 'check-standard.yaml'
-      - 'lint-project.yaml'
-      - 'test-coverage.yaml'
-      - 'pkgdown.yaml'
+      - 'R-CMD-check.yaml'
+      - 'lint-project'
+      - 'test-coverage'
+      - 'pkgdown'
     types:
       - completed
 
