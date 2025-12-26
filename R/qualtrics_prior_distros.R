@@ -1,16 +1,21 @@
 #' Get prior distributions for a survey
 #' @param survey_id Qualtrics Survey ID
-#' @param api_token Qualtrics api token
+#' @param api_token Qualtrics api token. Consider using `Sys.getenv()` to keep this secure.
 #' @param datacenter Qualtrics data center (default "az1")
+#' @param max_iterations Maximum number of pages to fetch per mailing list (default 100) to prevent infinite loops.
 #' @return Data frame of distribution data
 #' @description Retrieves distributions for a survey on Qualtrics
 #' @export
 #' @examples
 #' \dontrun{
-#' qualtrics_prior_distros("SV_12345", "API_TOKEN")
+#' qualtrics_prior_distros("SV_12345", Sys.getenv("QUALTRICS_KEY"))
 #' }
 qualtrics_prior_distros <-
-  function(survey_id, api_token, datacenter = "az1") {
+  function(survey_id, api_token, datacenter = "az1", max_iterations = 100) {
+    if (!grepl("^[a-zA-Z0-9]+$", datacenter)) {
+      stop("Invalid datacenter format. Alphanumeric characters only.")
+    }
+
     header_all <-
       c(
         "X-API-TOKEN" = api_token,
@@ -24,11 +29,8 @@ qualtrics_prior_distros <-
     # Initial Request to get distributions
     distributions_response <-
       httr::GET(
-        url = paste0(
-          base_url,
-          "/distributions?surveyId=",
-          survey_id
-        ),
+        url = paste0(base_url, "/distributions"),
+        query = list(surveyId = survey_id),
         httr::add_headers(header_all)
       ) |>
       httr::content()
@@ -45,7 +47,7 @@ qualtrics_prior_distros <-
             url = paste0(
               base_url,
               "/mailinglists/",
-              x,
+              utils::URLencode(x, reserved = TRUE),
               "/contacts"
             ),
             httr::add_headers(header_all)
@@ -59,6 +61,7 @@ qualtrics_prior_distros <-
       purrr::map(\(x) x$result$elements)
 
     # Pagination Loop: Keep fetching while 'nextPage' exists
+    iteration <- 0
     while ({
       length(
         distributions_list |>
@@ -67,6 +70,12 @@ qualtrics_prior_distros <-
       ) >
         0
     }) {
+      iteration <- iteration + 1
+      if (iteration > max_iterations) {
+        warning("Max iterations reached in pagination loop. Stopping fetch.")
+        break
+      }
+
       distributions_list <-
         distributions_list |>
         purrr::map(\(x) x$result$nextPage) |>

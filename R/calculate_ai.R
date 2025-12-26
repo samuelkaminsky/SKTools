@@ -163,10 +163,10 @@ calculate_ai <-
               sqrt(
                 (.data$stage2 + .data$stage21) /
                   ((.data$stage1 +
-                      .data$stage11)) *
+                    .data$stage11)) *
                   (1 -
-                     (.data$stage2 + .data$stage21) /
-                       (.data$stage1 + .data$stage11)) *
+                    (.data$stage2 + .data$stage21) /
+                      (.data$stage1 + .data$stage11)) *
                   (1 / .data$stage1 + 1 / .data$stage11)
               )
           ) |>
