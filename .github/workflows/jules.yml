@@ -9,13 +9,14 @@ on:
       - 'pkgdown'
     types:
       - completed
+  workflow_dispatch:
 
 jobs:
   jules-fix:
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    if: ${{ github.event.workflow_run.conclusion == 'failure' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
       issues: write
       pull-requests: write
