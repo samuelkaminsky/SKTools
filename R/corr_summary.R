@@ -4,6 +4,8 @@
 #' @return tibble with clean output
 #' @description Converts corr.test output to tidy tibble with most important
 #'   information (IV, DV, r, n, t, p)
+#' @importFrom rlang .data
+#' @importFrom dplyr across
 #' @export
 #' @examples
 #' if (requireNamespace("psych", quietly = TRUE)) {

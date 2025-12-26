@@ -5,6 +5,8 @@
 #' @return Dataframe of descriptives and frequencies for each variable and value
 #' @description Calculates descriptives and frequencies of every Column in a
 #'   dataframe. Heavily inspired by Ujjwal Karn's XDA package.
+#' @importFrom tidyselect where
+#' @importFrom rlang .data
 #' @export
 #' @examples
 #' descriptives(mtcars)
