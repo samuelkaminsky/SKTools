@@ -2,6 +2,7 @@
 #' @param corr_test_results corr.test object
 #' @param alpha Alpha level to test significance
 #' @return tibble with clean output
+#' @importFrom dplyr across
 #' @description Converts corr.test output to tidy tibble with most important
 #'   information (IV, DV, r, n, t, p)
 #' @export

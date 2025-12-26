@@ -1,8 +1,10 @@
 #' Get prior distributions for a survey
 #' @param survey_id Qualtrics Survey ID
-#' @param api_token Qualtrics api token. Consider using `Sys.getenv()` to keep this secure.
+#' @param api_token Qualtrics api token. Consider using `Sys.getenv()`
+#'   to keep this secure.
 #' @param datacenter Qualtrics data center (default "az1")
-#' @param max_iterations Maximum number of pages to fetch per mailing list (default 100) to prevent infinite loops.
+#' @param max_iterations Maximum number of pages to fetch per mailing list
+#'   (default 100) to prevent infinite loops.
 #' @return Data frame of distribution data
 #' @description Retrieves distributions for a survey on Qualtrics
 #' @export

@@ -14,11 +14,13 @@ qualtrics_prior_distros(
 \arguments{
 \item{survey_id}{Qualtrics Survey ID}
 
-\item{api_token}{Qualtrics api token. Consider using `Sys.getenv()` to keep this secure.}
+\item{api_token}{Qualtrics api token. Consider using `Sys.getenv()`
+to keep this secure.}
 
 \item{datacenter}{Qualtrics data center (default "az1")}
 
-\item{max_iterations}{Maximum number of pages to fetch per mailing list (default 100) to prevent infinite loops.}
+\item{max_iterations}{Maximum number of pages to fetch per mailing list
+(default 100) to prevent infinite loops.}
 }
 \value{
 Data frame of distribution data
