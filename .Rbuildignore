@@ -3,3 +3,5 @@
 ^\.travis\.yml$
 ^\.github$
 ^GEMINI\.md$
+^_pkgdown\.yml$
+^codecov\.yml$
