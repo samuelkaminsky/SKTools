@@ -1,5 +1,5 @@
 [![R-CMD-check.yaml](https://github.com/samuelkaminsky/SKTools/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/samuelkaminsky/SKTools/actions/workflows/check-standard.yaml)
-[![codecov](https://codecov.io/gh/samuelkaminsky/SKTools/branch/master/graph/badge.svg)](https://codecov.io/gh/samuelkaminsky/SKTools)
+[![codecov](https://codecov.io/gh/samuelkaminsky/SKTools/branch/main/graph/badge.svg)](https://codecov.io/gh/samuelkaminsky/SKTools)
 
 # SKTools
 A collection of R functions that help with importing and analyzing data frames.
