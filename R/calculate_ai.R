@@ -159,16 +159,14 @@ calculate_ai <-
             ai_ratio = .data$SR / .data$SR1,
             H = 2 * asin(sqrt(.data$SR1)) - 2 * asin(sqrt(.data$SR)),
             # Z-test for two proportions
-            Z = (.data$SR1 - .data$SR) /
-              sqrt(
-                (.data$stage2 + .data$stage21) /
-                  ((.data$stage1 +
-                    .data$stage11)) *
-                  (1 -
-                    (.data$stage2 + .data$stage21) /
-                      (.data$stage1 + .data$stage11)) *
-                  (1 / .data$stage1 + 1 / .data$stage11)
+            Z = {
+              p_pool <- (.data$stage2 + .data$stage21) /
+                (.data$stage1 + .data$stage11)
+              se <- sqrt(
+                p_pool * (1 - p_pool) * (1 / .data$stage1 + 1 / .data$stage11)
               )
+              (.data$SR1 - .data$SR) / se
+            }
           ) |>
           dplyr::ungroup() |>
           dplyr::rowwise() |>
