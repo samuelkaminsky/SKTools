@@ -26,4 +26,6 @@ jobs:
           jules_api_key: ${{ secrets.JULES_API_KEY }}
           prompt: >
             The workflow '${{ github.event.workflow_run.name }}' (Run ID: ${{ github.event.workflow_run.id }}) failed.
-            Please analyze the logs, reproduce the failure locally (e.g. using `devtools::check()`), and implement a fix.
+            Please analyze the logs, reproduce the failure locally, and implement a fix.
+            - If it is a check failure, run `devtools::check()`.
+            - If it is a lint failure, run `lintr::lint_package()`.
