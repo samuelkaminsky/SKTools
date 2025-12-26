@@ -26,10 +26,7 @@ anova_multi <-
       dvs_list |>
       purrr::map(
         \(x) {
-          stats::aov(stats::lm(
-            stats::as.formula(paste0("`", x, "` ~ iv")),
-            data = df
-          ))
+          stats::aov(stats::reformulate("iv", response = x), data = df)
         }
       )
 
@@ -69,13 +66,12 @@ anova_multi <-
       ) |>
       tibble::rownames_to_column(var = "DV")
     df_summary <-
-      cbind(means_t, p_value = results[, 7:ncol(results)]) |>
+      means_t |>
+      dplyr::bind_cols(results |> dplyr::select(7:dplyr::last_col())) |>
       as.data.frame() |>
       dplyr::mutate(dplyr::across(where(is.numeric), \(x) round(x, 4)))
     if (isTRUE(print)) {
       details <- list(
-        # IV = iv,
-        # SJT.Items = df |> select(contains("AOSJT")) |> names,
         Ns = table(df$iv),
         Props = prop.table(table(df$iv)) |> round(3)
       )
