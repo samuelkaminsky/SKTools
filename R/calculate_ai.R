@@ -25,6 +25,8 @@
 #' chi-squared test of proportions, and Fisher's exact}
 #' @details Calculates selection ratios and adverse impact using Fisher's Exact
 #'   Test, Z-test for two proportions, and Chi-Squared test.
+#' @importFrom rlang .data :=
+#' @importFrom tidyselect where
 #' @export
 #' @description Calculates adverse impact metrics
 #' @examples
@@ -162,11 +164,9 @@ calculate_ai <-
             Z = (.data$SR1 - .data$SR) /
               sqrt(
                 (.data$stage2 + .data$stage21) /
-                  ((.data$stage1 +
-                    .data$stage11)) *
-                  (1 -
-                    (.data$stage2 + .data$stage21) /
-                      (.data$stage1 + .data$stage11)) *
+                  (.data$stage1 + .data$stage11) *
+                  (1 - (.data$stage2 + .data$stage21) /
+                    (.data$stage1 + .data$stage11)) *
                   (1 / .data$stage1 + 1 / .data$stage11)
               )
           ) |>
