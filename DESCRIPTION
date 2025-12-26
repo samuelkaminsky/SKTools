@@ -29,6 +29,8 @@ Imports:
     tidyr,
     utils
 RoxygenNote: 7.3.3
+Config/Needs/website: pkgdown
 Suggests: testthat,
     readr,
-    psych
+    psych,
+    pkgdown
