@@ -23,6 +23,10 @@ jobs:
           needs: check
 
       - name: Lint
-        run: lintr::lint_package()
+        run: |
+          lints <- lintr::lint_package()
+          if (length(lints) > 0) {
+            print(lints)
+            stop("Linting errors found")
+          }
         shell: Rscript {0}
-        continue-on-error: true 
