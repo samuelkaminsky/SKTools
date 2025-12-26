@@ -6,17 +6,17 @@ Read an entire Excel file workbook (using openxlsx functions)
 
 ``` r
 read_xlsx_all(
-  xlsxFile,
+  xlsx_file,
   save2env = FALSE,
   names = "",
-  startRow = 1,
-  detectDates = TRUE
+  start_row = 1,
+  detect_dates = TRUE
 )
 ```
 
 ## Arguments
 
-- xlsxFile:
+- xlsx_file:
 
   Path to the xls/xlsx file
 
@@ -29,12 +29,12 @@ read_xlsx_all(
 
   A vector of character data representing preferred sheet names
 
-- startRow:
+- start_row:
 
   first row to begin looking for data. Empty rows at the top of a file
-  are always skipped, regardless of the value of startRow.
+  are always skipped, regardless of the value of start_row.
 
-- detectDates:
+- detect_dates:
 
   If TRUE, attempt to recognise dates and perform conversion.
 

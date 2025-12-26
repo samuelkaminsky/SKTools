@@ -5,12 +5,12 @@ Retrieves distributions for a survey on Qualtrics
 ## Usage
 
 ``` r
-qualtrics_prior_distros(surveyId, api_token, datacenter = "az1")
+qualtrics_prior_distros(survey_id, api_token, datacenter = "az1")
 ```
 
 ## Arguments
 
-- surveyId:
+- survey_id:
 
   Qualtrics Survey ID
 

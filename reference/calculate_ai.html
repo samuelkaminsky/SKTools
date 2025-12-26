@@ -55,19 +55,26 @@
 
 
 <dl><dt id="arg-df">df<a class="anchor" aria-label="anchor" href="#arg-df"></a></dt>
-<dd><p>Dataframe with passrate information. Must include columns for each grouping of interest and columns with logicals indicating success at each stage</p></dd>
+<dd><p>Dataframe with passrate information. Must include columns for each
+grouping of interest and columns with logicals indicating success at each
+stage</p></dd>
 
 
 <dt id="arg-groupings">groupings<a class="anchor" aria-label="anchor" href="#arg-groupings"></a></dt>
-<dd><p>Character vector with names of each column containing grouping variables (e.g, race, gender, etc.)</p></dd>
+<dd><p>Character vector with names of each column containing
+grouping variables (e.g, race, gender, etc.)</p></dd>
 
 
 <dt id="arg-stage-">stage1<a class="anchor" aria-label="anchor" href="#arg-stage-"></a></dt>
-<dd><p>Unquoted column name of column indicating whether or not a row should be counted in the calculations (i.e., the denominator). Column must be logical.</p></dd>
+<dd><p>Unquoted column name of column indicating whether or not a row
+should be counted in the calculations (i.e., the denominator). Column must
+be logical.</p></dd>
 
 
 <dt id="arg-stage-">stage2<a class="anchor" aria-label="anchor" href="#arg-stage-"></a></dt>
-<dd><p>Unquoted column name of column indicating whether or not a row should be counted as a 'Pass' in the calculations (i.e., the numerator). Column must be logical.</p></dd>
+<dd><p>Unquoted column name of column indicating whether or not a row
+should be counted as a 'Pass' in the calculations (i.e., the numerator).
+Column must be logical.</p></dd>
 
 
 <dt id="arg-n-min">n_min<a class="anchor" aria-label="anchor" href="#arg-n-min"></a></dt>
@@ -75,30 +82,37 @@
 
 
 <dt id="arg-prop-min">prop_min<a class="anchor" aria-label="anchor" href="#arg-prop-min"></a></dt>
-<dd><p>Minimum percentage for a group to be included in the calculation</p></dd>
+<dd><p>Minimum percentage for a group to be included in the
+calculation</p></dd>
 
 
 <dt id="arg-only-max">only_max<a class="anchor" aria-label="anchor" href="#arg-only-max"></a></dt>
-<dd><p>Only calculate adverse impact using the group with the highest selection ratio as the denominator</p></dd>
+<dd><p>Only calculate adverse impact using the group with the
+highest selection ratio as the denominator</p></dd>
 
 
 <dt id="arg-correct">correct<a class="anchor" aria-label="anchor" href="#arg-correct"></a></dt>
-<dd><p>a logical indicating whether Yates' continuity correction should be applied where possible.</p></dd>
+<dd><p>a logical indicating whether Yates' continuity correction
+should be applied where possible.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>List with two data frames. The first includes all selection ratios, the second includes all adverse impact calculation</p>
+    <p>List with two data frames. The first includes all selection ratios,
+  the second includes all adverse impact calculation</p>
 <dl><dt>selection_ratio</dt>
 <dd><p>Dataframe with selection ratios</p></dd>
 
 <dt>adverse_impact</dt>
-<dd><p>Dataframe with adverse impact metrics, including adverse impact ratio, Cohen's H, Z score test of two proportions, Pearson's chi-squared test of proportions, and Fisher's exact</p></dd>
+<dd><p>Dataframe with adverse impact metrics, including
+adverse impact ratio, Cohen's H, Z score test of two proportions, Pearson's
+chi-squared test of proportions, and Fisher's exact</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Calculates selection ratios and adverse impact using Fisher's Exact Test, Z-test for two proportions, and Chi-Squared test.</p>
+    <p>Calculates selection ratios and adverse impact using Fisher's Exact
+  Test, Z-test for two proportions, and Chi-Squared test.</p>
     </div>
 
     <div class="section level2">

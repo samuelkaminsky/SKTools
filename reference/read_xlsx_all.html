@@ -39,11 +39,11 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_xlsx_all</span><span class="op">(</span></span>
-<span>  <span class="va">xlsxFile</span>,</span>
+<span>  <span class="va">xlsx_file</span>,</span>
 <span>  save2env <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  names <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  startRow <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  detectDates <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  start_row <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  detect_dates <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -51,7 +51,7 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-xlsxfile">xlsxFile<a class="anchor" aria-label="anchor" href="#arg-xlsxfile"></a></dt>
+<dl><dt id="arg-xlsx-file">xlsx_file<a class="anchor" aria-label="anchor" href="#arg-xlsx-file"></a></dt>
 <dd><p>Path to the xls/xlsx file</p></dd>
 
 
@@ -64,13 +64,14 @@ FALSE to return a list of worksheets, which can be saved to the environment</p><
 <dd><p>A vector of character data representing preferred sheet names</p></dd>
 
 
-<dt id="arg-startrow">startRow<a class="anchor" aria-label="anchor" href="#arg-startrow"></a></dt>
+<dt id="arg-start-row">start_row<a class="anchor" aria-label="anchor" href="#arg-start-row"></a></dt>
 <dd><p>first row to begin looking for data. Empty rows at the top
-of a file are always skipped, regardless of the value of startRow.</p></dd>
+of a file are always skipped, regardless of the value of start_row.</p></dd>
 
 
-<dt id="arg-detectdates">detectDates<a class="anchor" aria-label="anchor" href="#arg-detectdates"></a></dt>
-<dd><p>If TRUE, attempt to recognise dates and perform conversion.</p></dd>
+<dt id="arg-detect-dates">detect_dates<a class="anchor" aria-label="anchor" href="#arg-detect-dates"></a></dt>
+<dd><p>If TRUE, attempt to recognise dates and perform
+conversion.</p></dd>
 
 </dl></div>
     <div class="section level2">
