@@ -4,6 +4,7 @@
 #' and valid percentages for each value by variable
 #' @return Dataframe of frequencies for each variable and value
 #' @description Calculates frequencies of every Column in a dataframe
+#' @importFrom rlang .data
 #' @export
 #' @examples
 #' frequencies(mtcars)

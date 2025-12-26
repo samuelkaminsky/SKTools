@@ -2,15 +2,12 @@
 #' @export
 #' @description Updates packages that have been installed from public Github
 #'   repositories
+#' @importFrom utils installed.packages packageDescription
 #' @examples
 #' \dontrun{
 #' update_github_pkgs()
 #' }
 update_github_pkgs <- function() {
-  check <- "SKTools" %in% .packages()
-  if (check) {
-    detach("package:SKTools", unload = TRUE)
-  }
   utils::installed.packages() |>
     tibble::as_tibble() |>
     dplyr::pull("Package") |>
@@ -21,7 +18,4 @@ update_github_pkgs <- function() {
       \(x) nchar(x) > 3,
       purrr::safely(\(x) devtools::install_github(x))
     )
-  if (check) {
-    library("SKTools")
-  }
 }

@@ -6,6 +6,8 @@
 #' @return Data frame of tidy t.test results
 #' @description Conduct T-Tests at specified percentile intervals for list of
 #'   IVs and DVs
+#' @importFrom rlang .data
+#' @importFrom tidyselect where
 #' @export
 #' @examples
 #' ttest_all(mtcars, ivs = c("disp", "hp"), dvs = "mpg")
