@@ -4,6 +4,8 @@
 #' @param dvs Names of dependent variables to be inserted into dplyr::select()
 #' @param perc Nth percentile to conduct T-Test at
 #' @return Data frame of tidy t.test results
+#' @importFrom rlang .data
+#' @importFrom tidyselect where
 #' @description Conduct T-Tests at specified percentile intervals for list of
 #'   IVs and DVs
 #' @export

@@ -23,6 +23,8 @@
 #' \item{adverse_impact}{Dataframe with adverse impact metrics, including
 #' adverse impact ratio, Cohen's H, Z score test of two proportions, Pearson's
 #' chi-squared test of proportions, and Fisher's exact}
+#' @importFrom rlang :=
+#' @importFrom tidyselect where
 #' @details Calculates selection ratios and adverse impact using Fisher's Exact
 #'   Test, Z-test for two proportions, and Chi-Squared test.
 #' @export
@@ -162,11 +164,9 @@ calculate_ai <-
             Z = (.data$SR1 - .data$SR) /
               sqrt(
                 (.data$stage2 + .data$stage21) /
-                  ((.data$stage1 +
-                    .data$stage11)) *
-                  (1 -
-                    (.data$stage2 + .data$stage21) /
-                      (.data$stage1 + .data$stage11)) *
+                  (.data$stage1 + .data$stage11) *
+                  (1 - (.data$stage2 + .data$stage21) /
+                    (.data$stage1 + .data$stage11)) *
                   (1 / .data$stage1 + 1 / .data$stage11)
               )
           ) |>
