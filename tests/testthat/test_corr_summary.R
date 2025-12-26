@@ -3,6 +3,7 @@ library(SKTools)
 mtcars_ct <- psych::corr.test(mtcars)
 
 test_that("corr_summary works for mtcars", {
+  skip_if_not_installed("psych")
   expect_equal(
     mtcars_ct |>
       corr_summary() |>

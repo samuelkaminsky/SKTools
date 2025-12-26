@@ -1,6 +1,7 @@
 library(SKTools)
 
 test_that("read_excel_all has predictable result", {
+  skip_if_not_installed("readr")
   expect_equal(
     read_excel_all("excel_test.xlsx"),
     readr::read_rds("excel_test_tidy.rds")
@@ -8,6 +9,7 @@ test_that("read_excel_all has predictable result", {
 })
 
 test_that("read_xlsx_all has predictable result", {
+  skip_if_not_installed("readr")
   expect_equal(
     read_xlsx_all("excel_test.xlsx"),
     readr::read_rds("excel_test_open.rds")
