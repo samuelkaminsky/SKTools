@@ -64,14 +64,16 @@ qualtrics_prior_distros <-
 
     # Pagination Loop: Keep fetching while 'nextPage' exists
     iteration <- 0
-    while ({
-      length(
-        distributions_list |>
-          purrr::map(\(x) x$result$nextPage) |>
-          purrr::compact()
-      ) >
-        0
-    }) {
+    while (
+      {
+        length(
+          distributions_list |>
+            purrr::map(\(x) x$result$nextPage) |>
+            purrr::compact()
+        ) >
+          0
+      }
+    ) {
       iteration <- iteration + 1
       if (iteration > max_iterations) {
         warning("Max iterations reached in pagination loop. Stopping fetch.")
