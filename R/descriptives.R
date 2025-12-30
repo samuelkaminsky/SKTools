@@ -10,6 +10,16 @@
 #' descriptives(mtcars)
 descriptives <-
   function(df, frequencies = FALSE) {
+    if (dplyr::is_grouped_df(df)) {
+      return(
+        df |>
+          dplyr::group_modify(
+            ~ descriptives(.x, frequencies = frequencies)
+          ) |>
+          dplyr::ungroup()
+      )
+    }
+
     # Prepare dataframe
     df_func <-
       df |>
