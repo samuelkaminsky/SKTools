@@ -144,17 +144,19 @@ calculate_ai <-
           df_ai |>
           dplyr::filter(.data$Denominator %in% max_sr)
       }
-      if (nrow(df_ai) == 0) {
+      df_ai_filtered <- df_ai |>
+        dplyr::filter(
+          .data$Grouping == .data$Grouping1,
+          .data$Numerator != .data$Denominator
+        )
+
+      if (nrow(df_ai) == 0 || nrow(df_ai_filtered) == 0) {
         df_ai <-
           list(Error = "No adverse impact comparisons possible")
       } else {
         # Calculate Adverse Impact Stats
         df_ai <-
-          df_ai |>
-          dplyr::filter(
-            .data$Grouping == .data$Grouping1,
-            .data$Numerator != .data$Denominator
-          ) |>
+          df_ai_filtered |>
           dplyr::arrange(.data$Numerator, .data$Denominator) |>
           dplyr::mutate(
             ai_ratio = .data$SR / .data$SR1,

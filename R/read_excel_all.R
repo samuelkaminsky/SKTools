@@ -40,7 +40,7 @@ read_excel_all <-
             \(x) purrr::set_names(x, make.names(names(x), unique = TRUE))
           )
       }
-      if (names != "") {
+      if (all(names != "")) {
         names(worksheet) <- names
       } else {
         names(worksheet) <- make_sheetnames
