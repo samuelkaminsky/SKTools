@@ -36,5 +36,4 @@ Suggests: testthat,
     pkgdown,
     lintr,
     mockery,
-    writexl,
-    mockery
+    writexl
