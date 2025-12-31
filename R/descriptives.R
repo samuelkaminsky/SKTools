@@ -14,7 +14,7 @@ descriptives <-
       return(
         df |>
           dplyr::group_modify(
-            ~ descriptives(.x, frequencies = frequencies)
+            \(x, ...) descriptives(x, frequencies = frequencies)
           ) |>
           dplyr::ungroup()
       )

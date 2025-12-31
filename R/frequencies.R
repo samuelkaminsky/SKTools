@@ -13,7 +13,7 @@ frequencies <-
       return(
         df |>
           dplyr::group_modify(
-            ~ frequencies(.x, perc = perc)
+            \(x, ...) frequencies(x, perc = perc)
           ) |>
           dplyr::ungroup()
       )
