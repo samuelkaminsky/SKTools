@@ -66,7 +66,8 @@ calculate_ai <-
       )
 
     # Calculate Selection Ratios
-    df_sr <- groupings |>
+    df_sr <-
+      groupings |>
       purrr::map_dfr(\(x) {
         x <- as.name(x)
 
