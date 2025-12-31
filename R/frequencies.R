@@ -9,6 +9,16 @@
 #' frequencies(mtcars)
 frequencies <-
   function(df, perc = FALSE) {
+    if (dplyr::is_grouped_df(df)) {
+      return(
+        df |>
+          dplyr::group_modify(
+            \(x, ...) frequencies(x, perc = perc)
+          ) |>
+          dplyr::ungroup()
+      )
+    }
+
     result <-
       df |>
       names() |>
