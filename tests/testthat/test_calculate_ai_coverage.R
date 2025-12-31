@@ -17,7 +17,7 @@ test_that("calculate_ai handles selection ratio > 1", {
   df <- tibble::tibble(
     gender = c("Male"),
     applied = c(1), # Just one person applied
-    hired = c(2)    # Two people hired?
+    hired = c(2) # Two people hired?
   )
   # So if columns are numeric, it sums.
   res <- calculate_ai(df, groupings = "gender", stage1 = applied, stage2 = hired)
@@ -46,12 +46,12 @@ test_that("calculate_ai handles only_max = TRUE", {
 })
 
 test_that("calculate_ai returns error if no adverse impact comparisons possible", {
-    df <- tibble::tibble(
-        gender = c(rep("Male", 10)),
-        applied = rep(TRUE, 10),
-        hired = rep(TRUE, 10)
-    )
-    # Only one group, so no comparisons possible
-    res <- calculate_ai(df, groupings = "gender", stage1 = applied, stage2 = hired)
-    expect_match(res$adverse_impact$Error, "No adverse impact comparisons possible")
+  df <- tibble::tibble(
+    gender = c(rep("Male", 10)),
+    applied = rep(TRUE, 10),
+    hired = rep(TRUE, 10)
+  )
+  # Only one group, so no comparisons possible
+  res <- calculate_ai(df, groupings = "gender", stage1 = applied, stage2 = hired)
+  expect_match(res$adverse_impact$Error, "No adverse impact comparisons possible")
 })

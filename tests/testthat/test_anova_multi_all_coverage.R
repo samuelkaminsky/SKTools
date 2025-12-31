@@ -15,8 +15,8 @@ test_that("anova_multi_all handles missing results", {
   # Inside pmap, if `aov` fails?
   # e.g. constant response?
   df <- data.frame(
-      x = 1:20,
-      y = rep(1, 20) # Constant response
+    x = 1:20,
+    y = rep(1, 20) # Constant response
   )
 
   # This might produce an error or warning in aov, which purrr::possibly catches

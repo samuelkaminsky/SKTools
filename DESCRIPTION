@@ -35,4 +35,5 @@ Suggests: testthat,
     psych,
     pkgdown,
     lintr,
-    mockery
+    mockery,
+    writexl
