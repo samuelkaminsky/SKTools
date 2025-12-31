@@ -184,7 +184,18 @@ test_that("qualtrics_prior_distros fetches and paginates", {
     if (x == "r2") {
       return(resp2)
     }
-    if (x == "r3") return(resp3)
+    if (x == "r3") {
+      return(resp3)
+    }
+    if (x == "r1") {
+      return(resp1)
+    }
+    if (x == "r2") {
+      return(resp2)
+    }
+    if (x == "r3") {
+      resp3
+    }
   })
 
   # Set up return values for GET
@@ -193,15 +204,21 @@ test_that("qualtrics_prior_distros fetches and paginates", {
     "httr::GET",
     function(url, query = NULL, ...) {
       if (grepl("/distributions", url)) {
-        return("r1")
+        {
+          return("r1")
+        }
       }
       if (grepl("/contacts", url)) {
-        return("r2")
+        {
+          return("r2")
+        }
       }
       if (url == "https://example.com/nextpage") {
-        return("r3")
+        {
+          return("r3")
+        }
       }
-      return("unknown")
+      "unknown"
     }
   )
 

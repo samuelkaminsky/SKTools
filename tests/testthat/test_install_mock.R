@@ -4,7 +4,11 @@ library(mockery)
 
 test_that("install_sk installs packages", {
   m_install <- mock()
-  m_installed <- mock(matrix(c("SKTools"), ncol = 1, dimnames = list(NULL, "Package")))
+  m_installed <- mock(matrix(
+    c("SKTools"),
+    ncol = 1,
+    dimnames = list(NULL, "Package")
+  ))
 
   stub(install_sk, "utils::install.packages", m_install)
   stub(install_sk, "utils::installed.packages", m_installed)
@@ -17,7 +21,11 @@ test_that("install_sk installs packages", {
 
 test_that("install_sk handles extra packages", {
   m_install <- mock()
-  m_installed <- mock(matrix(c("SKTools"), ncol = 1, dimnames = list(NULL, "Package")))
+  m_installed <- mock(matrix(
+    c("SKTools"),
+    ncol = 1,
+    dimnames = list(NULL, "Package")
+  ))
 
   stub(install_sk, "utils::install.packages", m_install)
   stub(install_sk, "utils::installed.packages", m_installed)
