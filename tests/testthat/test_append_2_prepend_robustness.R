@@ -1,13 +1,13 @@
 library(SKTools)
 
-test_that("append_2_prepend handles suffixes that appear earlier in the string", {
+test_that("append_2_prepend handles suffixes appearing earlier", {
   df <- tibble::tibble(
     suff_x_suff = 1,
     x_suff = 1
   )
-  
+
   result <- append_2_prepend(df, "suff")
-  
+
   expect_equal(names(result)[1], "suff_suff_x")
   expect_equal(names(result)[2], "suff_x")
 })
