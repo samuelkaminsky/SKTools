@@ -67,7 +67,7 @@ test_that("calculate_ai handles only_max = TRUE", {
   expect_true(all(res$adverse_impact$Denominator == "Female"))
 })
 
-test_that("calculate_ai returns error if no adverse impact comparisons possible", {
+test_that("calculate_ai returns error if no comparisons possible", {
   df <- tibble::tibble(
     gender = c(rep("Male", 10)),
     applied = rep(TRUE, 10),

@@ -42,11 +42,12 @@ test_that("read_excel_all saves to env", {
   env <- new.env()
   # Mock list2env or verify side effects if possible
   # For now we just call it with save2env=TRUE to ensure code coverage
-  # Note: list2env uses .GlobalEnv by default in the function code, which we can't easily capture
-  # without mocking.
+  # Note: list2env uses .GlobalEnv by default in the function code, which we
+  # can't easily capture without mocking.
   # Just running it to cover the lines.
   res <- read_excel_all(tmp, save2env = TRUE)
-  # It returns the list even if save2env is TRUE (actually list2env returns env invisibly)
+  # It returns the list even if save2env is TRUE (actually list2env returns env
+  # invisibly)
   # The function returns whatever list2env returns if save2env=TRUE.
   expect_true(is.environment(res))
 })

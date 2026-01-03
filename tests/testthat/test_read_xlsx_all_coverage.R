@@ -12,8 +12,8 @@ test_that("read_xlsx_all works with custom names", {
 })
 
 test_that("read_xlsx_all detects dates", {
-  # It is hard to construct a xlsx with dates using writexl that openxlsx sees as dates cleanly sometimes?
-  # But writexl should do it.
+  # It is hard to construct a xlsx with dates using writexl that openxlsx sees
+  # as dates cleanly sometimes? But writexl should do it.
   df <- data.frame(Date = as.Date("2021-01-01"))
   tmp <- tempfile(fileext = ".xlsx")
   writexl::write_xlsx(df, tmp)

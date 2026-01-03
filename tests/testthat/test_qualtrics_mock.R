@@ -48,7 +48,8 @@ test_that("qualtrics_prior_distros fetches and paginates", {
 
   # Mock httr::content to return these responses in order
   # But httr::GET is called first, then httr::content on the result.
-  # So mock GET to return "response_object" and mock content to return the list based on input.
+  # So mock GET to return "response_object" and mock content to return the
+  # list based on input.
 
   m_content <- mock()
   stub(qualtrics_prior_distros, "httr::content", m_content)

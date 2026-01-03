@@ -53,10 +53,10 @@ test_that("update_github_pkgs updates packages", {
   stub(update_github_pkgs, "library", m_library)
 
   # Mock .packages() to return SKTools so detach logic runs
-  # But .packages() is in base, might be hard to mock if called directly as .packages().
+  # But .packages() is in base, might be hard to mock if called directly.
   # The code uses `.packages()`.
-  # mockery::stub doesn't easily mock base functions in the package namespace if they are not imported?
-  # But let's try.
+  # mockery::stub doesn't easily mock base functions in the package namespace
+  # if they are not imported? But let's try.
 
   # Actually `update_github_pkgs` calls `.packages()`.
   # If we can't mock it, we can ensure SKTools is attached or not.
