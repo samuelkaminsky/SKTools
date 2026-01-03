@@ -41,13 +41,9 @@ anova_multi <-
     results_posthocs <-
       models |>
       purrr::map(stats::TukeyHSD) |>
-      purrr::map(\(x) x["iv"]) |>
-      purrr::map(as.data.frame) |>
-      purrr::map_df(tibble::rownames_to_column, .id = "DV") |>
-      tidyr::pivot_wider(names_from = "rowname", values_from = "iv.p.adj") |>
-      dplyr::select(-(dplyr::starts_with("iv"))) |>
-      dplyr::group_by(.data$DV) |>
-      dplyr::summarise(dplyr::across(everything(), \(x) mean(x, na.rm = TRUE)))
+      purrr::map_df(broom::tidy, .id = "DV") |>
+      dplyr::select("DV", "contrast", "adj.p.value") |>
+      tidyr::pivot_wider(names_from = "contrast", values_from = "adj.p.value")
     results <-
       results_anova |>
       dplyr::left_join(results_posthocs, by = "DV", na_matches = "never")
