@@ -21,7 +21,7 @@ append_2_prepend <-
     new_names[matches] <-
       stringr::str_replace(
         new_names[matches],
-        paste0("^(.*).", stringr::str_escape(string), "$"),
+        paste0("^(.*?)(?:[._])?", stringr::str_escape(string), "$"),
         paste0(string, sep, "\\1")
       )
 

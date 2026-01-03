@@ -21,3 +21,11 @@ test_that("append_2_prepend handles special characters in suffix", {
   result <- append_2_prepend(df, "y")
   expect_equal(names(result)[1], "y_x")
 })
+
+test_that("append_2_prepend handles suffix without separator", {
+  df <- tibble::tibble(
+    namesuff = 1
+  )
+  result <- append_2_prepend(df, "suff")
+  expect_equal(names(result)[1], "suff_name")
+})
