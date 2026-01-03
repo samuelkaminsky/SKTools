@@ -3,6 +3,7 @@
 #' @param perc Logical indicating whether or not to calculate percentages
 #' and valid percentages for each value by variable
 #' @return Dataframe of frequencies for each variable and value
+#' @importFrom rlang .data
 #' @description Calculates frequencies of every Column in a dataframe
 #' @export
 #' @examples
