@@ -34,4 +34,6 @@ Suggests: testthat,
     readr,
     psych,
     pkgdown,
-    lintr
+    lintr,
+    mockery,
+    writexl
