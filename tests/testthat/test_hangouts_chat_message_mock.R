@@ -3,8 +3,9 @@ library(testthat)
 library(mockery)
 
 test_that("hangouts_chat_message sends POST request", {
-  m <- mock()
+  m <- mock(list(status_code = 200))
   stub(hangouts_chat_message, "httr::POST", m)
+  stub(hangouts_chat_message, "httr::stop_for_status", function(...) TRUE)
 
   # Call function
   hangouts_chat_message("https://example.com", "Hello")

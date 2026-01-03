@@ -20,5 +20,7 @@ hangouts_chat_message <- function(url, message) {
     list(text = as.character(message)),
     auto_unbox = TRUE
   )
-  httr::POST(url, header, body = body)
+  resp <- httr::POST(url, header, body = body)
+  httr::stop_for_status(resp)
+  resp
 }
