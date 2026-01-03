@@ -15,19 +15,15 @@
 #' append_2_prepend(df, "suff", "_")
 append_2_prepend <-
   function(df, string, sep = "_") {
-    df |>
-      purrr::set_names(dplyr::if_else(
-        endsWith(names(df), string),
-        stringr::str_c(
-          string,
-          stringr::str_sub(
-            names(df),
-            start = 1,
-            end = as.data.frame(stringr::str_locate(names(df), string))$start -
-              2
-          ),
-          sep = sep
-        ),
-        names(df)
-      ))
+    new_names <- names(df)
+    matches <- endsWith(new_names, string)
+
+    new_names[matches] <-
+      stringr::str_replace(
+        new_names[matches],
+        paste0("^(.*).", stringr::str_escape(string), "$"),
+        paste0(string, sep, "\\1")
+      )
+
+    purrr::set_names(df, new_names)
   }
