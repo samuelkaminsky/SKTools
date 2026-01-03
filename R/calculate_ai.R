@@ -23,6 +23,8 @@
 #' \item{adverse_impact}{Dataframe with adverse impact metrics, including
 #' adverse impact ratio, Cohen's H, Z score test of two proportions, Pearson's
 #' chi-squared test of proportions, and Fisher's exact}
+#' @importFrom rlang .data :=
+#' @importFrom dplyr where
 #' @details Calculates selection ratios and adverse impact using Fisher's Exact
 #'   Test, Z-test for two proportions, and Chi-Squared test.
 #' @export

@@ -3,6 +3,7 @@
 #' @param col1 Quoted name of first column
 #' @param col2 Quoted name of second column
 #' @return Dataframe with duplicates removed
+#' @importFrom rlang .data
 #' @export
 #' @examples
 #' df <- tibble::tibble(
