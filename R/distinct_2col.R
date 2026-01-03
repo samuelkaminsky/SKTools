@@ -26,6 +26,6 @@ distinct_2col <- function(df, col1, col2) {
         }
       )
     ) |>
-    dplyr::distinct(.data$dupevec, .keep_all = TRUE) |>
+    dplyr::distinct(dplyr::across("dupevec"), .keep_all = TRUE) |>
     dplyr::select(-"dupevec")
 }
