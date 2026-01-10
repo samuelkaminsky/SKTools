@@ -29,28 +29,24 @@ descriptives <-
       dplyr::mutate(dplyr::across(where(is.factor), as.character)) |>
       sjlabelled::remove_all_labels()
 
-    # 1. Class
-    class_df <-
-      df_func |>
-      purrr::map_chr(\(x) paste(class(x), collapse = ", ")) |>
-      tibble::enframe(name = "var", value = "class")
-
-    # 2. Missing / N
-    missing_df <-
+    # 1. Basic Stats (Class, Missing, N)
+    basic_stats <-
       df_func |>
       purrr::map(
         \(x) {
           n_miss <- sum(is.na(x))
+          n_total <- length(x)
           tibble::tibble(
-            n = length(x) - n_miss,
+            class = paste(class(x), collapse = ", "),
+            n = n_total - n_miss,
             n_missing = n_miss,
-            perc_missing = n_miss / length(x)
+            perc_missing = n_miss / n_total
           )
         }
       ) |>
       purrr::list_rbind(names_to = "var")
 
-    # 3. Numeric Stats
+    # 2. Numeric Stats
     df_num <- df_func |> dplyr::select(where(is.numeric))
 
     if (ncol(df_num) > 0) {
@@ -79,7 +75,7 @@ descriptives <-
               ))
             }
 
-            q <- stats::quantile(
+            qs <- stats::quantile(
               x_clean,
               probs = c(0.01, 0.25, 0.5, 0.75, 0.99)
             )
@@ -95,11 +91,11 @@ descriptives <-
               skewness = moments::skewness(x_clean),
               kurtosis = moments::kurtosis(x_clean),
               n_unique = length(unique(x_clean)),
-              `1%` = q[1],
-              `25%` = q[2],
-              `50%` = q[3],
-              `75%` = q[4],
-              `99%` = q[5]
+              `1%` = qs[1],
+              `25%` = qs[2],
+              `50%` = qs[3],
+              `75%` = qs[4],
+              `99%` = qs[5]
             )
           }
         ) |>
@@ -110,25 +106,14 @@ descriptives <-
 
     # Join basic stats
     df_final <-
-      class_df |>
-      dplyr::left_join(stats_df, by = "var") |>
-      dplyr::left_join(missing_df, by = "var")
+      basic_stats |>
+      dplyr::left_join(stats_df, by = "var")
 
-    # 4. Frequencies (Optional)
+    # 3. Frequencies (Optional)
     if (isTRUE(frequencies)) {
+      # Use the optimized frequencies function
       freqs <-
-        df_func |>
-        names() |>
-        purrr::set_names() |>
-        purrr::map(
-          \(x) {
-            df_func |>
-              dplyr::count(!!dplyr::sym(x)) |>
-              purrr::set_names(c("value", "n")) |>
-              dplyr::mutate(value = as.character(.data$value))
-          }
-        ) |>
-        purrr::list_rbind(names_to = "var") |>
+        frequencies(df_func, perc = FALSE) |>
         dplyr::group_by(.data$var) |>
         tidyr::nest(frequencies = c("value", "n")) |>
         dplyr::mutate(
