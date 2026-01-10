@@ -69,12 +69,7 @@ anova_multi <-
       tibble::rownames_to_column(var = "DV")
     df_summary <-
       means_t |>
-      dplyr::left_join(
-        results |> dplyr::select(
-          -c("df", "sumsq", "meansq", "statistic", "p.value")
-        ),
-        by = "DV"
-      ) |>
+      dplyr::left_join(results, by = "DV") |>
       as.data.frame() |>
       dplyr::mutate(dplyr::across(where(is.numeric), \(x) round(x, 4)))
     if (isTRUE(print)) {
