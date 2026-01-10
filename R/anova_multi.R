@@ -7,6 +7,8 @@
 #' @return Data frame of tidy ANOVA post-hoc results, also prints Ns and
 #'   percentages in each level of the IV
 #' @description Conduct one-way ANOVAs on multiple DVs
+#' @importFrom rlang .data
+#' @importFrom dplyr where
 #' @export
 #' @examples
 #' anova_multi(mtcars, iv = cyl, dvs = c(mpg, disp))
