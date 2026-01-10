@@ -18,7 +18,7 @@
 read_excel_all <-
   function(path, save2env = FALSE, check_names = FALSE, names = "", skip = 0) {
     sheetnames <- readxl::excel_sheets(path)
-    if (length(readxl::excel_sheets(path)) == 1) {
+    if (length(sheetnames) == 1) {
       worksheet <- readxl::read_excel(path = path, skip = skip)
       if (isTRUE(check_names)) {
         names(worksheet) <- make.names(names(worksheet), unique = TRUE)

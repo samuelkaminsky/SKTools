@@ -34,14 +34,16 @@ anova_multi <-
 
     results_anova <-
       models |>
-      purrr::map_df(broom::tidy, .id = "DV") |>
+      purrr::map(broom::tidy) |>
+      purrr::list_rbind(names_to = "DV") |>
       dplyr::filter(.data$term != "Residuals") |>
       dplyr::select(-"term")
 
     results_posthocs <-
       models |>
       purrr::map(stats::TukeyHSD) |>
-      purrr::map_df(broom::tidy, .id = "DV") |>
+      purrr::map(broom::tidy) |>
+      purrr::list_rbind(names_to = "DV") |>
       dplyr::select("DV", "contrast", "adj.p.value") |>
       tidyr::pivot_wider(names_from = "contrast", values_from = "adj.p.value")
     results <-
@@ -67,10 +69,7 @@ anova_multi <-
       tibble::rownames_to_column(var = "DV")
     df_summary <-
       means_t |>
-      dplyr::bind_cols(
-        results |>
-          dplyr::select(7:dplyr::last_col())
-      ) |>
+      dplyr::left_join(results, by = "DV") |>
       as.data.frame() |>
       dplyr::mutate(dplyr::across(where(is.numeric), \(x) round(x, 4)))
     if (isTRUE(print)) {

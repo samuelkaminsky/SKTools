@@ -38,7 +38,7 @@ descriptives <-
     # 2. Missing / N
     missing_df <-
       df_func |>
-      purrr::map_dfr(
+      purrr::map(
         \(x) {
           n_miss <- sum(is.na(x))
           tibble::tibble(
@@ -46,9 +46,9 @@ descriptives <-
             n_missing = n_miss,
             perc_missing = n_miss / length(x)
           )
-        },
-        .id = "var"
-      )
+        }
+      ) |>
+      purrr::list_rbind(names_to = "var")
 
     # 3. Numeric Stats
     df_num <- df_func |> dplyr::select(where(is.numeric))
@@ -56,9 +56,9 @@ descriptives <-
     if (ncol(df_num) > 0) {
       stats_df <-
         df_num |>
-        purrr::map_dfr(
+        purrr::map(
           \(x) {
-            x_clean <- stats::na.omit(x)
+            x_clean <- x[!is.na(x)]
             if (length(x_clean) == 0) {
               return(tibble::tibble(
                 mean = NA_real_,
@@ -101,9 +101,9 @@ descriptives <-
               `75%` = q[4],
               `99%` = q[5]
             )
-          },
-          .id = "var"
-        )
+          }
+        ) |>
+        purrr::list_rbind(names_to = "var")
     } else {
       stats_df <- tibble::tibble(var = character())
     }
@@ -120,15 +120,15 @@ descriptives <-
         df_func |>
         names() |>
         purrr::set_names() |>
-        purrr::map_dfr(
+        purrr::map(
           \(x) {
             df_func |>
               dplyr::count(!!dplyr::sym(x)) |>
               purrr::set_names(c("value", "n")) |>
               dplyr::mutate(value = as.character(.data$value))
-          },
-          .id = "var"
+          }
         ) |>
+        purrr::list_rbind(names_to = "var") |>
         dplyr::group_by(.data$var) |>
         tidyr::nest(frequencies = c("value", "n")) |>
         dplyr::mutate(
