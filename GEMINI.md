@@ -28,7 +28,7 @@ frames in R.
 
 ## Prerequisites
 
-- **R:** Version \>= 3.1.0
+- **R:** Version \>= 4.1.0 (Required for native pipe `|>`)
 - **devtools/remotes:** For package development and installation.
 
 ## Installation
@@ -53,12 +53,6 @@ To run tests:
 devtools::test()
 ```
 
-Or specifically:
-
-``` r
-testthat::test_dir("tests/testthat")
-```
-
 ## Documentation
 
 Documentation is generated using `roxygen2`. To update documentation
@@ -70,28 +64,53 @@ devtools::document()
 
 # Development Conventions
 
-## Coding Style
+## Coding Style & Modernization
 
-- **Tidyverse Style:** The code heavily utilizes the pipe operator
-  (`%>%`) and `dplyr` verbs.
-- **Explicit Namespacing:** Functions from other packages are generally
-  called with their namespace (e.g.,
-  [`dplyr::mutate`](https://dplyr.tidyverse.org/reference/mutate.html),
-  [`stats::sd`](https://rdrr.io/r/stats/sd.html)) rather than relying on
-  [`library()`](https://rdrr.io/r/base/library.html) calls within
-  functions. This is a best practice for package development.
-- **Pronouns:** Usage of `.data` pronoun inside `dplyr` verbs to avoid
-  ambiguity (e.g., `.data$value`).
+- **Native Pipe:** Use the native R pipe `|>` instead of `%>%` wherever
+  possible.
+- **Modern purrr:** Favor `purrr::map() |> purrr::list_rbind()` over
+  deprecated `map_df()` or `map_dfr()`.
+- **Tidy Evaluation:** Use
+  [`rlang::new_formula()`](https://rlang.r-lib.org/reference/new_formula.html)
+  or [`rlang::inject()`](https://rlang.r-lib.org/reference/inject.html)
+  for safe dynamic model construction instead of
+  [`paste0()`](https://rdrr.io/r/base/paste.html) and
+  [`as.formula()`](https://rdrr.io/r/stats/formula.html).
+- **Input Validation:** Use
+  [`rlang::abort()`](https://rlang.r-lib.org/reference/abort.html) for
+  consistent and informative error signaling.
+- **Internal Helpers:** Redundant logic (like percentile-based grouping)
+  should be abstracted into internal helpers (e.g.,
+  `R/utils_cutpoints.R`).
+- **Explicit Namespacing:** Functions from other packages must be called
+  with their namespace (e.g.,
+  [`dplyr::mutate`](https://dplyr.tidyverse.org/reference/mutate.html)).
+- **Pronouns:** Always use the `.data` pronoun inside `dplyr` verbs.
 
-## Documentation
+## Linting and Formatting
 
-- **Roxygen2:** All exported functions are documented using Roxygen2
-  comments (`#'`) immediately preceding the function definition.
-- **Parameters:** `@param`, `@return`, `@export`, and `@description`
-  tags are standard.
+- **Strict Compliance:** All code MUST pass `styler::style_pkg()` and
+  [`lintr::lint_package()`](https://lintr.r-lib.org/reference/lint.html)
+  before being considered for a merge or push.
+- **Line Length:** Adhere to a strict 80-character line limit.
 
-## Version Control
+## Testing Standards
 
-- **Git:** The project is version-controlled with Git.
-- **CI/CD:** Configuration exists for GitHub Actions (in
-  `.github/workflows`).
+- **Robustness:** Avoid brittle tests that rely on exact row indices
+  (e.g., `slice(37)`). Instead, use
+  [`dplyr::filter()`](https://dplyr.tidyverse.org/reference/filter.html)
+  to target specific IV/DV/Cutoff combinations to ensure tests are
+  resilient to row-ordering changes.
+
+## Version Control Workflow
+
+- **Jujutsu (jj):** The project uses Jujutsu for local version control.
+  Ensure `.jj` is always in `.Rbuildignore`.
+- **Push Restriction:** **CRITICAL:** Never push changes to GitHub
+  without explicit user confirmation.
+- **Pre-push Verification:** Documentation must be updated
+  ([`devtools::document()`](https://devtools.r-lib.org/reference/document.html)),
+  and a full
+  [`devtools::check()`](https://devtools.r-lib.org/reference/check.html)
+  must pass with 0 errors and 0 warnings before pushing.
+- **Branching:** Merge features into `main` only after verification.

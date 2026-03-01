@@ -12,11 +12,11 @@ quality_check(df)
 
 - df:
 
-  name of dataframe
+  A data frame.
 
 ## Value
 
-Prints message that identifies columns with no variance and those with
+Prints messages identifying columns with no variance and those with
 strong or moderate skewness.
 
 ## Author

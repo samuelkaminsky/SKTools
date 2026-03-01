@@ -49,16 +49,16 @@
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>Number to be converted to letter</p></dd>
+<dd><p>Vector of numbers to be converted to letters</p></dd>
 
 
 <dt id="arg-number">number<a class="anchor" aria-label="anchor" href="#arg-number"></a></dt>
-<dd><p>Optional suffix to append to letter</p></dd>
+<dd><p>Optional suffix to append to each letter</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Character string a letter and optional appended number</p>
+    <p>Character vector of letters with optional appended numbers</p>
     </div>
 
     <div class="section level2">
@@ -69,6 +69,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Z"</span>
 <span class="r-in"><span><span class="fu">num2letter</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A1"</span>
+<span class="r-in"><span><span class="fu">num2letter</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">10</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A10" "B11" "C12"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -61,7 +61,7 @@
 <div class="section level2">
 <h2 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a></h2>
 <ul><li>
-<strong>R:</strong> Version &gt;= 3.1.0</li>
+<strong>R:</strong> Version &gt;= 4.1.0 (Required for native pipe <code>|&gt;</code>)</li>
 <li>
 <strong>devtools/remotes:</strong> For package development and installation.</li>
 </ul></div>
@@ -81,41 +81,55 @@
 <p>To run tests:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">test</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>Or specifically:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_dir.html" class="external-link">test_dir</a></span><span class="op">(</span><span class="st">"tests/testthat"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a></h2>
 <p>Documentation is generated using <code>roxygen2</code>. To update documentation (man pages):</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level1">
 <h1 id="development-conventions">Development Conventions<a class="anchor" aria-label="anchor" href="#development-conventions"></a></h1>
 <div class="section level2">
-<h2 id="coding-style">Coding Style<a class="anchor" aria-label="anchor" href="#coding-style"></a></h2>
+<h2 id="coding-style--modernization">Coding Style &amp; Modernization<a class="anchor" aria-label="anchor" href="#coding-style--modernization"></a></h2>
 <ul><li>
-<strong>Tidyverse Style:</strong> The code heavily utilizes the pipe operator (<code>%&gt;%</code>) and <code>dplyr</code> verbs.</li>
+<strong>Native Pipe:</strong> Use the native R pipe <code>|&gt;</code> instead of <code>%&gt;%</code> wherever possible.</li>
 <li>
-<strong>Explicit Namespacing:</strong> Functions from other packages are generally called with their namespace (e.g., <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate</a></code>, <code><a href="https://rdrr.io/r/stats/sd.html" class="external-link">stats::sd</a></code>) rather than relying on <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code> calls within functions. This is a best practice for package development.</li>
+<strong>Modern purrr:</strong> Favor <code>purrr::map() |&gt; purrr::list_rbind()</code> over deprecated <code>map_df()</code> or <code>map_dfr()</code>.</li>
 <li>
-<strong>Pronouns:</strong> Usage of <code>.data</code> pronoun inside <code>dplyr</code> verbs to avoid ambiguity (e.g., <code>.data$value</code>).</li>
+<strong>Tidy Evaluation:</strong> Use <code><a href="https://rlang.r-lib.org/reference/new_formula.html" class="external-link">rlang::new_formula()</a></code> or <code><a href="https://rlang.r-lib.org/reference/inject.html" class="external-link">rlang::inject()</a></code> for safe dynamic model construction instead of <code><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0()</a></code> and <code><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula()</a></code>.</li>
+<li>
+<strong>Input Validation:</strong> Use <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">rlang::abort()</a></code> for consistent and informative error signaling.</li>
+<li>
+<strong>Internal Helpers:</strong> Redundant logic (like percentile-based grouping) should be abstracted into internal helpers (e.g., <code>R/utils_cutpoints.R</code>).</li>
+<li>
+<strong>Explicit Namespacing:</strong> Functions from other packages must be called with their namespace (e.g., <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate</a></code>).</li>
+<li>
+<strong>Pronouns:</strong> Always use the <code>.data</code> pronoun inside <code>dplyr</code> verbs.</li>
 </ul></div>
 <div class="section level2">
-<h2 id="documentation-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1"></a></h2>
+<h2 id="linting-and-formatting">Linting and Formatting<a class="anchor" aria-label="anchor" href="#linting-and-formatting"></a></h2>
 <ul><li>
-<strong>Roxygen2:</strong> All exported functions are documented using Roxygen2 comments (<code>#'</code>) immediately preceding the function definition.</li>
+<strong>Strict Compliance:</strong> All code MUST pass <code>styler::style_pkg()</code> and <code><a href="https://lintr.r-lib.org/reference/lint.html" class="external-link">lintr::lint_package()</a></code> before being considered for a merge or push.</li>
 <li>
-<strong>Parameters:</strong> <code>@param</code>, <code>@return</code>, <code>@export</code>, and <code>@description</code> tags are standard.</li>
+<strong>Line Length:</strong> Adhere to a strict 80-character line limit.</li>
 </ul></div>
 <div class="section level2">
-<h2 id="version-control">Version Control<a class="anchor" aria-label="anchor" href="#version-control"></a></h2>
+<h2 id="testing-standards">Testing Standards<a class="anchor" aria-label="anchor" href="#testing-standards"></a></h2>
 <ul><li>
-<strong>Git:</strong> The project is version-controlled with Git.</li>
+<strong>Robustness:</strong> Avoid brittle tests that rely on exact row indices (e.g., <code>slice(37)</code>). Instead, use <code><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">dplyr::filter()</a></code> to target specific IV/DV/Cutoff combinations to ensure tests are resilient to row-ordering changes.</li>
+</ul></div>
+<div class="section level2">
+<h2 id="version-control-workflow">Version Control Workflow<a class="anchor" aria-label="anchor" href="#version-control-workflow"></a></h2>
+<ul><li>
+<strong>Jujutsu (jj):</strong> The project uses Jujutsu for local version control. Ensure <code>.jj</code> is always in <code>.Rbuildignore</code>.</li>
 <li>
-<strong>CI/CD:</strong> Configuration exists for GitHub Actions (in <code>.github/workflows</code>).</li>
+<strong>Push Restriction:</strong> <strong>CRITICAL:</strong> Never push changes to GitHub without explicit user confirmation.</li>
+<li>
+<strong>Pre-push Verification:</strong> Documentation must be updated (<code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code>), and a full <code><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">devtools::check()</a></code> must pass with 0 errors and 0 warnings before pushing.</li>
+<li>
+<strong>Branching:</strong> Merge features into <code>main</code> only after verification.</li>
 </ul></div>
 </div>
 

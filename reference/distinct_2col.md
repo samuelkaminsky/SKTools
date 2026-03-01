@@ -16,15 +16,15 @@ distinct_2col(df, col1, col2)
 
 - col1:
 
-  Quoted name of first column
+  Column name (quoted or unquoted)
 
 - col2:
 
-  Quoted name of second column
+  Column name (quoted or unquoted)
 
 ## Value
 
-Dataframe with duplicates removed
+Data frame with duplicates removed
 
 ## Examples
 
@@ -33,7 +33,7 @@ df <- tibble::tibble(
   a = c("A", "B", "C"),
   b = c("B", "A", "D")
 )
-distinct_2col(df, "a", "b")
+distinct_2col(df, a, b)
 #> # A tibble: 2 × 2
 #>   a     b    
 #>   <chr> <chr>
