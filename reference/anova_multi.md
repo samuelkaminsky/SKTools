@@ -35,10 +35,10 @@ percentages in each level of the IV
 
 ``` r
 anova_multi(mtcars, iv = cyl, dvs = c(mpg, disp))
-#>     DV        4        6     8 df       sumsq      meansq statistic p.value
-#> 1  mpg  26.6636  19.7429  15.1  2    824.7846    412.3923   39.6975       0
-#> 2 disp 105.1364 183.3143 353.1  2 398890.9607 199445.4803   74.8303       0
-#>      6-4 8-4    8-6
-#> 1 0.0003   0 0.0112
-#> 2 0.0107   0 0.0000
+#> # A tibble: 2 × 12
+#>   DV      `4`   `6`   `8`    df   sumsq  meansq statistic p.value  `6-4` `8-4`
+#>   <chr> <dbl> <dbl> <dbl> <dbl>   <dbl>   <dbl>     <dbl>   <dbl>  <dbl> <dbl>
+#> 1 mpg    26.7  19.7  15.1     2    825.    412.      39.7       0 0.0003     0
+#> 2 disp  105.  183.  353.      2 398891. 199445.      74.8       0 0.0107     0
+#> # ℹ 1 more variable: `8-6` <dbl>
 ```

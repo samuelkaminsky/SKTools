@@ -35,8 +35,8 @@ quality_check(df)
 #> no_var
 #> 
 #> .........SKEWNESS.........
-#> Strong (-): 
-#> Strong (+): 
-#> Moderate (-): 
-#> Moderate (+): 
+#> Strong (-): NA
+#> Strong (+): NA, skewed
+#> Moderate (-): NA
+#> Moderate (+): NA
 ```

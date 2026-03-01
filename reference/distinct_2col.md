@@ -34,8 +34,9 @@ df <- tibble::tibble(
   b = c("B", "A", "D")
 )
 distinct_2col(df, "a", "b")
-#> # A tibble: 1 × 2
+#> # A tibble: 2 × 2
 #>   a     b    
 #>   <chr> <chr>
 #> 1 A     B    
+#> 2 C     D    
 ```
