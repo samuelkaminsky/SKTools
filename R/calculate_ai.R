@@ -142,7 +142,8 @@ calculate_ai <-
         )
 
       if (isTRUE(only_max)) {
-        # Keep only comparisons against the group with the highest selection ratio
+        # Keep only comparisons against the group with the highest selection
+        # ratio
         max_sr_groups <-
           df_sr |>
           dplyr::group_by(.data$Grouping) |>

@@ -15,8 +15,17 @@
 corr_summary <-
   function(corr_test_results, alpha = .05) {
     # Input validation
-    if (!is.list(corr_test_results) || !all(c("r", "n", "t", "p") %in% names(corr_test_results))) {
-      rlang::abort("`corr_test_results` must be an object of class `psych::corr.test` or similar list.")
+    valid_names <- c("r", "n", "t", "p")
+    is_valid <- is.list(corr_test_results) &&
+      all(valid_names %in% names(corr_test_results))
+
+    if (!is_valid) {
+      rlang::abort(
+        paste(
+          "`corr_test_results` must be an object of class",
+          "`psych::corr.test` or similar list."
+        )
+      )
     }
 
     if (length(corr_test_results$n) == 1L) {
@@ -62,7 +71,7 @@ corr_summary <-
             cols = -"iv",
             names_to = "dv",
             values_to = name,
-            # Removes rows with no values (especially for NA diagonals if present)
+            # Removes rows with no values (especially for NA diagonals)
             values_drop_na = TRUE
           )
         }
