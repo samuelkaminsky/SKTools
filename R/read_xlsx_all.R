@@ -24,7 +24,7 @@ read_xlsx_all <-
     detect_dates = TRUE
   ) {
     sheetnames <- openxlsx::getSheetNames(xlsx_file)
-    
+
     # Single sheet case
     if (length(sheetnames) == 1) {
       return(openxlsx::read.xlsx(
@@ -33,8 +33,8 @@ read_xlsx_all <-
         check.names = TRUE,
         startRow = start_row
       ))
-    } 
-    
+    }
+
     # Multiple sheets case
     workbook <-
       purrr::map(sheetnames, \(x) {
