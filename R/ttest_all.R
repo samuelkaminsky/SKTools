@@ -50,7 +50,9 @@ ttest_all <-
                         df$Grouped <- .create_percentile_groups(df, x, z)
 
                         # Create formula safely using rlang::new_formula
-                        formula <- rlang::new_formula(as.name(y), quote(Grouped))
+                        formula <- rlang::new_formula(
+                          as.name(y), quote(Grouped)
+                        )
 
                         # Calculate Cohen's D
                         cd <- effsize::cohen.d(formula, data = df)
@@ -113,7 +115,17 @@ ttest_all <-
       tidyr::drop_na("estimate") |>
       dplyr::mutate(sig = .data$p.value < .05) |>
       dplyr::mutate(dplyr::across(
-        dplyr::any_of(c("estimate", "estimate1", "estimate2", "statistic", "p.value", "parameter", "conf.low", "conf.high", "Cutoff.Num")),
+        dplyr::any_of(c(
+          "estimate",
+          "estimate1",
+          "estimate2",
+          "statistic",
+          "p.value",
+          "parameter",
+          "conf.low",
+          "conf.high",
+          "Cutoff.Num"
+        )),
         \(x) round(x, 6)
       )) |>
       dplyr::distinct(
