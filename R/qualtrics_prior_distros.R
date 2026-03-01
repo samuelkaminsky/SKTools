@@ -15,7 +15,7 @@
 qualtrics_prior_distros <-
   function(survey_id, api_token, datacenter = "az1", max_iterations = 100) {
     if (!grepl("^[a-zA-Z0-9]+$", datacenter)) {
-      stop("Invalid datacenter format. Alphanumeric characters only.")
+      rlang::abort("Invalid datacenter format. Alphanumeric characters only.")
     }
 
     header_all <-
@@ -56,7 +56,7 @@ qualtrics_prior_distros <-
           )
         }
       ) |>
-      purrr::map(\(x) httr::content(x))
+      purrr::map(httr::content)
 
     results <-
       distributions_list |>
@@ -90,7 +90,7 @@ qualtrics_prior_distros <-
             )
           }
         ) |>
-        purrr::map(\(x) httr::content(x))
+        purrr::map(httr::content)
 
       new_results <-
         distributions_list |>
@@ -101,26 +101,26 @@ qualtrics_prior_distros <-
 
     # Parse results into a single dataframe
     distributions_df <-
-      purrr::map_df(seq_along(results), \(x) {
-        purrr::map_df(
-          seq_along(results[[x]]),
-          purrr::possibly(
-            \(y) {
-              results[[x]][[y]] |>
-                unlist() |>
-                t() |>
-                as.data.frame() |>
-                tibble::repair_names() |>
-                lapply(as.character)
-            },
-            otherwise = dplyr::tibble(
-              id = NA_character_,
-              firstName = NA_character_,
-              lastName = NA_character_,
-              email = NA_character_
-            )
+      results |>
+      purrr::flatten() |>
+      purrr::map(
+        purrr::possibly(
+          \(x) {
+            x |>
+              unlist() |>
+              t() |>
+              tibble::as_tibble(.name_repair = "minimal") |>
+              dplyr::mutate(dplyr::across(dplyr::everything(), as.character))
+          },
+          otherwise = tibble::tibble(
+            id = NA_character_,
+            firstName = NA_character_,
+            lastName = NA_character_,
+            email = NA_character_
           )
         )
-      })
+      ) |>
+      purrr::list_rbind()
+
     distributions_df
   }

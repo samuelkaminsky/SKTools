@@ -47,6 +47,11 @@ calculate_ai <-
     only_max = FALSE,
     correct = TRUE
   ) {
+    # Basic input validation
+    if (!is.data.frame(df)) {
+      rlang::abort("`df` must be a data frame.")
+    }
+
     grouping_warn <- groupings[!(groupings %in% names(df))]
     valid_groupings <- groupings[groupings %in% names(df)]
 

@@ -14,6 +14,11 @@
 #' }
 corr_summary <-
   function(corr_test_results, alpha = .05) {
+    # Input validation
+    if (!is.list(corr_test_results) || !all(c("r", "n", "t", "p") %in% names(corr_test_results))) {
+      rlang::abort("`corr_test_results` must be an object of class `psych::corr.test` or similar list.")
+    }
+
     if (length(corr_test_results$n) == 1L) {
       corr_test_results$n <-
         matrix(
@@ -26,12 +31,15 @@ corr_summary <-
           )
         )
     }
+
+    # Ensure all components are matrices/dataframes with same dimensions
     corr_test_results_sub <- corr_test_results[c("r", "n", "t", "p", "p")]
     corr_test_results_sub_named <-
       purrr::set_names(
         corr_test_results_sub,
         c("r", "n", "t", "p", "p.adjust")
       )
+
     cor_df <-
       corr_test_results_sub_named |>
       # Replace bottom (unadjusted p values with NA)
@@ -48,18 +56,18 @@ corr_summary <-
       purrr::map(\(x) tibble::as_tibble(x, rownames = "iv")) |>
       # Convert to long format
       purrr::imap(
-        \(x, y) {
+        \(x, name) {
           tidyr::pivot_longer(
             x,
             cols = -"iv",
             names_to = "dv",
-            values_to = y,
-            # Removes rows with no p values
+            values_to = name,
+            # Removes rows with no values (especially for NA diagonals if present)
             values_drop_na = TRUE
           )
         }
       ) |>
-      purrr::map(\(x) dplyr::filter(x, !(.data$iv == .data$dv))) |>
+      purrr::map(\(x) dplyr::filter(x, .data$iv != .data$dv)) |>
       # For p value table, stack to create rows with dv/iv pairs
       purrr::map_at(c("p", "p.adjust"), \(x) {
         x_rev <-
@@ -69,5 +77,6 @@ corr_summary <-
       purrr::reduce(dplyr::left_join, by = c("iv", "dv")) |>
       # Calculate significance
       dplyr::mutate(across(c("p", "p.adjust"), list(sig = \(x) x < alpha)))
+
     cor_df
   }
