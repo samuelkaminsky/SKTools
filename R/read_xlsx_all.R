@@ -24,34 +24,39 @@ read_xlsx_all <-
     detect_dates = TRUE
   ) {
     sheetnames <- openxlsx::getSheetNames(xlsx_file)
+
+    # Single sheet case
     if (length(sheetnames) == 1) {
-      openxlsx::read.xlsx(
+      return(openxlsx::read.xlsx(
         xlsxFile = xlsx_file,
         detectDates = detect_dates,
         check.names = TRUE,
         startRow = start_row
-      )
+      ))
+    }
+
+    # Multiple sheets case
+    workbook <-
+      purrr::map(sheetnames, \(x) {
+        openxlsx::read.xlsx(
+          xlsxFile = xlsx_file,
+          sheet = x,
+          detectDates = detect_dates,
+          check.names = TRUE,
+          startRow = start_row
+        )
+      })
+
+    # Set sheet names
+    if (all(names != "") && length(names) == length(sheetnames)) {
+      names(workbook) <- names
     } else {
-      make_sheetnames <- make.names(sheetnames, unique = TRUE)
-      workbook <-
-        lapply(sheetnames, \(x) {
-          openxlsx::read.xlsx(
-            xlsxFile = xlsx_file,
-            sheet = x,
-            detectDates = detect_dates,
-            check.names = TRUE,
-            startRow = start_row
-          )
-        })
-      if (sum(names != "") > 0) {
-        names(workbook) <- names
-      } else {
-        names(workbook) <- make_sheetnames
-      }
-      if (isTRUE(save2env)) {
-        list2env(workbook, .GlobalEnv)
-      } else {
-        workbook
-      }
+      names(workbook) <- make.names(sheetnames, unique = TRUE)
+    }
+
+    if (isTRUE(save2env)) {
+      list2env(workbook, .GlobalEnv)
+    } else {
+      workbook
     }
   }

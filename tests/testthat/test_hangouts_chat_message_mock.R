@@ -30,7 +30,8 @@ test_that("hangouts_chat_message throws error on API failure", {
   # Mock a 500 Internal Server Error response
   # We need to give it a 'response' class so stop_for_status recognizes it
   m <- mock(structure(list(status_code = 500, url = "https://example.com"),
-                      class = "response"))
+    class = "response"
+  ))
   stub(hangouts_chat_message, "httr::POST", m)
 
   expect_error(

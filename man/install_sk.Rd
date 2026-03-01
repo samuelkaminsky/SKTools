@@ -19,6 +19,7 @@ Installs packages that I like
 \details{
 Packages installed with the default arguments include:
 \itemize{
+\item cellranger
 \item clipr
 \item data.table
 \item knitr

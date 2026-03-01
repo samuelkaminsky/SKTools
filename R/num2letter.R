@@ -1,6 +1,5 @@
 #' Convert number to equivalent letter
-#' @param x Number to be converted to letter (only works for numbers less than
-#'   or equal to 702)
+#' @param x Number to be converted to letter
 #' @param number Optional suffix to append to letter
 #' @return Character string a letter and optional appended number
 #' @export
@@ -14,5 +13,5 @@ num2letter <- function(x, number = "") {
   if (any(x <= 0)) {
     stop("Input must be positive integer")
   }
-  paste0(openxlsx::int2col(x), number)
+  paste0(cellranger::num_to_letter(x), number)
 }

@@ -18,37 +18,42 @@
 read_excel_all <-
   function(path, save2env = FALSE, check_names = FALSE, names = "", skip = 0) {
     sheetnames <- readxl::excel_sheets(path)
+
+    # Single sheet case
     if (length(sheetnames) == 1) {
-      worksheet <- readxl::read_excel(path = path, skip = skip)
+      res <- readxl::read_excel(path = path, skip = skip)
       if (isTRUE(check_names)) {
-        names(worksheet) <- make.names(names(worksheet), unique = TRUE)
-        worksheet
-      } else {
-        worksheet
+        names(res) <- make.names(names(res), unique = TRUE)
       }
-    } else {
-      make_sheetnames <- make.names(sheetnames, unique = TRUE)
-      worksheet <-
+      return(res)
+    }
+
+    # Multiple sheets case
+    res_list <-
+      purrr::map(
+        sheetnames,
+        \(x) readxl::read_excel(path = path, sheet = x, skip = skip)
+      )
+
+    # Clean column names if requested
+    if (isTRUE(check_names)) {
+      res_list <-
         purrr::map(
-          sheetnames,
-          \(x) readxl::read_excel(path = path, sheet = x, skip = skip)
+          res_list,
+          \(x) purrr::set_names(x, make.names(names(x), unique = TRUE))
         )
-      if (isTRUE(check_names)) {
-        worksheet <-
-          worksheet |>
-          purrr::map(
-            \(x) purrr::set_names(x, make.names(names(x), unique = TRUE))
-          )
-      }
-      if (all(names != "")) {
-        names(worksheet) <- names
-      } else {
-        names(worksheet) <- make_sheetnames
-      }
-      if (isTRUE(save2env)) {
-        list2env(worksheet, .GlobalEnv)
-      } else {
-        worksheet
-      }
+    }
+
+    # Set sheet names
+    if (all(names != "") && length(names) == length(sheetnames)) {
+      names(res_list) <- names
+    } else {
+      names(res_list) <- make.names(sheetnames, unique = TRUE)
+    }
+
+    if (isTRUE(save2env)) {
+      list2env(res_list, envir = .GlobalEnv)
+    } else {
+      res_list
     }
   }
