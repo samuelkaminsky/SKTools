@@ -91,9 +91,7 @@ df <- tibble::tibble(
 calculate_ai(df, groupings = "gender", stage1 = applied, stage2 = hired)
 #> Warning: There were 2 warnings in `dplyr::mutate()`.
 #> The first warning was:
-#> ℹ In argument: `chi =
-#>   list(broom::tidy(stats::prop.test(as.matrix(.data$conting), correct =
-#>   correct)))`.
+#> ℹ In argument: `chi = list(...)`.
 #> ℹ In row 1.
 #> Caused by warning in `stats::prop.test()`:
 #> ! Chi-squared approximation may be incorrect
@@ -111,6 +109,6 @@ calculate_ai(df, groupings = "gender", stage1 = applied, stage2 = hired)
 #>   <chr>    <chr>     <chr>          <dbl>  <dbl> <dbl> <dbl>       <dbl>
 #> 1 gender   Female    Male           1.6   -0.644 -1.41 0.879       0.348
 #> 2 gender   Male      Female         0.625  0.644  1.41 0.879       0.348
-#> # ℹ 2 more variables: odds_ratio <dbl>, p_value_fisher <dbl>
+#> # ℹ 2 more variables: p_value_fisher <dbl>, odds_ratio <dbl>
 #> 
 ```
