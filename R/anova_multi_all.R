@@ -13,198 +13,155 @@
 #' anova_multi_all(mtcars, ivs = c(disp, hp), dvs = mpg)
 anova_multi_all <-
   function(df, ivs, dvs, perc = .05, print = FALSE) {
-    dvs <- dplyr::enquo(dvs)
-    ivs <- dplyr::enquo(ivs)
+    dvs_quo <- dplyr::enquo(dvs)
+    ivs_quo <- dplyr::enquo(ivs)
+
     ivs_list <-
       df |>
-      dplyr::select(!!ivs) |>
+      dplyr::select(!!ivs_quo) |>
       names() |>
       purrr::set_names()
     dvs_list <-
       df |>
-      dplyr::select(!!dvs) |>
+      dplyr::select(!!dvs_quo) |>
       names() |>
       purrr::set_names()
 
     # Calculate quantiles for each IV to determine cutpoints
     cuts <-
       ivs_list |>
-      purrr::map(\(x) dplyr::pull(df, x)) |>
-      purrr::map(
-        \(x) {
-          stats::quantile(
-            x,
-            seq(
-              from = 0.05,
-              to = .95,
-              by = perc
-            ),
-            na.rm = TRUE
-          )
-        }
-      ) |>
-      as.data.frame() |>
-      tibble::rownames_to_column("percentage") |>
-      tidyr::pivot_longer(
-        !"percentage",
-        cols_vary = "slowest",
-        names_to = "iv",
-        values_to = "cut"
-      ) |>
+      purrr::map(\(x) {
+        stats::quantile(
+          df[[x]],
+          seq(
+            from = 0.05,
+            to = 0.95,
+            by = perc
+          ),
+          na.rm = TRUE
+        )
+      }) |>
+      purrr::map(tibble::enframe, name = "percentage", value = "cut") |>
+      purrr::list_rbind(names_to = "iv") |>
       dplyr::distinct(.data$iv, .data$cut, .keep_all = TRUE)
-
-    iv_dv <-
-      tidyr::crossing(dv = dvs_list, iv = ivs_list) |>
-      dplyr::mutate(dplyr::across(everything(), as.character))
 
     # Create an index of all combinations of IVs, DVs, and cutpoints
     index <-
       cuts |>
-      dplyr::left_join(
-        cuts,
+      dplyr::rename(percentage_bottom = "percentage", cut_bottom = "cut") |>
+      dplyr::inner_join(
+        cuts |> dplyr::rename(percentage_top = "percentage", cut_top = "cut"),
         by = "iv",
-        suffix = c("_bottom", "_top"),
         relationship = "many-to-many"
       ) |>
-      dplyr::distinct() |>
       dplyr::filter(.data$cut_top >= .data$cut_bottom) |>
-      dplyr::left_join(iv_dv, by = "iv", relationship = "many-to-many") |>
-      dplyr::distinct() |>
+      tidyr::crossing(dv = dvs_list) |>
       tibble::rowid_to_column()
-    index <-
-      as.list(index)
 
     # Execute ANOVA for each combination
     results_all <-
-      purrr::pmap_df(
-        index,
+      purrr::pmap(
+        as.list(index),
         purrr::possibly(
           \(
+            rowid,
             iv,
-            cut_bottom,
-            cut_top,
             percentage_bottom,
+            cut_bottom,
             percentage_top,
-            dv,
-            rowid
+            cut_top,
+            dv
           ) {
-            # Categorize the IV based on cutpoints
-            df$Grouped <-
-              dplyr::case_when(
-                df[[iv]] < cut_bottom ~ 0,
-                df[[iv]] >= cut_bottom &
-                  df[[iv]] < cut_top ~
-                  1,
-                df[[iv]] >= cut_top ~ 2
-              ) |>
-              as.factor()
+            # Use internal helper to create groups
+            df$Grouped <- .create_percentile_groups(df, iv, cut_bottom, cut_top)
 
             # Run ANOVA
-            temp_anova <-
-              stats::aov(stats::lm(
-                stats::as.formula(paste0("`", dv, "` ~ Grouped")),
-                data = df
-              ))
+            formula <- rlang::new_formula(as.name(dv), quote(Grouped))
+            temp_anova <- stats::aov(formula, data = df)
+
+            # Tidy ANOVA results
             results_anova <-
               temp_anova |>
               broom::tidy() |>
-              dplyr::filter(.data$term != "Residuals") |>
-              dplyr::select(-"term") |>
-              cbind(DV = as.character(dv))
+              dplyr::filter(.data$term == "Grouped") |>
+              dplyr::select(-"term")
 
             # Run Post-Hoc Tests (Tukey HSD)
+            # We must collapse multiple rows from TukeyHSD into one row
             results_posthocs <-
               temp_anova |>
               stats::TukeyHSD() |>
-              (\(x) x["Grouped"])() |>
+              (\(x) x[["Grouped"]])() |>
               as.data.frame() |>
               tibble::rownames_to_column() |>
+              dplyr::select("rowname", "p adj") |>
               tidyr::pivot_wider(
                 names_from = "rowname",
-                values_from = "Grouped.p.adj"
-              ) |>
-              dplyr::select(-(dplyr::starts_with("Grouped"))) |>
-              cbind(DV = as.character(dv)) |>
-              dplyr::group_by(.data$DV) |>
-              dplyr::summarise(dplyr::across(everything(), \(x) {
-                mean(x, na.rm = TRUE)
-              }))
-
-            # Calculate means for each group
-            mean0 <-
-              df |>
-              dplyr::filter(.data$Grouped == 0) |>
-              dplyr::select(paste0(dv)) |>
-              unlist() |>
-              mean(na.rm = TRUE)
-            mean1 <-
-              df |>
-              dplyr::filter(.data$Grouped == 1) |>
-              dplyr::select(paste0(dv)) |>
-              unlist() |>
-              mean(na.rm = TRUE)
-            mean2 <-
-              df |>
-              dplyr::filter(.data$Grouped == 2) |>
-              dplyr::select(paste0(dv)) |>
-              unlist() |>
-              mean(na.rm = TRUE)
-            n <-
-              df |>
-              dplyr::group_by(.data$Grouped) |>
-              dplyr::summarize(Count = dplyr::n()) |>
-              tidyr::pivot_wider(
-                names_from = "Grouped",
-                values_from = "Count"
+                values_from = "p adj"
               )
 
-            # Combine results
+            # Calculate group statistics efficiently
+            group_stats <-
+              df |>
+              dplyr::group_by(.data$Grouped) |>
+              dplyr::summarise(
+                mean = mean(!!as.name(dv), na.rm = TRUE),
+                n = dplyr::n(),
+                .groups = "drop"
+              )
+
+            means_wide <-
+              group_stats |>
+              dplyr::select("Grouped", "mean") |>
+              dplyr::mutate(Grouped = paste0("mean_", .data$Grouped)) |>
+              tidyr::pivot_wider(names_from = "Grouped", values_from = "mean")
+
+            n_wide <-
+              group_stats |>
+              dplyr::select("Grouped", "n") |>
+              tidyr::pivot_wider(names_from = "Grouped", values_from = "n")
+
+            # Combine everything into a single row
             results <-
               results_anova |>
-              dplyr::left_join(
-                results_posthocs,
-                by = "DV",
-                na_matches = "never"
-              ) |>
-              cbind(
-                mean_0 = mean0,
-                mean_1 = mean1,
-                mean_2 = mean2,
-                n
+              dplyr::bind_cols(results_posthocs, means_wide, n_wide) |>
+              dplyr::mutate(
+                iv = iv,
+                dv = dv,
+                Cutoff.Bottom = percentage_bottom,
+                Cutoff.Top = percentage_top,
+                Cutoff.Bottom.Num = cut_bottom,
+                Cutoff.Bottom.Top = cut_top
               ) |>
               dplyr::mutate(dplyr::across(where(is.factor), as.character))
+
             if (isTRUE(print)) {
               print(paste0(
                 rowid,
                 " / ",
-                length(index[[1]]),
+                nrow(index),
                 " - ",
-                round(100 * rowid / length(index[[1]]), 2),
+                round(100 * rowid / nrow(index), 2),
                 "%"
               ))
-            }
-            if (nrow(results) == 0) {
-              return(tibble::tibble(Error = "Empty Results"))
             }
             results
           },
           otherwise = tibble::tibble(Error = "Y")
-        ),
-        .id = "Source"
-      )
-    index <-
-      dplyr::bind_cols(index) |>
-      dplyr::select(-"rowid")
+        )
+      ) |>
+      purrr::list_rbind()
+
     final_results <-
-      cbind(index, results_all) |>
+      results_all |>
       dplyr::distinct() |>
       dplyr::select(
         "iv",
         "dv",
-        Cutoff.Bottom = "percentage_bottom",
-        Cutoff.Top = "percentage_top",
-        Cutoff.Bottom.Num = "cut_bottom",
-        Cutoff.Bottom.Top = "cut_top",
+        "Cutoff.Bottom",
+        "Cutoff.Top",
+        "Cutoff.Bottom.Num",
+        "Cutoff.Bottom.Top",
         dplyr::any_of(c(
           "df",
           "sumsq",
@@ -231,5 +188,6 @@ anova_multi_all <-
         dplyr::contains("mean_"),
         \(x) dplyr::if_else(is.nan(x), NA_real_, x)
       ))
+
     final_results
   }

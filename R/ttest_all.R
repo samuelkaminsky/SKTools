@@ -13,29 +13,28 @@
 #' ttest_all(mtcars, ivs = c("disp", "hp"), dvs = "mpg")
 ttest_all <-
   function(df, ivs, dvs, perc = .05) {
-    dvs <- dplyr::enquo(dvs)
-    ivs <- dplyr::enquo(ivs)
+    dvs_quo <- dplyr::enquo(dvs)
+    ivs_quo <- dplyr::enquo(ivs)
+
     ivs_list <-
       df |>
-      dplyr::select(!!ivs) |>
+      dplyr::select(!!ivs_quo) |>
       names() |>
       purrr::set_names()
     dvs_list <-
       df |>
-      dplyr::select(!!dvs) |>
+      dplyr::select(!!dvs_quo) |>
       names() |>
       purrr::set_names()
 
     ivs_list |>
-      purrr::map_dfr(
+      purrr::map(
         \(x) {
           dvs_list |>
-            purrr::map_dfr(
+            purrr::map(
               \(y) {
-                y_quo <- rlang::enquo(y)
-
                 stats::quantile(
-                  df[[x]] |> unlist(),
+                  df[[x]],
                   seq(
                     from = 0.05,
                     to = .95,
@@ -44,40 +43,41 @@ ttest_all <-
                   na.rm = TRUE
                 ) |>
                   as.list() |>
-                  purrr::map_dfr(
+                  purrr::map(
                     purrr::possibly(
                       \(z) {
-                        df$Grouped <-
-                          dplyr::if_else(df[[x]] >= z, 1, 0) |>
-                          as.factor()
-                        cd <-
-                          effsize::cohen.d(
-                            stats::as.formula(paste0(y, " ~ Grouped")),
-                            data = df
-                          )
+                        # Use internal helper to create groups
+                        df$Grouped <- .create_percentile_groups(df, x, z)
+
+                        # Create formula safely using rlang::new_formula
+                        formula <- rlang::new_formula(as.name(y), quote(Grouped))
+
+                        # Calculate Cohen's D
+                        cd <- effsize::cohen.d(formula, data = df)
                         cd_df <-
                           tibble::tibble(
-                            cd.est = cd$estimate |> as.numeric(),
-                            cd.mag = cd$magnitude |> as.character()
+                            cd.est = as.numeric(cd$estimate),
+                            cd.mag = as.character(cd$magnitude)
                           )
-                        stats::t.test(
-                          stats::as.formula(paste0(y, " ~ Grouped")),
-                          data = df
-                        ) |>
-                          broom::tidy() |>
-                          cbind(
-                            df |>
-                              dplyr::group_by(.data$Grouped, !!y_quo) |>
-                              dplyr::summarize(Count = dplyr::n()) |>
-                              dplyr::group_by(.data$Grouped) |>
-                              dplyr::summarize(Count = sum(.data$Count)) |>
-                              tidyr::pivot_wider(
-                                names_from = "Grouped",
-                                values_from = "Count"
-                              ),
-                            Cutoff.Num = z,
-                            cd_df
-                          ) |>
+
+                        # Run T-test
+                        t_test_results <-
+                          stats::t.test(formula, data = df) |>
+                          broom::tidy()
+
+                        # Efficient group count calculation
+                        counts <-
+                          df |>
+                          dplyr::count(.data$Grouped) |>
+                          tidyr::pivot_wider(
+                            names_from = "Grouped",
+                            values_from = "n"
+                          )
+
+                        # Combine all results
+                        t_test_results |>
+                          dplyr::bind_cols(counts, cd_df) |>
+                          dplyr::mutate(Cutoff.Num = z) |>
                           dplyr::mutate(dplyr::across(
                             where(is.factor),
                             as.character
@@ -97,24 +97,23 @@ ttest_all <-
                         `0` = NA_real_,
                         `1` = NA_real_,
                         Cutoff.Num = NA_real_,
-                        Cutoff.Perc = NA_real_,
                         cd.est = NA_real_,
                         cd.mag = NA_character_
                       )
-                    ),
-                    .id = "Cutoff.Perc"
-                  )
-              },
-              .id = "DV"
-            )
-        },
-        .id = "IV"
+                    )
+                  ) |>
+                  purrr::list_rbind(names_to = "Cutoff.Perc")
+              }
+            ) |>
+            purrr::list_rbind(names_to = "DV")
+        }
       ) |>
+      purrr::list_rbind(names_to = "IV") |>
       dplyr::distinct() |>
       tidyr::drop_na("estimate") |>
-      dplyr::mutate(sig = dplyr::if_else(.data$p.value < .05, TRUE, FALSE)) |>
+      dplyr::mutate(sig = .data$p.value < .05) |>
       dplyr::mutate(dplyr::across(
-        c("estimate":"conf.high", "Cutoff.Num"),
+        dplyr::any_of(c("estimate", "estimate1", "estimate2", "statistic", "p.value", "parameter", "conf.low", "conf.high", "Cutoff.Num")),
         \(x) round(x, 6)
       )) |>
       dplyr::distinct(

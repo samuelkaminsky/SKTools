@@ -48,19 +48,26 @@ calculate_ai <-
     correct = TRUE
   ) {
     grouping_warn <- groupings[!(groupings %in% names(df))]
-    groupings <- groupings[groupings %in% names(df)]
+    valid_groupings <- groupings[groupings %in% names(df)]
 
-    if (length(grouping_warn > 0)) {
+    if (length(grouping_warn) > 0) {
       warning(paste(
         "Groupings not found in file:",
         stringr::str_c(grouping_warn, collapse = ", ")
       ))
     }
 
+    if (length(valid_groupings) == 0) {
+      return(list(
+        selection_ratio = tibble::tibble(Error = "No valid groupings found"),
+        adverse_impact = tibble::tibble(Error = "No valid groupings found")
+      ))
+    }
+
     stage1_quo <- dplyr::enquo(stage1)
     stage2_quo <- dplyr::enquo(stage2)
 
-    df <-
+    df_internal <-
       df |>
       dplyr::rename(
         stage1 = !!stage1_quo,
@@ -69,34 +76,31 @@ calculate_ai <-
 
     # Calculate Selection Ratios
     df_sr <-
-      groupings |>
-      purrr::map_dfr(\(x) {
-        x <- as.name(x)
-
-        # Filter out groups with insufficient N or proportion
-        df_filter <-
-          df |>
-          dplyr::count(!!x) |>
+      valid_groupings |>
+      purrr::map(\(x) {
+        # Filter out groups with insufficient proportion
+        valid_groups <-
+          df_internal |>
+          dplyr::count(!!as.name(x)) |>
           dplyr::mutate(perc = .data$n / sum(.data$n, na.rm = TRUE)) |>
           dplyr::filter(.data$perc >= prop_min) |>
-          dplyr::select(-"n", -"perc")
+          dplyr::pull(!!as.name(x))
 
-        df |>
-          dplyr::semi_join(df_filter, by = as.character(x)) |>
-          dplyr::group_by(!!x) |>
-          tidyr::drop_na(!!x) |>
+        df_internal |>
+          dplyr::filter(!!as.name(x) %in% valid_groups) |>
+          dplyr::group_by(!!as.name(x)) |>
+          tidyr::drop_na(!!as.name(x)) |>
           dplyr::summarize(dplyr::across(
             c("stage1", "stage2"),
-            \(x) sum(x, na.rm = TRUE)
-          ))
+            \(val) sum(val, na.rm = TRUE)
+          )) |>
+          tidyr::pivot_longer(
+            cols = !!as.name(x),
+            names_to = "Grouping",
+            values_to = "Group"
+          )
       }) |>
-      tidyr::pivot_longer(
-        !c("stage1", "stage2"),
-        cols_vary = "slowest",
-        names_to = "Grouping",
-        values_to = "Group",
-        values_drop_na = TRUE
-      ) |>
+      purrr::list_rbind() |>
       dplyr::mutate(SR = .data$stage2 / .data$stage1) |>
       dplyr::select(
         "Grouping",
@@ -110,12 +114,11 @@ calculate_ai <-
     # Sanity Check
     check <-
       df_sr |>
-      dplyr::mutate(check = dplyr::if_else(.data$SR > 1, TRUE, FALSE)) |>
-      dplyr::filter(check == TRUE)
+      dplyr::filter(.data$SR > 1)
 
     if (nrow(check) > 0) {
       df_ai <-
-        list(
+        tibble::tibble(
           Error = paste(
             "More people in stage 2 than in stage 1,",
             "check the selection ratio table for more information."
@@ -133,28 +136,28 @@ calculate_ai <-
           Denominator = "Group1"
         )
 
-      if (only_max == TRUE) {
-        # Keep only comparisons against the group with the highest selection
-        # ratio
-        max_sr <-
+      if (isTRUE(only_max)) {
+        # Keep only comparisons against the group with the highest selection ratio
+        max_sr_groups <-
           df_sr |>
           dplyr::group_by(.data$Grouping) |>
-          dplyr::filter(.data$SR == max(.data$SR)) |>
+          dplyr::filter(.data$SR == max(.data$SR, na.rm = TRUE)) |>
           dplyr::pull(.data$Group)
 
         df_ai <-
           df_ai |>
-          dplyr::filter(.data$Denominator %in% max_sr)
+          dplyr::filter(.data$Denominator %in% max_sr_groups)
       }
+
       df_ai_filtered <- df_ai |>
         dplyr::filter(
           .data$Grouping == .data$Grouping1,
           .data$Numerator != .data$Denominator
         )
 
-      if (nrow(df_ai) == 0 || nrow(df_ai_filtered) == 0) {
+      if (nrow(df_ai_filtered) == 0) {
         df_ai <-
-          list(Error = "No adverse impact comparisons possible")
+          tibble::tibble(Error = "No adverse impact comparisons possible")
       } else {
         # Calculate Adverse Impact Stats
         df_ai <-
@@ -175,37 +178,27 @@ calculate_ai <-
           ) |>
           dplyr::ungroup() |>
           dplyr::rowwise() |>
+          # Run Chi-Square and Fisher's Exact tests
           dplyr::mutate(
-            conting = list(
-              list(
-                pass = c(.data$stage2, .data$stage21),
-                fail = c(
-                  .data$stage1 - .data$stage2,
-                  .data$stage11 - .data$stage21
-                )
-              ) |>
-                tibble::as_tibble()
+            conting_matrix = list(matrix(
+              c(
+                .data$stage2, .data$stage1 - .data$stage2,
+                .data$stage21, .data$stage11 - .data$stage21
+              ),
+              nrow = 2, byrow = TRUE
+            )),
+            chi = list(
+              stats::prop.test(.data$conting_matrix, correct = correct) |>
+                broom::tidy() |>
+                dplyr::select("statistic", "p.value")
+            ),
+            f_exact = list(
+              stats::fisher.test(.data$conting_matrix) |>
+                broom::tidy() |>
+                dplyr::select("p.value", "estimate")
             )
           ) |>
-          # Run Chi-Square and Fisher's Exact tests on contingency tables
-          dplyr::mutate(
-            chi = list(
-              stats::prop.test(as.matrix(.data$conting), correct = correct) |>
-                broom::tidy()
-            ),
-            f_exact = list(stats::fisher.test(.data$conting) |> broom::tidy())
-          ) |>
           tidyr::unnest("chi") |>
-          dplyr::select(
-            -"conting",
-            -"parameter",
-            -"alternative",
-            -"estimate1",
-            -"estimate2",
-            -"conf.low",
-            -"conf.high",
-            -"method"
-          ) |>
           dplyr::rename(
             chi = "statistic",
             p_value_chi = "p.value"
@@ -216,23 +209,23 @@ calculate_ai <-
             odds_ratio = "estimate"
           ) |>
           dplyr::select(
-            -"conf.low",
-            -"conf.high",
-            -"Grouping1",
-            -"SR",
-            -"SR1",
-            -"stage1",
-            -"stage2",
-            -"stage11",
-            -"stage21",
-            -"method",
-            -"alternative"
+            "Grouping",
+            "Numerator",
+            "Denominator",
+            "ai_ratio",
+            "H",
+            "Z",
+            "chi",
+            "p_value_chi",
+            "p_value_fisher",
+            "odds_ratio"
           ) |>
+          dplyr::ungroup() |>
           dplyr::mutate(dplyr::across(where(is.double), \(x) round(x, 6)))
       }
     }
 
-    df_sr <-
+    df_sr_final <-
       df_sr |>
       dplyr::rename(
         !!paste0(dplyr::quo_name(stage1_quo), "_n") := "stage1",
@@ -240,7 +233,7 @@ calculate_ai <-
       )
 
     list(
-      selection_ratio = df_sr,
+      selection_ratio = df_sr_final,
       adverse_impact = df_ai
     )
   }
