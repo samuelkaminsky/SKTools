@@ -13,8 +13,7 @@ num2letter(x, number = "")
 
 - x:
 
-  Number to be converted to letter (only works for numbers less than or
-  equal to 702)
+  Number to be converted to letter
 
 - number:
 

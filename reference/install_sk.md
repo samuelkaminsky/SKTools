@@ -24,6 +24,8 @@ install_sk(extra = FALSE, dependencies = FALSE)
 
 Packages installed with the default arguments include:
 
+- cellranger
+
 - clipr
 
 - data.table
