@@ -7,12 +7,12 @@
 num2letter(x, number = "")
 }
 \arguments{
-\item{x}{Number to be converted to letter}
+\item{x}{Vector of numbers to be converted to letters}
 
-\item{number}{Optional suffix to append to letter}
+\item{number}{Optional suffix to append to each letter}
 }
 \value{
-Character string a letter and optional appended number
+Character vector of letters with optional appended numbers
 }
 \description{
 Converts a number to an equivalent letter, with an option to
@@ -22,4 +22,5 @@ Converts a number to an equivalent letter, with an option to
 num2letter(1)
 num2letter(26)
 num2letter(1, 1)
+num2letter(1:3, 10:12)
 }

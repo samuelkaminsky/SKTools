@@ -7,10 +7,10 @@
 quality_check(df)
 }
 \arguments{
-\item{df}{name of dataframe}
+\item{df}{A data frame.}
 }
 \value{
-Prints message that identifies columns with no variance and those
+Prints messages identifying columns with no variance and those
   with strong or moderate skewness.
 }
 \description{
