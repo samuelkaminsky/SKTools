@@ -6,6 +6,7 @@
 #' @export
 #' @description Installs packages that I like
 #' @details Packages installed with the default arguments include:
+#' * cellranger
 #' * clipr
 #' * data.table
 #' * knitr
@@ -59,6 +60,7 @@
 install_sk <- function(extra = FALSE, dependencies = FALSE) {
   list_of_packages <-
     c(
+      "cellranger",
       "clipr",
       "data.table",
       "knitr",

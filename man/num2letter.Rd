@@ -7,8 +7,7 @@
 num2letter(x, number = "")
 }
 \arguments{
-\item{x}{Number to be converted to letter (only works for numbers less than
-or equal to 702)}
+\item{x}{Number to be converted to letter}
 
 \item{number}{Optional suffix to append to letter}
 }
